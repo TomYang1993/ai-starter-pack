@@ -3,6 +3,10 @@
 Install **the pack** once per tool. The pack then installs individual components
 (rails, caveman, design, etc.) for you — no per-component manual steps.
 
+Host-specific paths are maintained in
+`skills/ai-starter-pack/references/hosts.json`. The commands below are the
+human-facing install shortcuts for that registry.
+
 ---
 
 ## Claude Code
@@ -205,8 +209,8 @@ and it cascades — no second manual install needed.
 ## Notes
 
 - Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
-  use current documented conventions where available; verify against your actual
-  install if a tool moved its dirs.
+  are sourced from `skills/ai-starter-pack/references/hosts.json`. Run
+  `skills/ai-starter-pack/scripts/validate_hosts.py` after changing host docs.
 - `rtk init` flags (`references/optional/rtk.md`) should be checked against
   rtk's current README — it's a fast-moving binary.
 - Windsurf/Devin naming has changed over time. Prefer `.devin/rules/` for new
