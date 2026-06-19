@@ -1,0 +1,125 @@
+---
+name: ai-starter-pack
+description: Set up a coding agent's everyday environment in one step — behavioral guardrails, terse-output style, design guidance, and shell-command hygiene — written as portable files that work across Claude Code, Codex, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+---
+
+# AI Starter Pack
+
+A self-installing pack. The agent reading this file **is** the installer — it uses
+its own file tools to place a small set of behavioral files where the current host
+expects them. No shell toolchain, npm, or curl is required for the default install.
+
+The pack ships two kinds of content:
+
+- **Always-on rails** — short behavioral guardrails that belong in the host's
+  always-loaded context file (`CLAUDE.md` for Claude Code, `AGENTS.md` for
+  Codex / Antigravity / most others). These must load every session, so they go
+  in the context file, *not* in a lazily-triggered skill.
+- **On-demand skills** — self-contained `SKILL.md` folders that the host loads
+  only when their description matches (caveman, design, command-hygiene).
+
+One component (`rtk`) is **not** a pure skill — it is a compiled binary that
+compresses shell output below the model. It is opt-in and installed by fetching
+from upstream, never bundled. See `references/optional/rtk.md`.
+
+## Run the install
+> **Paths in this document are relative to this skill's directory** — the
+> folder that contains this `SKILL.md` (e.g. `references/payloads/rails.md`,
+> `LICENSES/...`). Resolve them from there regardless of where the skill is
+> installed.
+
+
+Follow these steps in order. Do not skip the dedup checks — re-running this pack,
+or running it on a machine that already has some of these files, must never create
+duplicates or silently overwrite the user's edits.
+
+### 1. Detect the host and target directories
+
+Read `references/dedup.md` → "Host detection" and resolve:
+
+- `CONTEXT_FILE` — the always-loaded file (`CLAUDE.md` or `AGENTS.md`).
+- `SKILLS_DIR` — where on-demand skills live for this host and scope.
+- `SCOPE` — project-local (default) or global, per the user's preference.
+
+If detection is ambiguous, ask the user which agent and scope they want rather
+than guessing. Honor `ASP_AGENT` / `ASP_SCOPE` env vars if set.
+
+### 2. Offer the menu
+
+Present the components and ask which to install. Keep it plain-language — the
+user picks by name, you do the writing.
+
+| Component | Type | Default | What it does |
+|---|---|---|---|
+| `rails` | always-on | ✅ on | Guardrails: surface assumptions, stay minimal, make surgical edits, define verifiable success criteria |
+| `caveman` | on-demand | optional | Terse output style — cuts filler tokens, keeps technical accuracy |
+| `design` | on-demand | optional | Frontend/visual quality guidance — intentional, non-templated UI |
+| `command-hygiene` | on-demand | optional | Teaches the agent to issue quiet, low-noise shell commands (a pure-skill stand-in for rtk) |
+| `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
+
+If the user just says "everything" or "the usual", install `rails` +
+`caveman` + `design` + `command-hygiene` and *ask* before doing `rtk`, since it
+touches their PATH and hook config.
+
+### 3. Dedup BEFORE writing anything
+
+For every selected component, run the matching check in `references/dedup.md`
+→ "Dedup checks". In summary:
+
+- **Already installed by this pack** (our marker present, same version) → skip,
+  report "already current".
+- **Installed by this pack, older version** → show a diff, ask before replacing.
+- **Installed independently by the user** (e.g. they already ran the upstream
+  caveman installer, or already have rails-like rules in their context file) →
+  do **not** write a second copy. Report what you found and ask whether to leave
+  it, replace it, or merge.
+- **Absent** → install.
+
+Idempotency comes from markers, so re-running is always safe:
+
+- Context-file blocks are wrapped in
+  `<!-- BEGIN ai-starter-pack:rails v1 -->` … `<!-- END ai-starter-pack:rails -->`.
+- Each on-demand skill folder is named `asp-<component>` and its `SKILL.md`
+  carries `# source: ai-starter-pack <component> v1` on the first body line.
+
+### 4. Write the selected components
+
+- **rails** → read `references/payloads/rails.md`. If `CONTEXT_FILE` does not exist, create
+  it with the marked block. If it exists and has no `ai-starter-pack:rails`
+  marker, append the marked block after one blank line — never rewrite the file.
+  Preserve everything already there.
+- **caveman / design / command-hygiene** → copy `references/payloads/<name>.md` to
+  `SKILLS_DIR/asp-<name>/SKILL.md`, creating the folder. Keep the frontmatter and
+  the source marker line intact.
+- **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
+  detect a fetch primitive, narrate each command, install for the detected host,
+  verify, and report. Stop and ask if no fetch tool is available.
+
+### 5. Report
+
+Summarize per component: installed / skipped (already current) / skipped (user
+already had it) / updated. Tell the user the trigger phrases for the on-demand
+skills and confirm the rails are active for the next session. Do not re-read or
+narrate these instructions back to the user.
+
+## Provenance and licensing
+
+The default payloads in `references/payloads/` are original content authored for this pack
+(MIT, see `LICENSES/`). They express well-known, freely-usable *ideas* (e.g.
+"state your assumptions", "keep it minimal") in their own words; copying them
+carries no third-party obligation.
+
+If the user specifically wants the canonical upstream files instead (forrestchang's
+Karpathy guidelines, JuliusBrussee's caveman), follow `references/vendor/VENDORING.md`: it
+fetches those files at a pinned commit and installs their MIT notices alongside,
+so attribution is correct. Default install does not require this.
+
+## Adding, listing, updating, removing
+
+- **list** → scan `CONTEXT_FILE` for the rails marker and `SKILLS_DIR` for
+  `asp-*` folders; report what's present and at what version.
+- **add** → run steps 1–5 for just the named component.
+- **update** → re-run with the newer payload; the version bump in the marker
+  triggers the diff-and-confirm path in step 3.
+- **remove** → delete the marked block (rails) or the `asp-<name>` folder
+  (skills). Never touch content outside the markers.

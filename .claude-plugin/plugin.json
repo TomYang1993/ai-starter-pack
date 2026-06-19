@@ -1,0 +1,8 @@
+{
+  "name": "ai-starter-pack",
+  "version": "1.0.0",
+  "description": "Self-installing pack of coding-agent defaults. Say 'set up my coding environment' to choose components; installs rails into your context file and on-demand skills into your skills dir, with dedup.",
+  "author": { "name": "YOUR_GH" },
+  "license": "MIT",
+  "skills": ["./skills/ai-starter-pack"]
+}

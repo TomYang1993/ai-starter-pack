@@ -1,0 +1,27 @@
+{
+  "_comment": "Optional: canonical upstream files for users who want the original popular versions instead of this pack's original payloads. Pin 'commit' to a reviewed SHA at vendoring time. Both are MIT; their license notices must be copied alongside (see VENDORING.md).",
+  "sources": [
+    {
+      "component": "rails",
+      "replaces": "payloads/rails.md",
+      "name": "andrej-karpathy-skills (karpathy-guidelines)",
+      "author": "Forrest Chang (forrestchang)",
+      "repo": "https://github.com/forrestchang/andrej-karpathy-skills",
+      "license": "MIT",
+      "file": "CLAUDE.md",
+      "commit": "PIN_ME",
+      "note": "Canonical Karpathy-inspired guardrails. Verify the LICENSE in the repo at the pinned commit before copying."
+    },
+    {
+      "component": "caveman",
+      "replaces": "payloads/caveman.md",
+      "name": "caveman",
+      "author": "Julius Brussee (JuliusBrussee)",
+      "repo": "https://github.com/JuliusBrussee/caveman",
+      "license": "MIT",
+      "file": "SKILL.md",
+      "commit": "PIN_ME",
+      "note": "Canonical caveman skill. Verify the LICENSE in the repo at the pinned commit before copying."
+    }
+  ]
+}

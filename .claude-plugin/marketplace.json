@@ -1,0 +1,12 @@
+{
+  "name": "ai-starter-pack",
+  "owner": { "name": "YOUR_GH" },
+  "plugins": [
+    {
+      "name": "ai-starter-pack",
+      "source": "./",
+      "description": "One-step setup for a coding agent's everyday defaults: guardrails, terse output, design guidance, command hygiene, optional rtk.",
+      "version": "1.0.0"
+    }
+  ]
+}
