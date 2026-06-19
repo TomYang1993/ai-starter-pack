@@ -1,7 +1,7 @@
 ---
 description: AI Starter Pack — self-installing coding agent defaults
 globs: []
-alwaysApply: false
+alwaysApply: true
 ---
 
 # AI Starter Pack
@@ -11,7 +11,7 @@ When the user says "set up my coding environment", "bootstrap my agent", "instal
 Load and execute `skills/ai-starter-pack/SKILL.md` from this repo. It contains the full install menu (rails, caveman, design, command-hygiene, rtk), dedup logic, and write instructions per component.
 
 For Cursor specifically, the host is detected as `cursor` in the dedup check:
-- `CONTEXT_FILE` → `.cursorrules` (project) or `~/.cursor/rules/global.mdc` (global)
-- `SKILLS_DIR` → `.cursor/rules/` (project) or `~/.cursor/rules/` (global)
+- `CONTEXT_FILE` → `AGENTS.md` by default, or `.cursor/rules/asp-rails.mdc` for Cursor-native project rules
+- `SKILLS_DIR` → `.cursor/rules/` for Cursor-native converted rules, not raw `SKILL.md` folders
 
 All paths in SKILL.md are relative to the `skills/ai-starter-pack/` directory.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Starter Pack"
+  short_description: "Install everyday coding-agent defaults"
+  default_prompt: "Use $ai-starter-pack to set up my coding environment."

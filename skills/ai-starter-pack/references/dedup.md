@@ -5,7 +5,7 @@ running install steps 1 and 3.
 
 ## Host detection
 
-Resolve three values: `CONTEXT_FILE`, `SKILLS_DIR`, `SCOPE`.
+Resolve four values: `CONTEXT_FILE`, `SKILLS_DIR`, `TARGET_FORMAT`, `SCOPE`.
 
 ### Scope
 
@@ -18,22 +18,22 @@ and are easy to review in a diff). Use **global** only if the user asks for
 Check, in order, and stop at the first confident match. If two hosts both look
 present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 
-| Host | Context file | Project skills dir | Global skills dir |
-|---|---|---|---|
-| Claude Code | `CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` |
-| Cursor | `.cursorrules` | `.cursor/rules/` | `~/.cursor/rules/` |
-| Windsurf | `.windsurfrules` | `.windsurf/rules/` | `~/.codeium/windsurf/memories/` |
-| Codex | `AGENTS.md` | `.codex/skills/` | `~/.codex/skills/` |
-| Aider | `AGENTS.md` | `.aider/skills/` | `~/.aider/skills/` |
-| Copilot | `.github/copilot-instructions.md` | `.github/` | `~/.github/` |
-| Antigravity | `AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` |
-| Generic / other | `AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` |
+| Host | Project context/rule file | Global context/rule file | Project skill/rule dir | Global skill/rule dir | Target format |
+|---|---|---|---|---|---|
+| Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
+| Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
+| Cursor | `AGENTS.md` or `.cursor/rules/asp-rails.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
+| Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-rails.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
+| GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
+| Aider | `AGENTS.md` or a file loaded with `--read` | `.aider.conf.yml` `read:` entry | none | none | `read-only` |
+| Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
+| Generic / other | `AGENTS.md` | `~/.agents/AGENTS.md` if supported | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
 
 Detection hints:
 
 - A `.claude/` directory or an existing `CLAUDE.md` → Claude Code.
 - A `.cursor/` directory or `.cursorrules` file → Cursor.
-- A `.windsurfrules` file or `.windsurf/` directory → Windsurf.
+- A `.devin/`, `.windsurf/`, or `.windsurfrules` file → Windsurf / Devin.
 - A `.codex/` directory → Codex.
 - A `.github/copilot-instructions.md` file → Copilot.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
@@ -41,15 +41,17 @@ Detection hints:
 - `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|generic`
   overrides all of the above.
 
-If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/`, since
-`AGENTS.md` is the most widely-read context file. Tell the user what you picked.
+If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with
+`TARGET_FORMAT=skill-folder`, since `AGENTS.md` is the most widely-read context
+file and `.agents/skills/` is the shared skill location used by current Codex and
+the open Agent Skills ecosystem. Tell the user what you picked.
 
 ## Dedup checks
 
 The goal: never write a file the user already has, never clobber their edits,
 and make re-running a no-op. Two layers, two strategies.
 
-### Layer 1 — rails in the context file
+### Layer 1 — rails in the context/rule file
 
 1. If `CONTEXT_FILE` is missing → no conflict, install creates it.
 2. If it exists, search for `<!-- BEGIN ai-starter-pack:rails`:
@@ -71,11 +73,18 @@ and make re-running a no-op. Two layers, two strategies.
 Never rewrite or reorder the existing context file. Append or splice the marked
 region only.
 
-### Layer 2 — on-demand skills in the skills dir
+### Layer 2 — on-demand skills or converted rules
 
 For each of `caveman`, `design`, `command-hygiene`, `stop-slop`, `matt-pocock`:
 
-1. **Our copy present** — `SKILLS_DIR/asp-<name>/SKILL.md` exists:
+1. **Our copy present**:
+   - `skill-folder`: `SKILLS_DIR/asp-<name>/SKILL.md` exists.
+   - `cursor-rule`: `.cursor/rules/asp-<name>.mdc` exists.
+   - `windsurf-rule`: `.devin/rules/asp-<name>.md` or
+     `.windsurf/rules/asp-<name>.md` exists.
+   - `copilot-instruction`: `.github/instructions/asp-<name>.instructions.md`
+     exists, or the component marker is in `AGENTS.md` /
+     `.github/copilot-instructions.md`.
    - Read its source-marker line. Same version → skip. Older → diff + confirm.
 2. **User's independent copy present** — a sibling folder whose `SKILL.md` `name`
    frontmatter (or folder name) matches the component's purpose. Examples to look
@@ -93,10 +102,10 @@ For each of `caveman`, `design`, `command-hygiene`, `stop-slop`, `matt-pocock`:
    - If found: do **not** write `asp-<name>`. Report the existing install and
      ask whether to leave it, replace it with the pack's version, or keep both
      (discouraged — two skills with the same job confuse triggering).
-3. **Absent** — install: for bundled skills (`caveman`/`design`/`command-hygiene`)
-   create `SKILLS_DIR/asp-<name>/` and write `SKILL.md`; for fetched skills
-   (`stop-slop`/`matt-pocock`) follow `vendor/VENDORING.md` to copy the upstream
-   as-is with its MIT notice.
+3. **Absent** — install according to `TARGET_FORMAT`: skill folder for
+   skill-capable hosts, native `.mdc`/`.md` rule for Cursor or Windsurf/Devin,
+   explicit confirmation before broad Copilot instructions, and read-only report
+   for Aider-style flows.
 
 ### Detection is best-effort, confirmation is the backstop
 
@@ -112,7 +121,7 @@ A duplicate guardrail or a clobbered edit is far worse than one extra question.
   ...payload...
   <!-- END ai-starter-pack:rails -->
   ```
-- On-demand skill, first body line after frontmatter:
+- On-demand skill/rule, first body line after frontmatter when possible:
   ```
   # source: ai-starter-pack <component> v1
   ```

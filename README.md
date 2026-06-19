@@ -1,8 +1,9 @@
 # AI Starter Pack
 
-A one-step setup for a coding agent's everyday defaults. Works across every major
-coding agent — Claude Code, Codex, Cursor, Windsurf, GitHub Copilot, Aider,
-Antigravity, and any tool that reads `SKILL.md` / `AGENTS.md`.
+A one-step setup for a coding agent's everyday defaults. Works best in agents
+with first-class `SKILL.md` support (Claude Code and Codex) and also bootstraps
+rule/instruction-based tools such as Cursor, Windsurf/Devin, GitHub Copilot,
+Aider, Antigravity, and other `AGENTS.md` readers.
 
 The pack is **self-installing**: the agent reading it uses its own file tools to
 place the right files where your host expects them. No npm, curl, or toolchain
@@ -15,12 +16,12 @@ for you, conversationally. There is no per-component manual step.
 | Tool | How the pack loads | Install entry point |
 |---|---|---|
 | **Claude Code** | Plugin marketplace or skills dir | `.claude-plugin/` manifests, `~/.claude/skills/` |
-| **Codex** | Reads root `AGENTS.md` + skills dir | `AGENTS.md`, `~/.codex/skills/` |
-| **Cursor** | Auto-loads project rules | `.cursor/rules/ai-starter-pack.mdc` |
-| **Windsurf** | Reads `.windsurfrules` / `AGENTS.md` | `.windsurfrules`, `~/.codeium/windsurf/memories/` |
-| **GitHub Copilot** | Reads repo instructions | `.github/copilot-instructions.md` |
+| **Codex** | Reads root `AGENTS.md` + `.agents/skills/` | `AGENTS.md`, `.agents/skills/`, `~/.agents/skills/` |
+| **Cursor** | Reads Project Rules and `AGENTS.md` | `.cursor/rules/ai-starter-pack.mdc`, `AGENTS.md` |
+| **Windsurf / Devin** | Reads Rules and `AGENTS.md` | `.devin/rules/`, `.windsurf/rules/`, `AGENTS.md` |
+| **GitHub Copilot** | Reads repo and agent instructions | `.github/copilot-instructions.md`, `.github/instructions/`, `AGENTS.md` |
 | **Aider** | Loaded via `--read` / `AGENTS.md` | `aider --read skills/ai-starter-pack/SKILL.md` |
-| **Antigravity** | Reads `AGENTS.md` + skills dir | `AGENTS.md`, `~/.agents/skills/` |
+| **Antigravity** | Uses `AGENTS.md`-style agent instructions where available | `AGENTS.md`, verify current host-specific skill/rule path |
 | **Any other agent** | Reads `SKILL.md` / `AGENTS.md` | generic `AGENTS.md` + skills dir |
 
 Exact commands for each are in [INSTALL.md](INSTALL.md).
@@ -37,10 +38,12 @@ Exact commands for each are in [INSTALL.md](INSTALL.md).
 | `matt-pocock` | skill set | opt-in | Matt Pocock's engineering skills — TDD, architecture review, planning… (fetched) |
 | `rtk` | binary | opt-in | Real deterministic shell-output compression (fetched, not bundled) |
 
-`rails` install into your always-loaded context file (`CLAUDE.md` / `AGENTS.md` /
-`.cursorrules` / etc.) so they apply every session. The on-demand skills load
-only when their topic comes up. `rtk` is infrastructure and only installs if you
-ask.
+`rails` install into your always-loaded context file or native rule file
+(`CLAUDE.md`, `AGENTS.md`, Cursor/Windsurf rules, etc.) so they apply every
+session. In skill-capable hosts, the on-demand components load only when their
+topic comes up. In rule-only hosts, the pack writes the closest native
+model-decision/manual rule format the host supports. `rtk` is infrastructure and
+only installs if you ask.
 
 ## Install & use
 
@@ -63,6 +66,7 @@ ai-starter-pack/
 ├── AGENTS.md                      # root bootstrap for Codex / Windsurf / Aider / generic
 ├── LICENSE                        # MIT (this pack's original content)
 ├── .claude-plugin/                # Claude Code plugin marketplace manifests
+├── .codex-plugin/                 # Codex plugin manifest
 ├── .cursor/rules/                 # Cursor auto-loaded rule
 └── skills/
     └── ai-starter-pack/           # the skill itself (the distributable unit)
@@ -111,7 +115,7 @@ each one and keeping their config formats documented:
 - **[Claude Code](https://github.com/anthropics/claude-code)** (Anthropic) — plugin marketplace + skills dir.
 - **[Codex](https://github.com/openai/codex)** (OpenAI) — `AGENTS.md` + skills dir.
 - **[Cursor](https://www.cursor.com)** — `.cursor/rules/*.mdc`.
-- **[Windsurf](https://windsurf.com)** — `.windsurfrules` / `AGENTS.md`.
+- **[Windsurf / Devin](https://docs.devin.ai/desktop/cascade/memories)** — `.devin/rules/`, legacy `.windsurf/rules/`, and `AGENTS.md`.
 - **[GitHub Copilot](https://github.com/features/copilot)** — `.github/copilot-instructions.md`.
 - **[Aider](https://github.com/Aider-AI/aider)** — `--read` / `AGENTS.md`.
 - **Antigravity** and any other `AGENTS.md` / `SKILL.md` agent — generic path.

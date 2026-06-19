@@ -14,9 +14,11 @@ skipping attribution is what turns a permitted copy into a violation.
 For each entry in `sources.json` the user wants:
 
 1. **Pick and pin a commit.** Fetch the repo, choose a specific reviewed commit
-   SHA, and record it in the `commit` field (replace `PIN_ME`). Never track a
-   moving branch like `main` for content that lands in an always-loaded context
-   file — a compromised upstream would inject into every session.
+   SHA, and record it in the install report. Entries with
+   `"commit": "PIN_AT_INSTALL"` intentionally require this install-time
+   resolution. Never track a moving branch like `main` for content that lands in
+   an always-loaded context file — a compromised upstream would inject into every
+   session.
 2. **Read the actual LICENSE** in the repo at that commit. Confirm it is MIT and
    capture the copyright line (e.g. `Copyright (c) <year> <author>`). Trust the
    repo's own LICENSE file, not secondhand reports.

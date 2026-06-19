@@ -34,17 +34,19 @@ cp -r skills/ai-starter-pack .claude/skills/ai-starter-pack
 ## Codex (OpenAI)
 
 ```bash
-# Skills CLI
-npx skills add TomYang1993/ai-starter-pack --skill ai-starter-pack --agent codex
-
 # Manual — global
-cp -r skills/ai-starter-pack ~/.codex/skills/ai-starter-pack
+mkdir -p ~/.agents/skills
+cp -r skills/ai-starter-pack ~/.agents/skills/ai-starter-pack
+
 # Manual — project-local
-cp -r skills/ai-starter-pack .codex/skills/ai-starter-pack
+mkdir -p .agents/skills
+cp -r skills/ai-starter-pack .agents/skills/ai-starter-pack
 ```
 
-Codex also reads `AGENTS.md` at the repo root — already present in this repo, so
-cloning it into a project gives Codex the bootstrap automatically.
+Codex reads `AGENTS.md` at the repo root and discovers skills from
+`.agents/skills/` in the repo or `~/.agents/skills/` for the user. This repo also
+ships a `.codex-plugin/plugin.json` manifest for packaging the pack as a Codex
+plugin.
 
 ---
 
@@ -59,26 +61,29 @@ Cursor loads rules from `.cursor/rules/*.mdc`. This repo ships
 
 ```bash
 mkdir -p /path/to/your-project/.cursor/rules
+mkdir -p /path/to/your-project/skills
 cp .cursor/rules/ai-starter-pack.mdc /path/to/your-project/.cursor/rules/
-cp -r skills/ai-starter-pack /path/to/your-project/.cursor/rules/
+cp -r skills/ai-starter-pack /path/to/your-project/skills/ai-starter-pack
 ```
 
 Then open that project in Cursor and say: **"set up my coding environment"**
 
-**Global install (applies to all Cursor projects):**
+**Global install:** Cursor's current global surface is **Cursor Settings → Rules**
+(`User Rules`). Add a short bootstrap there that points at a stable local copy of
+`skills/ai-starter-pack/SKILL.md`. For team/repo installs, prefer the project
+rule above because it is versioned and portable.
 
-```bash
-mkdir -p ~/.cursor/rules
-cp .cursor/rules/ai-starter-pack.mdc ~/.cursor/rules/
-cp -r skills/ai-starter-pack ~/.cursor/rules/
-```
+Cursor also supports `AGENTS.md` in the project root and subdirectories, so a
+repo-level `AGENTS.md` bootstrap is the simplest fallback when you do not need
+Cursor-specific rule metadata.
 
 ---
 
-## Windsurf
+## Windsurf / Devin
 
-Windsurf reads `.windsurfrules` (project) or `~/.codeium/windsurf/memories/global_rules.md` (global).
-It also reads `AGENTS.md`.
+Windsurf/Devin currently prefers `.devin/rules/*.md` for workspace rules and
+keeps `.windsurf/rules/*.md` plus root `.windsurfrules` as legacy/fallback
+surfaces. It also reads `AGENTS.md`.
 
 **Project install:**
 
@@ -86,8 +91,13 @@ It also reads `AGENTS.md`.
 # Clone or copy this repo into your project, then:
 cp -r skills/ai-starter-pack /path/to/your-project/skills/
 
-# Add bootstrap to .windsurfrules
-cat >> /path/to/your-project/.windsurfrules << 'EOF'
+# Add bootstrap as a workspace rule
+mkdir -p /path/to/your-project/.devin/rules
+cat > /path/to/your-project/.devin/rules/ai-starter-pack.md << 'EOF'
+---
+trigger: model_decision
+description: Load AI Starter Pack when the user wants coding-agent defaults installed.
+---
 
 # AI Starter Pack
 When the user says "set up my coding environment" or "bootstrap my agent",
@@ -112,21 +122,26 @@ EOF
 
 ## GitHub Copilot (VS Code / JetBrains)
 
-Copilot reads `.github/copilot-instructions.md` automatically in VS Code.
+Copilot supports repository-wide `.github/copilot-instructions.md`,
+path-specific `.github/instructions/*.instructions.md`, and agent instructions
+via `AGENTS.md`.
 
 ```bash
 mkdir -p /path/to/your-project/.github
 mkdir -p /path/to/your-project/.github/ai-starter-pack
 
-cp -r skills/ai-starter-pack /path/to/your-project/.github/ai-starter-pack/
+cp -r skills/ai-starter-pack /path/to/your-project/.github/ai-starter-pack/ai-starter-pack
 
 cat >> /path/to/your-project/.github/copilot-instructions.md << 'EOF'
 
 ## AI Starter Pack
 When the user says "set up my coding environment" or "bootstrap my agent",
-load and run `.github/ai-starter-pack/SKILL.md` to install components.
+load and run `.github/ai-starter-pack/ai-starter-pack/SKILL.md` to install components.
 EOF
 ```
+
+For Copilot agents, adding the same bootstrap to `AGENTS.md` is often cleaner
+because Copilot now recognizes `AGENTS.md` agent instructions directly.
 
 ---
 
@@ -189,9 +204,11 @@ and it cascades — no second manual install needed.
 
 ## Notes
 
-- Skills-dir paths per host (`skills/ai-starter-pack/references/dedup.md`) use
-  common conventions; verify against your actual install if a tool moved its dirs.
+- Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
+  use current documented conventions where available; verify against your actual
+  install if a tool moved its dirs.
 - `rtk init` flags (`references/optional/rtk.md`) should be checked against
   rtk's current README — it's a fast-moving binary.
-- Windsurf path `~/.codeium/windsurf/memories/` is current as of mid-2025; check
-  Windsurf docs if the global rules location has changed.
+- Windsurf/Devin naming has changed over time. Prefer `.devin/rules/` for new
+  workspace rules and keep `.windsurf/rules/` / `.windsurfrules` as fallback
+  only when the installed client still expects them.

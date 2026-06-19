@@ -1,5 +1,6 @@
 {
   "name": "ai-starter-pack",
+  "description": "One-step setup for coding-agent defaults: guardrails, terse output, design guidance, command hygiene, optional rtk.",
   "owner": { "name": "TomYang1993" },
   "plugins": [
     {

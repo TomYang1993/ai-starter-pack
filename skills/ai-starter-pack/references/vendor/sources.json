@@ -1,5 +1,5 @@
 {
-  "_comment": "Upstream skills the pack can fetch at install time. The first two REPLACE this pack's own original payloads (vendor only if the user wants the canonical versions). The last two are fetch-ONLY skills that have no bundled stand-in — they install by copying the upstream as-is. Pin 'commit' to a reviewed SHA at vendoring time. All are MIT; their license notices must be copied alongside (see VENDORING.md).",
+  "_comment": "Upstream skills the pack can fetch at install time. The first two REPLACE this pack's own original payloads (vendor only if the user wants the canonical versions). The last two are fetch-ONLY skills that have no bundled stand-in — they install by copying the upstream as-is. PIN_AT_INSTALL means the installer must resolve a reviewed commit SHA before copying. All are MIT; their license notices must be copied alongside (see VENDORING.md).",
   "sources": [
     {
       "component": "rails",
@@ -10,7 +10,7 @@
       "repo": "https://github.com/forrestchang/andrej-karpathy-skills",
       "license": "MIT",
       "file": "CLAUDE.md",
-      "commit": "PIN_ME",
+      "commit": "PIN_AT_INSTALL",
       "note": "Canonical Karpathy-inspired guardrails. Verify the LICENSE in the repo at the pinned commit before copying."
     },
     {
@@ -22,7 +22,7 @@
       "repo": "https://github.com/JuliusBrussee/caveman",
       "license": "MIT",
       "file": "SKILL.md",
-      "commit": "PIN_ME",
+      "commit": "PIN_AT_INSTALL",
       "note": "Canonical caveman skill. Verify the LICENSE in the repo at the pinned commit before copying."
     },
     {
@@ -36,7 +36,7 @@
       "license_holder": "Copyright (c) 2025 Hardik Pandya",
       "file": "SKILL.md",
       "extra_files": ["references/phrases.md", "references/structures.md", "references/examples.md"],
-      "commit": "PIN_ME",
+      "commit": "PIN_AT_INSTALL",
       "note": "Removes AI writing tells from prose. No bundled stand-in — install by copying the upstream SKILL.md + its references as-is, with the MIT notice."
     },
     {
@@ -49,7 +49,7 @@
       "license": "MIT",
       "license_holder": "Copyright (c) 2026 Matt Pocock",
       "file": "skills/**/SKILL.md",
-      "commit": "PIN_ME",
+      "commit": "PIN_AT_INSTALL",
       "note": "A collection (~21) of production engineering skills (TDD, architecture review, planning, git guardrails, etc.). Let the user pick which sub-skills to install, or install the set. Copy each chosen skill folder as-is with the MIT notice. The upstream's own 'setup-matt-pocock-skills' skill can drive selection."
     }
   ]

@@ -12,11 +12,12 @@ expects them. No shell toolchain, npm, or curl is required for the default insta
 The pack ships two kinds of content:
 
 - **Always-on rails** — short behavioral guardrails that belong in the host's
-  always-loaded context file (`CLAUDE.md` for Claude Code, `AGENTS.md` for
-  Codex / Antigravity / most others). These must load every session, so they go
-  in the context file, *not* in a lazily-triggered skill.
-- **On-demand skills** — self-contained `SKILL.md` folders that the host loads
-  only when their description matches (caveman, design, command-hygiene).
+  always-loaded context/rule file (`CLAUDE.md`, `AGENTS.md`, Cursor/Windsurf
+  rules, etc.). These must load every session, so they go in the always-on
+  surface, *not* in a lazily-triggered skill.
+- **On-demand skills/rules** — self-contained `SKILL.md` folders for hosts that
+  support skills, or the closest native model-decision/manual rule format for
+  rule-only hosts (Cursor, Windsurf/Devin, Copilot).
 
 One component (`rtk`) is **not** a pure skill — it is a compiled binary that
 compresses shell output below the model. It is opt-in and installed by fetching
@@ -38,7 +39,10 @@ duplicates or silently overwrite the user's edits.
 Read `references/dedup.md` → "Host detection" and resolve:
 
 - `CONTEXT_FILE` — the always-loaded file (`CLAUDE.md` or `AGENTS.md`).
-- `SKILLS_DIR` — where on-demand skills live for this host and scope.
+- `SKILLS_DIR` — where on-demand skills or converted native rules live for this
+  host and scope.
+- `TARGET_FORMAT` — `skill-folder`, `cursor-rule`, `windsurf-rule`,
+  `copilot-instruction`, or `read-only`.
 - `SCOPE` — project-local (default) or global, per the user's preference.
 
 If detection is ambiguous, ask the user which agent and scope they want rather
@@ -80,24 +84,41 @@ For every selected component, run the matching check in `references/dedup.md`
 
 Idempotency comes from markers, so re-running is always safe:
 
-- Context-file blocks are wrapped in
+- Context-file/rule blocks are wrapped in
   `<!-- BEGIN ai-starter-pack:rails v1 -->` … `<!-- END ai-starter-pack:rails -->`.
-- Each on-demand skill folder is named `asp-<component>` and its `SKILL.md`
-  carries `# source: ai-starter-pack <component> v1` on the first body line.
+- Each on-demand skill/rule is named `asp-<component>` and carries
+  `# source: ai-starter-pack <component> v1` near the top of the body.
 
 ### 4. Write the selected components
 
-- **rails** → read `references/payloads/rails.md`. If `CONTEXT_FILE` does not exist, create
-  it with the marked block. If it exists and has no `ai-starter-pack:rails`
-  marker, append the marked block after one blank line — never rewrite the file.
-  Preserve everything already there.
-- **caveman / design / command-hygiene** → copy `references/payloads/<name>.md` to
-  `SKILLS_DIR/asp-<name>/SKILL.md`, creating the folder. Keep the frontmatter and
-  the source marker line intact.
+- **rails** → read `references/payloads/rails.md`. If `CONTEXT_FILE` does not
+  exist, create it with the marked block. If it exists and has no
+  `ai-starter-pack:rails` marker, append the marked block after one blank line —
+  never rewrite the file. Preserve everything already there. For Cursor or
+  Windsurf/Devin native rules, create a project rule file instead if the user
+  chose that host-native format.
+- **caveman / design / command-hygiene**:
+  - `skill-folder` → copy `references/payloads/<name>.md` to
+    `SKILLS_DIR/asp-<name>/SKILL.md`, creating the folder. Keep the frontmatter
+    and source marker intact.
+  - `cursor-rule` → convert the payload to `.cursor/rules/asp-<name>.mdc` with
+    Cursor frontmatter (`description`, `globs: []`, `alwaysApply: false`) and
+    keep the source marker in the body.
+  - `windsurf-rule` → convert the payload to `.devin/rules/asp-<name>.md` with
+    `trigger: model_decision` and a concise `description`; use
+    `.windsurf/rules/` only when `.devin/rules/` is unavailable for the current
+    client.
+  - `copilot-instruction` → Copilot has no generic on-demand skill loader. Ask
+    before turning optional components into broader repository instructions in
+    `AGENTS.md`, `.github/copilot-instructions.md`, or
+    `.github/instructions/asp-<name>.instructions.md`.
+  - `read-only` → report the component as available to load via `--read` or by
+    pasting/attaching the payload; do not invent a persistent install path.
 - **stop-slop / matt-pocock** → only if explicitly chosen. These have **no
   bundled payload** — they install by fetching the upstream skill as-is. Follow
-  `references/vendor/VENDORING.md` using the matching `sources.json` entry: detect
-  a fetch primitive, pin a commit, read the upstream LICENSE, copy the
+  `references/vendor/VENDORING.md` using the matching `sources.json` entry:
+  detect a fetch primitive, resolve a concrete commit for any `PIN_AT_INSTALL`
+  source, read the upstream LICENSE, copy the
   `SKILL.md` (+ listed reference files) into `SKILLS_DIR/asp-<name>/`, and write
   the upstream MIT notice to `LICENSES/<name>-upstream-MIT.txt`. For `matt-pocock`,
   let the user pick which of the ~21 sub-skills to install (or all). Stop and ask
