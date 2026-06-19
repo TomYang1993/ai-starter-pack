@@ -12,12 +12,10 @@ files; skipping attribution is what turns permitted reuse into a violation.
 
 For each entry in `sources.json` the user wants:
 
-1. **Pick and pin a commit.** Fetch the repo, choose a specific reviewed commit
-   SHA, and record it in the install report. Entries with
-   `"commit": "PIN_AT_INSTALL"` intentionally require this install-time
-   resolution. Never track a moving branch like `main` for content that lands in
-   an always-loaded context file — a compromised upstream would inject into every
-   session.
+1. **Use the reviewed commit.** Fetch the repo at the exact `commit` recorded in
+   `sources.json` and record it in the install report. Never track a moving
+   branch like `main` for content that lands in an always-loaded context file —
+   a compromised upstream would inject into every session.
 2. **Read the actual LICENSE/NOTICE** in the repo at that commit. Confirm the
    license matches `sources.json`; update `sources.json` if upstream changed.
    Trust the repo's own files, not secondhand reports.

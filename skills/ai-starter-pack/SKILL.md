@@ -106,9 +106,9 @@ Idempotency comes from markers, so re-running is always safe:
   or included in the user's confirmed "usual" set. These have **no bundled
   rewritten payload** — they install by fetching the upstream skill as-is. Follow
   `references/vendor/VENDORING.md` using the matching `sources.json` entry:
-  detect a fetch primitive, resolve a concrete commit for any `PIN_AT_INSTALL`
-  source, read the upstream LICENSE/NOTICE, copy the listed upstream files into
-  the install target, and write the upstream license text to
+  detect a fetch primitive, fetch the reviewed `commit` recorded in
+  `sources.json`, read the upstream LICENSE/NOTICE, copy the listed upstream
+  files into the install target, and write the upstream license text to
   `LICENSES/<component>-upstream-LICENSE.txt`. For `matt-pocock`, let the user
   pick which sub-skills to install (or all). Stop and ask if no fetch tool is
   available.

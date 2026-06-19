@@ -49,10 +49,8 @@ replacing.
 ## Source registry
 
 Read `references/vendor/sources.json` for component identity, repo, file paths,
-license, and reviewed commit fields. Normal installs should use the reviewed
-commit recorded there. Avoid fetching arbitrary latest upstream commits during a
-user install. If a source still says `PIN_AT_INSTALL`, resolve the commit, report
-that it was not pre-reviewed in the registry, and ask before installing.
+license, and the reviewed `commit`. Normal installs should use that reviewed
+commit. Avoid fetching arbitrary latest upstream commits during a user install.
 
 ## Classify Each Installed Item
 

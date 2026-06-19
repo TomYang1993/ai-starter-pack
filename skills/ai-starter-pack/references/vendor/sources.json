@@ -1,5 +1,5 @@
 {
-  "_comment": "Upstream originals the pack can fetch at install time. Do not replace these with ASP-authored summaries. PIN_AT_INSTALL means the installer must resolve a reviewed commit SHA before copying. Licenses and notices must be copied alongside each installed component (see VENDORING.md).",
+  "_comment": "Upstream originals the pack can fetch at install time. Do not replace these with ASP-authored summaries. The commit field is the reviewed install target. Licenses and notices must be copied alongside each installed component (see VENDORING.md).",
   "sources": [
     {
       "component": "andrej-karpathy-skills",
@@ -11,7 +11,9 @@
       "repo": "https://github.com/forrestchang/andrej-karpathy-skills",
       "license": "MIT",
       "file": "CLAUDE.md",
-      "commit": "PIN_AT_INSTALL",
+      "commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+      "reviewed_at": "2026-06-19",
+      "last_checked_at": "2026-06-19",
       "note": "Upstream guardrails file. Verify the LICENSE in the repo at the pinned commit before copying."
     },
     {
@@ -23,7 +25,9 @@
       "repo": "https://github.com/JuliusBrussee/caveman",
       "license": "MIT",
       "file": "SKILL.md",
-      "commit": "PIN_AT_INSTALL",
+      "commit": "25d22f864ad68cc447a4cb93aefde918aa4aec9f",
+      "reviewed_at": "2026-06-19",
+      "last_checked_at": "2026-06-19",
       "note": "Canonical caveman skill. Verify the LICENSE in the repo at the pinned commit before copying."
     },
     {
@@ -38,7 +42,9 @@
       "file": "skills/impeccable/SKILL.md",
       "extra_files": ["skills/impeccable/reference/**", "skills/impeccable/scripts/**"],
       "plugin_manifest": ".claude-plugin/plugin.json",
-      "commit": "PIN_AT_INSTALL",
+      "commit": "d5403f9d653d9192c35143f50bee4651703354e0",
+      "reviewed_at": "2026-06-19",
+      "last_checked_at": "2026-06-19",
       "note": "Frontend/UI design workflow skill. Prefer the upstream plugin install when the host supports plugins; otherwise copy the upstream skill folder as-is with Apache-2.0 license/notice files."
     },
     {
@@ -52,7 +58,9 @@
       "license_holder": "Copyright (c) 2025 Hardik Pandya",
       "file": "SKILL.md",
       "extra_files": ["references/phrases.md", "references/structures.md", "references/examples.md"],
-      "commit": "PIN_AT_INSTALL",
+      "commit": "8da1f030185bdfe8471220585162991eaeb970e9",
+      "reviewed_at": "2026-06-19",
+      "last_checked_at": "2026-06-19",
       "note": "Removes AI writing tells from prose. No bundled ASP rewrite — install by copying the upstream SKILL.md + its references as-is, with the MIT notice."
     },
     {
@@ -65,7 +73,9 @@
       "license": "MIT",
       "license_holder": "Copyright (c) 2026 Matt Pocock",
       "file": "skills/**/SKILL.md",
-      "commit": "PIN_AT_INSTALL",
+      "commit": "6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461",
+      "reviewed_at": "2026-06-19",
+      "last_checked_at": "2026-06-19",
       "note": "A collection (~21) of production engineering skills (TDD, architecture review, planning, git guardrails, etc.). Let the user pick which sub-skills to install, or install the set. Copy each chosen skill folder as-is with the MIT notice. The upstream's own 'setup-matt-pocock-skills' skill can drive selection."
     }
   ]
