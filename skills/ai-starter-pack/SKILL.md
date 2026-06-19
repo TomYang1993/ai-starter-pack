@@ -136,8 +136,10 @@ own MIT content is limited to installer glue and documentation.
   `rails` marker, and `SKILLS_DIR` for `asp-*` folders; report what's present
   and at what version.
 - **add** → run steps 1–5 for just the named component.
-- **update** → re-run with the newer payload; the version bump in the marker
-  triggers the diff-and-confirm path in step 3.
+- **update** → read `references/update.md` and follow its ownership rules. Only
+  update AI Starter Pack-managed components that are unchanged or explicitly
+  approved. Never overwrite user-edited, user-updated, or user-added skills by
+  default.
 - **remove** → delete the marked block (`andrej-karpathy-skills`, or legacy
   `rails`) or the `asp-<name>` folder (skills). Never touch content outside the
   markers.

@@ -241,6 +241,7 @@ ai-starter-pack/
         ├── LICENSES/
         └── references/
             ├── dedup.md           # host-detection + dedup algorithm
+            ├── update.md          # managed/user-edited update policy
             ├── optional/          # rtk opt-in install flow
             └── vendor/            # upstream-original source registry
 ```
@@ -251,6 +252,10 @@ Every component is marked, so re-running never duplicates anything. If you
 already installed one of these — or have your own guardrails in your context
 file — the pack detects it and asks rather than writing a second copy. See
 `skills/ai-starter-pack/references/dedup.md`.
+
+Updates use `skills/ai-starter-pack/references/update.md`: managed unchanged
+components can move forward, while user-edited, user-updated, and user-added
+skills are left alone unless you approve replacement.
 
 ## Credits & Thanks
 
