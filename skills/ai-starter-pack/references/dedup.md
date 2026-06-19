@@ -5,7 +5,12 @@ running install steps 1 and 3.
 
 ## Host detection
 
-Resolve four values: `CONTEXT_FILE`, `SKILLS_DIR`, `TARGET_FORMAT`, `SCOPE`.
+Load `references/hosts.json` first. It is the source of truth for host paths,
+target formats, docs URLs, and verification status. This file defines the
+resolution algorithm and dedup behavior; do not copy host path tables here.
+
+Resolve four values from the matching host entry: `CONTEXT_FILE`, `SKILLS_DIR`,
+`TARGET_FORMAT`, `SCOPE`.
 
 ### Scope
 
@@ -15,36 +20,38 @@ and are easy to review in a diff). Use **global** only if the user asks for
 
 ### Signals
 
-Check, in order, and stop at the first confident match. If two hosts both look
-present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
+Check, in order, and stop at the first confident match:
 
-| Host | Project context/rule file | Global context/rule file | Project skill/rule dir | Global skill/rule dir | Target format |
-|---|---|---|---|---|---|
-| Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
-| Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
-| Cursor | `AGENTS.md` or `.cursor/rules/asp-rails.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
-| Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-rails.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
-| GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
-| Aider | `AGENTS.md` or a file loaded with `--read` | `.aider.conf.yml` `read:` entry | none | none | `read-only` |
-| Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
-| Generic / other | `AGENTS.md` | `~/.agents/AGENTS.md` if supported | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
+1. If `ASP_AGENT` is set, match it against a host `id` or `aliases` entry in
+   `hosts.json`.
+2. Otherwise score each host by `detection_hints` that exist in the current repo
+   or home directory. A host-specific directory/file beats a generic `AGENTS.md`.
+3. If two host-specific signals both look present (for example `CLAUDE.md` and
+   `.cursor/`), ask the user which host to configure.
+4. If only generic `AGENTS.md` is present, choose the `generic` host unless the
+   user names a specific host.
+5. If nothing matches, choose `generic` and tell the user that you picked the
+   portable `AGENTS.md` + Agent Skills shape.
 
 Detection hints:
 
-- A `.claude/` directory or an existing `CLAUDE.md` → Claude Code.
-- A `.cursor/` directory or `.cursorrules` file → Cursor.
-- A `.devin/`, `.windsurf/`, or `.windsurfrules` file → Windsurf / Devin.
-- A `.codex/` directory → Codex.
-- A `.github/copilot-instructions.md` file → Copilot.
-- An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
-  family (Codex / Aider / Antigravity / others all read `AGENTS.md`).
+- Use the `detection_hints` arrays in `hosts.json`; keep those hints updated
+  when a host changes its docs.
+- Treat explicit user intent as stronger than filesystem hints.
 - `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|generic`
   overrides all of the above.
 
-If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with
-`TARGET_FORMAT=skill-folder`, since `AGENTS.md` is the most widely-read context
-file and `.agents/skills/` is the shared skill location used by current Codex and
-the open Agent Skills ecosystem. Tell the user what you picked.
+### Resolving paths
+
+- `TARGET_FORMAT` is the selected host's `target_format`.
+- `CONTEXT_FILE` is the first writable entry in `context_files[SCOPE]`, unless
+  the host note or user asks for a native rule surface such as Cursor or
+  Windsurf/Devin rules.
+- `SKILLS_DIR` is the first writable entry in `skill_or_rule_dirs[SCOPE]`.
+- If the selected entry is a settings UI rather than a path, report that the
+  install cannot write it directly and give the user the text to paste.
+- For `needs-verification` hosts, do not write host-native paths unless the user
+  provides or confirms current docs. Fall back to `AGENTS.md` when available.
 
 ## Dedup checks
 

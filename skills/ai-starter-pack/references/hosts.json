@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "last_verified": "2026-06-19",
+  "purpose": "Source of truth for host-specific context, skill, rule, and plugin surfaces used by AI Starter Pack. README.md and INSTALL.md are user-facing snapshots; installers should read this file first.",
+  "target_formats": {
+    "skill-folder": "Write an Agent Skills directory containing SKILL.md plus optional bundled resources.",
+    "cursor-rule": "Convert payloads to Cursor .mdc rules under .cursor/rules/.",
+    "windsurf-rule": "Convert payloads to Windsurf/Devin markdown rules.",
+    "copilot-instruction": "Write Copilot repository instruction files only after explicit confirmation.",
+    "read-only": "Do not persist host-specific installs; tell the user how to load the skill as context."
+  },
+  "update_policy": {
+    "host_adapters": "Re-verify source_urls before releases and whenever a host changes rule, skill, plugin, or instruction behavior.",
+    "component_payloads": "Do not update third-party skills or binaries here. Track those in references/vendor/sources.json or references/optional/rtk.md.",
+    "validation": "Run skills/ai-starter-pack/scripts/validate_hosts.py after editing this file or host install docs."
+  },
+  "hosts": [
+    {
+      "id": "claude",
+      "display_name": "Claude Code",
+      "aliases": ["claude-code"],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": [
+        "https://code.claude.com/docs/en/skills",
+        "https://code.claude.com/docs/en/plugins"
+      ],
+      "detection_hints": ["CLAUDE.md", ".claude/"],
+      "context_files": {
+        "project": ["CLAUDE.md"],
+        "global": ["~/.claude/CLAUDE.md"]
+      },
+      "skill_or_rule_dirs": {
+        "project": [".claude/skills/"],
+        "global": ["~/.claude/skills/"],
+        "plugin": ["<plugin>/skills/"]
+      },
+      "plugin_manifests": [".claude-plugin/plugin.json"],
+      "target_format": "skill-folder",
+      "rails_target": "context-file",
+      "notes": [
+        "Plugin skills are namespaced by plugin name.",
+        "Project skills live in .claude/skills/ and personal skills in ~/.claude/skills/."
+      ]
+    },
+    {
+      "id": "codex",
+      "display_name": "Codex",
+      "aliases": ["openai-codex"],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": [
+        "https://developers.openai.com/codex/codex-manual.md",
+        "https://developers.openai.com/codex/skills.md",
+        "https://developers.openai.com/codex/plugins/build.md",
+        "https://developers.openai.com/codex/guides/agents-md.md"
+      ],
+      "detection_hints": ["AGENTS.md", "AGENTS.override.md", ".codex/"],
+      "context_files": {
+        "project": ["AGENTS.md", "AGENTS.override.md"],
+        "global": ["~/.codex/AGENTS.md", "~/.codex/AGENTS.override.md"]
+      },
+      "skill_or_rule_dirs": {
+        "project": [".agents/skills/"],
+        "global": ["~/.agents/skills/"],
+        "admin": ["/etc/codex/skills"]
+      },
+      "plugin_manifests": [".codex-plugin/plugin.json"],
+      "target_format": "skill-folder",
+      "rails_target": "context-file",
+      "notes": [
+        "Codex scans .agents/skills from the working directory up to the repository root.",
+        "AGENTS.override.md is a discovered override surface, but new installs should write AGENTS.md by default.",
+        "Use plugins for distribution; direct skill folders are best for local authoring."
+      ]
+    },
+    {
+      "id": "cursor",
+      "display_name": "Cursor",
+      "aliases": [],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": ["https://cursor.com/docs/rules"],
+      "detection_hints": [".cursor/", ".cursorrules", "AGENTS.md"],
+      "context_files": {
+        "project": ["AGENTS.md", ".cursor/rules/asp-rails.mdc"],
+        "global": ["Cursor Settings -> Rules"]
+      },
+      "skill_or_rule_dirs": {
+        "project": [".cursor/rules/"],
+        "global": ["Cursor Settings -> Rules"]
+      },
+      "target_format": "cursor-rule",
+      "rails_target": "native-rule-or-agents-md",
+      "notes": [
+        "Project rules are .mdc files in .cursor/rules/.",
+        "AGENTS.md is supported for simple project instructions.",
+        "User Rules are configured in Cursor Settings -> Rules, not a portable repo file."
+      ]
+    },
+    {
+      "id": "windsurf",
+      "display_name": "Windsurf / Devin",
+      "aliases": ["devin", "cascade"],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": ["https://docs.devin.ai/desktop/cascade/memories"],
+      "detection_hints": [".devin/", ".windsurf/", ".windsurfrules", "AGENTS.md"],
+      "context_files": {
+        "project": ["AGENTS.md", ".devin/rules/asp-rails.md", ".windsurf/rules/asp-rails.md"],
+        "global": ["~/.codeium/windsurf/memories/global_rules.md"]
+      },
+      "skill_or_rule_dirs": {
+        "project": [".devin/rules/", ".windsurf/rules/"],
+        "global": ["~/.codeium/windsurf/memories/"]
+      },
+      "target_format": "windsurf-rule",
+      "rails_target": "native-rule-or-agents-md",
+      "notes": [
+        "Prefer .devin/rules/ for new workspace rules.",
+        "Keep .windsurf/rules/ and .windsurfrules only as fallback surfaces for older clients."
+      ]
+    },
+    {
+      "id": "copilot",
+      "display_name": "GitHub Copilot",
+      "aliases": ["github-copilot"],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": [
+        "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions"
+      ],
+      "detection_hints": [".github/copilot-instructions.md", ".github/instructions/", "AGENTS.md"],
+      "context_files": {
+        "project": [".github/copilot-instructions.md", "AGENTS.md"],
+        "global": []
+      },
+      "skill_or_rule_dirs": {
+        "project": [".github/instructions/"],
+        "global": []
+      },
+      "target_format": "copilot-instruction",
+      "rails_target": "instruction-file",
+      "notes": [
+        "Copilot supports repository-wide instructions, path-specific .instructions.md files, and AGENTS.md.",
+        "It is not a generic SKILL.md loader, so optional components need confirmation before becoming broad instructions."
+      ]
+    },
+    {
+      "id": "aider",
+      "display_name": "Aider",
+      "aliases": [],
+      "status": "verified",
+      "last_verified": "2026-06-19",
+      "source_urls": ["https://aider.chat/docs/usage/conventions.html"],
+      "detection_hints": [".aider.conf.yml", "AGENTS.md"],
+      "context_files": {
+        "project": ["AGENTS.md", ".aider.conf.yml read:"],
+        "global": []
+      },
+      "skill_or_rule_dirs": {
+        "project": [],
+        "global": []
+      },
+      "target_format": "read-only",
+      "rails_target": "read-context",
+      "notes": [
+        "Use aider --read or .aider.conf.yml read entries to load the pack.",
+        "Do not invent a persistent skill directory for Aider."
+      ]
+    },
+    {
+      "id": "antigravity",
+      "display_name": "Antigravity",
+      "aliases": [],
+      "status": "needs-verification",
+      "last_verified": null,
+      "source_urls": [],
+      "detection_hints": ["AGENTS.md"],
+      "context_files": {
+        "project": ["AGENTS.md"],
+        "global": []
+      },
+      "skill_or_rule_dirs": {
+        "project": [],
+        "global": []
+      },
+      "target_format": "read-only",
+      "rails_target": "context-file",
+      "notes": [
+        "Official host-specific skill or rule paths were not verified. Use AGENTS.md-style instructions where available, and verify current docs before writing a native path."
+      ]
+    },
+    {
+      "id": "generic",
+      "display_name": "Generic AGENTS.md Reader",
+      "aliases": ["other"],
+      "status": "best-effort",
+      "last_verified": null,
+      "source_urls": ["https://agents.md"],
+      "detection_hints": ["AGENTS.md"],
+      "context_files": {
+        "project": ["AGENTS.md"],
+        "global": ["~/.agents/AGENTS.md"]
+      },
+      "skill_or_rule_dirs": {
+        "project": [".agents/skills/"],
+        "global": ["~/.agents/skills/"]
+      },
+      "target_format": "skill-folder",
+      "rails_target": "context-file",
+      "notes": [
+        "Fallback only. If the host has documented native paths, add a verified host entry instead."
+      ]
+    }
+  ]
+}

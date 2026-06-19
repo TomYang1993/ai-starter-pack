@@ -1,6 +1,6 @@
 # AI Starter Pack
 
-A one-step setup for a coding agent's everyday defaults. Works best in agents
+A one-step setup for a coding agent's essential skillset. Works best in agents
 with first-class `SKILL.md` support (Claude Code and Codex) and also bootstraps
 rule/instruction-based tools such as Cursor, Windsurf/Devin, GitHub Copilot,
 Aider, Antigravity, and other `AGENTS.md` readers.
@@ -9,7 +9,7 @@ The pack is **self-installing**: the agent reading it uses its own file tools to
 place the right files where your host expects them. No npm, curl, or toolchain
 needed for the default install — the only capability required is "an agent that
 can write a file." You install *the pack* once; the pack installs the components
-for you, conversationally. There is no per-component manual step.
+for you.
 
 ## Supported tools
 
@@ -25,6 +25,9 @@ for you, conversationally. There is no per-component manual step.
 | **Any other agent** | Reads `SKILL.md` / `AGENTS.md` | generic `AGENTS.md` + skills dir |
 
 Exact commands for each are in [INSTALL.md](INSTALL.md).
+The installer's host-path source of truth is
+`skills/ai-starter-pack/references/hosts.json`; this README and INSTALL are
+human-readable snapshots of that registry.
 
 ## What's in it
 
@@ -69,8 +72,11 @@ ai-starter-pack/
     └── ai-starter-pack/           # the skill itself (the distributable unit)
         ├── SKILL.md               # orchestrator: menu, host-detect, dedup, install
         ├── NOTICE.md              # provenance & attribution
+        ├── scripts/
+        │   └── validate_hosts.py  # checks host registry + stale path drift
         ├── LICENSES/
         └── references/
+            ├── hosts.json         # source of truth for host adapters
             ├── dedup.md           # host-detection + dedup algorithm
             ├── payloads/          # the installable content (original, MIT)
             ├── optional/          # rtk opt-in install flow
@@ -82,6 +88,7 @@ ai-starter-pack/
 Every component is marked, so re-running never duplicates anything. If you
 already installed one of these — or have your own guardrails in your context
 file — the pack detects it and asks rather than writing a second copy. See
+`skills/ai-starter-pack/references/hosts.json` and
 `skills/ai-starter-pack/references/dedup.md`.
 
 ## Credits & Thanks

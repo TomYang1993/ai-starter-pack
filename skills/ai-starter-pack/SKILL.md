@@ -29,6 +29,10 @@ from upstream, never bundled. See `references/optional/rtk.md`.
 > `LICENSES/...`). Resolve them from there regardless of where the skill is
 > installed.
 
+`references/hosts.json` is the source of truth for host-specific context files,
+skill/rule directories, target formats, and documentation links. If any
+host path in README, INSTALL, or a note conflicts with `hosts.json`, follow
+`hosts.json` and report the drift.
 
 Follow these steps in order. Do not skip the dedup checks — re-running this pack,
 or running it on a machine that already has some of these files, must never create
@@ -36,7 +40,8 @@ duplicates or silently overwrite the user's edits.
 
 ### 1. Detect the host and target directories
 
-Read `references/dedup.md` → "Host detection" and resolve:
+Read `references/hosts.json` first, then read `references/dedup.md` → "Host
+detection" for the resolution algorithm. Resolve:
 
 - `CONTEXT_FILE` — the always-loaded file (`CLAUDE.md` or `AGENTS.md`).
 - `SKILLS_DIR` — where on-demand skills or converted native rules live for this
@@ -102,12 +107,12 @@ Idempotency comes from markers, so re-running is always safe:
     `SKILLS_DIR/asp-<name>/SKILL.md`, creating the folder. Keep the frontmatter
     and source marker intact.
   - `cursor-rule` → convert the payload to `.cursor/rules/asp-<name>.mdc` with
-    Cursor frontmatter (`description`, `globs: []`, `alwaysApply: false`) and
-    keep the source marker in the body.
-  - `windsurf-rule` → convert the payload to `.devin/rules/asp-<name>.md` with
+    Cursor frontmatter (`description`, `globs: []`, `alwaysApply: false`) in the
+    `SKILLS_DIR` from `hosts.json`, and keep the source marker in the body.
+  - `windsurf-rule` → convert the payload to `SKILLS_DIR/asp-<name>.md` with
     `trigger: model_decision` and a concise `description`; use
-    `.windsurf/rules/` only when `.devin/rules/` is unavailable for the current
-    client.
+    fallback directories only when the preferred `hosts.json` path is unavailable
+    for the current client.
   - `copilot-instruction` → Copilot has no generic on-demand skill loader. Ask
     before turning optional components into broader repository instructions in
     `AGENTS.md`, `.github/copilot-instructions.md`, or
@@ -155,3 +160,10 @@ so attribution is correct. Default install does not require this.
   triggers the diff-and-confirm path in step 3.
 - **remove** → delete the marked block (rails) or the `asp-<name>` folder
   (skills). Never touch content outside the markers.
+
+## Maintaining host adapters
+
+When a host changes its configuration surfaces, update `references/hosts.json`
+first. Then update README/INSTALL wording only as a user-facing snapshot. Run
+`scripts/validate_hosts.py` before release; it catches stale path tokens and
+ensures README, INSTALL, and `references/dedup.md` point back to the registry.
