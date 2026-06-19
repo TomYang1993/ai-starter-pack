@@ -2,36 +2,32 @@
 
 ## This pack's own content
 
-The files in `references/payloads/` and the pack's documentation are original work,
-licensed MIT (`LICENSES/ai-starter-pack-MIT.txt`). They express widely-known,
-freely-usable engineering ideas in their own words and carry no third-party
-obligation.
+The installer glue and documentation are original work, licensed MIT
+(`LICENSES/ai-starter-pack-MIT.txt`). The pack currently does not ship any
+ASP-authored installable skills.
 
-## Inspiration (not copied)
+## Collected upstream originals
 
-The default payloads were informed by ideas popularized in the community but do
-not reproduce any third-party file:
+The pack does not ship rewritten summaries of well-known community skills. When
+chosen, these components are fetched from upstream at a pinned commit and
+installed verbatim with their license/notice files (see
+`references/vendor/VENDORING.md` and `references/vendor/sources.json`).
 
-- Behavioral-guardrail ideas popularized by Andrej Karpathy's January 2026 notes
-  on LLM coding pitfalls, and Forrest Chang's `andrej-karpathy-skills` (MIT).
-- Terse-output style popularized by JuliusBrussee's `caveman` (MIT).
-
-## Fetched upstream skills (opt-in, copied as-is — not reworded)
-
-These components have no bundled stand-in. When chosen, the pack fetches the
-upstream skill at a pinned commit and installs it verbatim with its MIT notice
-(see `references/vendor/VENDORING.md`). Record each under "Vendored upstream
-files" below once installed.
-
+- `andrej-karpathy-skills` — Forrest Chang, [`forrestchang/andrej-karpathy-skills`](https://github.com/forrestchang/andrej-karpathy-skills)
+  (MIT). Karpathy-style coding-agent guardrails.
+- `caveman` — Julius Brussee, [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman)
+  (MIT). Terse-output skill.
+- `impeccable` — Paul Bakaus, [`pbakaus/impeccable`](https://github.com/pbakaus/impeccable)
+  (Apache-2.0). Frontend/UI design workflow skill.
 - `stop-slop` — Hardik Pandya, [`hardikpandya/stop-slop`](https://github.com/hardikpandya/stop-slop)
   (MIT, Copyright (c) 2025 Hardik Pandya). Removes AI writing tells from prose.
 - `matt-pocock` — Matt Pocock, [`mattpocock/skills`](https://github.com/mattpocock/skills)
   (MIT, Copyright (c) 2026 Matt Pocock). Collection of production engineering skills.
 
-## Vendored upstream files (only if you ran the vendoring step)
+## Installed upstream files
 
-If `references/vendor/VENDORING.md` was used to install canonical upstream files, record
-each here:
+When `references/vendor/VENDORING.md` installs upstream originals, record each
+here:
 
 | Component | Repo | Commit | Retrieved | License file |
 |---|---|---|---|---|

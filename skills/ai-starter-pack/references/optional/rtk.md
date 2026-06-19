@@ -14,8 +14,9 @@ user should watch the install happen, not trust an opaque one-liner.
 ## Preconditions
 
 - Confirm the user wants rtk (it modifies PATH and the host's hook config).
-- If `command-hygiene` (asp) is already installed, note that rtk supersedes it —
-  offer to remove the asp skill after rtk is verified working.
+- If an older AI Starter Pack install has `asp-command-hygiene`, note that rtk
+  supersedes it and offer to remove that legacy skill after rtk is verified
+  working.
 
 ## Step 1 — find a fetch primitive (detect and degrade)
 
@@ -67,7 +68,7 @@ Report success, or the exact error if it didn't take.
 ## Caveats to relay
 
 - rtk only compresses **Bash tool** output. Host-native read/grep/glob tools
-  bypass it. The `command-hygiene` skill complements it for those.
+  bypass it.
 - It compresses output tokens, not the model's reasoning.
 - It's a fast-moving community binary — worth re-checking the hook still works
   after the host updates its tool API.

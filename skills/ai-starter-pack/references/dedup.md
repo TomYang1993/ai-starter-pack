@@ -22,8 +22,8 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 |---|---|---|---|---|---|
 | Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
 | Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
-| Cursor | `AGENTS.md` or `.cursor/rules/asp-rails.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
-| Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-rails.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
+| Cursor | `AGENTS.md` or `.cursor/rules/asp-andrej-karpathy-skills.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
+| Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-andrej-karpathy-skills.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
 | Aider | `AGENTS.md` or a file loaded with `--read` | `.aider.conf.yml` `read:` entry | none | none | `read-only` |
 | Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
@@ -51,31 +51,38 @@ the open Agent Skills ecosystem. Tell the user what you picked.
 The goal: never write a file the user already has, never clobber their edits,
 and make re-running a no-op. Two layers, two strategies.
 
-### Layer 1 — rails in the context/rule file
+### Layer 1 — andrej-karpathy-skills in the context/rule file
 
 1. If `CONTEXT_FILE` is missing → no conflict, install creates it.
-2. If it exists, search for `<!-- BEGIN ai-starter-pack:rails`:
-   - **Marker found, same version** (`v1`) → already current, skip.
-   - **Marker found, older version** → extract the old block, show the user a
-     diff against `references/payloads/rails.md`, install only on confirmation by replacing
-     the bytes *between* the BEGIN/END markers. Leave the rest of the file byte-
-     for-byte unchanged.
-3. If no marker, scan for signs the user already has equivalent rules
+2. If it exists, search for
+   `<!-- BEGIN ai-starter-pack:andrej-karpathy-skills`:
+   - **Marker found, same upstream commit** → already current, skip.
+   - **Marker found, older upstream commit** → extract the old block, show the
+     user a diff against the newly fetched upstream content, install only on
+     confirmation by replacing the bytes *between* the BEGIN/END markers. Leave
+     the rest of the file byte-for-byte unchanged.
+3. If no new marker exists, search for the legacy marker
+   `<!-- BEGIN ai-starter-pack:rails`:
+   - **Legacy marker found** → treat it as an existing install. Do not append a
+     duplicate. Offer to migrate the marker name to `andrej-karpathy-skills`
+     while updating to the selected upstream commit.
+4. If no marker, scan for signs the user already has equivalent rules
    (independent install). Heuristic phrases: "surface assumptions", "surgical",
    "minimal change", "success criteria", "do not over-engineer", or a heading
    like "Karpathy". If two or more appear:
    - Report: "Your context file already contains guardrail-style rules that
-     overlap with `rails`." Ask: leave as-is / append ours anyway / show me both.
+     overlap with `andrej-karpathy-skills`." Ask: leave as-is / append ours
+     anyway / show me both.
    - Default to **leave as-is** — duplicate guardrails waste context and can
      contradict each other.
-4. Only if none of the above → append the marked block after one blank line.
+5. Only if none of the above → append the marked block after one blank line.
 
 Never rewrite or reorder the existing context file. Append or splice the marked
 region only.
 
 ### Layer 2 — on-demand skills or converted rules
 
-For each of `caveman`, `design`, `command-hygiene`, `stop-slop`, `matt-pocock`:
+For each of `caveman`, `impeccable`, `stop-slop`, `matt-pocock`:
 
 1. **Our copy present**:
    - `skill-folder`: `SKILLS_DIR/asp-<name>/SKILL.md` exists.
@@ -89,13 +96,14 @@ For each of `caveman`, `design`, `command-hygiene`, `stop-slop`, `matt-pocock`:
 2. **User's independent copy present** — a sibling folder whose `SKILL.md` `name`
    frontmatter (or folder name) matches the component's purpose. Examples to look
    for before writing `asp-caveman`: a folder named `caveman`, or any `SKILL.md`
-   whose `name` is `caveman` / contains "caveman". For `command-hygiene`, also
-   check whether `rtk` is already installed (run `rtk --version`); if rtk is
-   active, command-hygiene is redundant — say so and default to skipping it.
+   whose `name` is `caveman` / contains "caveman".
    - **`stop-slop`** — many users already have the upstream installed. Look for a
      folder named `stop-slop` or a `SKILL.md` whose `name` is `stop-slop` (check
      both `SKILLS_DIR` and the host's default skills dir, e.g. `~/.claude/skills/`).
      If present, do not fetch a second copy.
+   - **`impeccable`** — look for a folder named `impeccable`, a `SKILL.md` whose
+     `name` is `impeccable`, or an installed Impeccable plugin. If present, do
+     not fetch a second copy.
    - **`matt-pocock`** — look for folders matching the upstream sub-skill names
      (e.g. `setup-matt-pocock-skills`, or any `SKILL.md` authored by Matt Pocock).
      If the set is already present, report it and skip the ones that exist.
@@ -115,11 +123,11 @@ A duplicate guardrail or a clobbered edit is far worse than one extra question.
 
 ## Marker reference
 
-- Rails block in context file:
+- andrej-karpathy-skills block in context file:
   ```
-  <!-- BEGIN ai-starter-pack:rails v1 -->
+  <!-- BEGIN ai-starter-pack:andrej-karpathy-skills <upstream-commit> -->
   ...payload...
-  <!-- END ai-starter-pack:rails -->
+  <!-- END ai-starter-pack:andrej-karpathy-skills -->
   ```
 - On-demand skill/rule, first body line after frontmatter when possible:
   ```
