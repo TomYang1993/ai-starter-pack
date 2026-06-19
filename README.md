@@ -11,20 +11,36 @@ needed for the default install — the only capability required is "an agent tha
 can write a file." You install *the pack* once; the pack installs the components
 for you, conversationally. There is no per-component manual step.
 
-## Supported tools
+## Install
 
-| Tool | How the pack loads | Install entry point |
-|---|---|---|
-| **Claude Code** | Plugin marketplace or skills dir | `.claude-plugin/` manifests, `~/.claude/skills/` |
-| **Codex** | Reads root `AGENTS.md` + `.agents/skills/` | `AGENTS.md`, `.agents/skills/`, `~/.agents/skills/` |
-| **Cursor** | Reads Project Rules and `AGENTS.md` | `.cursor/rules/ai-starter-pack.mdc`, `AGENTS.md` |
-| **Windsurf / Devin** | Reads Rules and `AGENTS.md` | `.devin/rules/`, `.windsurf/rules/`, `AGENTS.md` |
-| **GitHub Copilot** | Reads repo and agent instructions | `.github/copilot-instructions.md`, `.github/instructions/`, `AGENTS.md` |
-| **Aider** | Loaded via `--read` / `AGENTS.md` | `aider --read skills/ai-starter-pack/SKILL.md` |
-| **Antigravity** | Uses `AGENTS.md`-style agent instructions where available | `AGENTS.md`, verify current host-specific skill/rule path |
-| **Any other agent** | Reads `SKILL.md` / `AGENTS.md` | generic `AGENTS.md` + skills dir |
+Install the pack once in the tool you use most, then say
+**"set up my coding environment"** and pick components from the menu.
 
-Exact commands for each are in [INSTALL.md](INSTALL.md).
+**Claude Code** (recommended path):
+
+```text
+/plugin marketplace add TomYang1993/ai-starter-pack
+/plugin install ai-starter-pack@ai-starter-pack
+```
+
+**Every other tool** — copy the skill into the place that tool loads from:
+
+| Tool | One-step install |
+|---|---|
+| **Codex / Antigravity** | `cp -r skills/ai-starter-pack ~/.agents/skills/` — reads root `AGENTS.md` |
+| **Cursor** | copy `.cursor/rules/ai-starter-pack.mdc` + `skills/ai-starter-pack/` into the project |
+| **Windsurf / Devin** | add a `.devin/rules/` bootstrap + copy `skills/ai-starter-pack/` |
+| **GitHub Copilot** | bootstrap in `.github/copilot-instructions.md` + copy `skills/ai-starter-pack/` |
+| **Aider** | `aider --read skills/ai-starter-pack/SKILL.md` |
+| **Any other agent** | copy `skills/ai-starter-pack/`, point the agent at `SKILL.md` |
+
+Then, in that tool:
+
+> "set up my coding environment"
+
+The pack detects your host, shows the component menu, runs dedup checks, and
+writes only what you pick. Full per-tool commands (global vs project scope,
+manual copies, plugin manifests) live in **[INSTALL.md](INSTALL.md)**.
 
 ## What's in it
 
@@ -44,15 +60,6 @@ session. In skill-capable hosts, the on-demand components load only when their
 topic comes up. In rule-only hosts, the pack writes the closest native
 model-decision/manual rule format the host supports. `rtk` is infrastructure and
 only installs if you ask.
-
-## Install & use
-
-See [INSTALL.md](INSTALL.md) for the exact commands per tool. The short version:
-
-1. Install the pack with one command (or one paste) in the tool you use most.
-2. Say: **"set up my coding environment"**
-3. Pick components from the menu.
-
 
 ## Repo layout
 
