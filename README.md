@@ -51,11 +51,8 @@ See [INSTALL.md](INSTALL.md) for the exact commands per tool. The short version:
 
 1. Install the pack with one command (or one paste) in the tool you use most.
 2. Say: **"set up my coding environment"**
-3. Pick components from the menu. The pack writes only what you choose.
+3. Pick components from the menu.
 
-Because the pack is just an agent writing files, once it's loaded in one tool it
-can populate another tool's directories too — install once, then say "also set
-up my Cursor environment" and it cascades.
 
 ## Repo layout
 
@@ -87,40 +84,7 @@ already installed one of these — or have your own guardrails in your context
 file — the pack detects it and asks rather than writing a second copy. See
 `skills/ai-starter-pack/references/dedup.md`.
 
-## Provenance & licensing
-
-Default payloads are original MIT content (`skills/ai-starter-pack/LICENSES/`,
-`skills/ai-starter-pack/NOTICE.md`). They express well-known, freely-usable ideas
-in their own words, so the default install carries no third-party obligation. If
-you want the canonical upstream files (forrestchang's Karpathy guidelines,
-JuliusBrussee's caveman) instead, `skills/ai-starter-pack/references/vendor/VENDORING.md`
-installs them at a pinned commit with correct attribution. `rtk` is fetched from
-[its upstream](https://github.com/rtk-ai/rtk), never redistributed here.
-
-This is a personal-tooling convenience, not legal advice; if you publish it,
-glance at each upstream's real LICENSE first.
-
-## Components, credits & thanks
-
-Everything this pack can install for you, what it does, and who to thank for the
-idea or the tool behind it. The default payloads ship in original wording, but
-the *ideas* — and the optional canonical files and binary — come from the people
-below. Go star their work.
-
-### Tools the pack installs into
-
-It writes config and skills for these coding agents. Thanks to the teams building
-each one and keeping their config formats documented:
-
-- **[Claude Code](https://github.com/anthropics/claude-code)** (Anthropic) — plugin marketplace + skills dir.
-- **[Codex](https://github.com/openai/codex)** (OpenAI) — `AGENTS.md` + skills dir.
-- **[Cursor](https://www.cursor.com)** — `.cursor/rules/*.mdc`.
-- **[Windsurf / Devin](https://docs.devin.ai/desktop/cascade/memories)** — `.devin/rules/`, legacy `.windsurf/rules/`, and `AGENTS.md`.
-- **[GitHub Copilot](https://github.com/features/copilot)** — `.github/copilot-instructions.md`.
-- **[Aider](https://github.com/Aider-AI/aider)** — `--read` / `AGENTS.md`.
-- **Antigravity** and any other `AGENTS.md` / `SKILL.md` agent — generic path.
-
-### Skills & components the pack installs
+## Credits & Thanks
 
 | Component | What it installs | Credit |
 |---|---|---|
@@ -132,9 +96,6 @@ each one and keeping their config formats documented:
 | `matt-pocock` | Engineering skill set (fetched as-is) | **[Matt Pocock](https://github.com/mattpocock)** — [`mattpocock/skills`](https://github.com/mattpocock/skills) (MIT) |
 | `rtk` | Opt-in shell-output compression binary | **[rtk-ai](https://github.com/rtk-ai/rtk)** — RTK "Rust Token Killer" (Apache-2.0); fetched from upstream, never bundled |
 
-Thank you to **Andrej Karpathy**, **Forrest Chang (forrestchang)**, **Julius
-Brussee (JuliusBrussee)**, **Hardik Pandya (hardikpandya)**, **Matt Pocock
-(mattpocock)**, the **rtk-ai** team, and the maintainers of every agent above.
-This pack is glue around your work — all credit for the underlying ideas and
-tools is yours. If you maintain one of these and want the attribution worded
+This pack is glue around your work, all credit is yours.
+If you maintain one of these and want the attribution worded
 differently, open an issue.
