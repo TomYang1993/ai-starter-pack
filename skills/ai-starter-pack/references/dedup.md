@@ -21,17 +21,25 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 | Host | Context file | Project skills dir | Global skills dir |
 |---|---|---|---|
 | Claude Code | `CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` |
+| Cursor | `.cursorrules` | `.cursor/rules/` | `~/.cursor/rules/` |
+| Windsurf | `.windsurfrules` | `.windsurf/rules/` | `~/.codeium/windsurf/memories/` |
 | Codex | `AGENTS.md` | `.codex/skills/` | `~/.codex/skills/` |
+| Aider | `AGENTS.md` | `.aider/skills/` | `~/.aider/skills/` |
+| Copilot | `.github/copilot-instructions.md` | `.github/` | `~/.github/` |
 | Antigravity | `AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` |
 | Generic / other | `AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` |
 
 Detection hints:
 
 - A `.claude/` directory or an existing `CLAUDE.md` → Claude Code.
+- A `.cursor/` directory or `.cursorrules` file → Cursor.
+- A `.windsurfrules` file or `.windsurf/` directory → Windsurf.
 - A `.codex/` directory → Codex.
+- A `.github/copilot-instructions.md` file → Copilot.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
-  family (Codex / Antigravity / others all read `AGENTS.md`).
-- `ASP_AGENT=claude|codex|antigravity|generic` overrides all of the above.
+  family (Codex / Aider / Antigravity / others all read `AGENTS.md`).
+- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|generic`
+  overrides all of the above.
 
 If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/`, since
 `AGENTS.md` is the most widely-read context file. Tell the user what you picked.

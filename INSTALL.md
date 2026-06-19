@@ -1,88 +1,197 @@
 # Installing the AI Starter Pack
 
-You install **the pack** once per tool you care about (often just your main one).
-The pack then installs the individual components for you — you don't install
-rails / caveman / design one by one.
+Install **the pack** once per tool. The pack then installs individual components
+(rails, caveman, design, etc.) for you — no per-component manual steps.
 
-Replace `YOUR_GH` below with your GitHub namespace after you push this repo
-(e.g. `tom/ai-starter-pack`).
+---
 
-## Step 0 — publish the repo
+## Claude Code
 
-Push this folder to a public GitHub repo named `ai-starter-pack`. Nothing to
-rearrange — the layout is already install-ready.
-
-## Step 1 — install the pack (pick the channel for your tool)
-
-### A. Skills CLI — cross-tool, no per-tool config
-
-```bash
-npx skills add YOUR_GH/ai-starter-pack --skill ai-starter-pack --agent claude-code
-npx skills add YOUR_GH/ai-starter-pack --skill ai-starter-pack --agent codex
-npx skills add YOUR_GH/ai-starter-pack --skill ai-starter-pack --agent antigravity
-```
-
-This copies the whole `skills/ai-starter-pack/` folder (SKILL.md + references)
-into the tool's skills directory.
-
-### B. Claude Code plugin marketplace — Claude Code only
+### Option A — Plugin marketplace (recommended)
 
 ```text
-/plugin marketplace add YOUR_GH/ai-starter-pack
+/plugin marketplace add TomYang1993/ai-starter-pack
 /plugin install ai-starter-pack@ai-starter-pack
 ```
 
-The manifests in `.claude-plugin/` drive this. Plugin specs change fast — if the
-install command errors, check the current Claude Code plugin docs and adjust
-`.claude-plugin/marketplace.json` / `plugin.json` to match. Channels A and C
-don't depend on the plugin spec.
-
-### C. No toolchain — manual copy
-
-Copy `skills/ai-starter-pack/` into your tool's skills folder:
+### Option B — Skills CLI
 
 ```bash
-# Claude Code (global)
-cp -r skills/ai-starter-pack ~/.claude/skills/ai-starter-pack
-# Codex (global)
-cp -r skills/ai-starter-pack ~/.codex/skills/ai-starter-pack
-# Antigravity / generic (global)
-cp -r skills/ai-starter-pack ~/.agents/skills/ai-starter-pack
+npx skills add TomYang1993/ai-starter-pack --skill ai-starter-pack --agent claude-code
 ```
 
-Project-local installs work too — use the project's `.claude/skills/`,
-`.codex/skills/`, or `.agents/skills/` instead.
+### Option C — Manual
 
-## Step 2 — use it
+```bash
+# Global
+cp -r skills/ai-starter-pack ~/.claude/skills/ai-starter-pack
+# Project-local
+cp -r skills/ai-starter-pack .claude/skills/ai-starter-pack
+```
 
-In any tool where the pack is loaded, say:
+---
 
-> set up my coding environment
+## Codex (OpenAI)
 
-The pack detects your host, shows the component menu, runs the dedup checks, and
-writes only what you pick. Other phrases that trigger it: "bootstrap my agent",
-"install my starter pack", "configure this project".
+```bash
+# Skills CLI
+npx skills add TomYang1993/ai-starter-pack --skill ai-starter-pack --agent codex
 
-## Step 3 — manage it later
+# Manual — global
+cp -r skills/ai-starter-pack ~/.codex/skills/ai-starter-pack
+# Manual — project-local
+cp -r skills/ai-starter-pack .codex/skills/ai-starter-pack
+```
 
-- **list** — "what's in my starter pack here?"
-- **add one** — "add caveman to this project"
-- **update** — "update my starter pack" (diffs before replacing)
-- **remove** — "remove the design skill"
-- **rtk** — "install rtk" (opt-in; fetches the binary, patches your host hook)
+Codex also reads `AGENTS.md` at the repo root — already present in this repo, so
+cloning it into a project gives Codex the bootstrap automatically.
+
+---
+
+## Cursor
+
+Cursor loads rules from `.cursor/rules/*.mdc`. This repo ships
+`.cursor/rules/ai-starter-pack.mdc` ready to go.
+
+**If working inside this repo:** Cursor already picks it up — no extra step.
+
+**To install into another project:**
+
+```bash
+mkdir -p /path/to/your-project/.cursor/rules
+cp .cursor/rules/ai-starter-pack.mdc /path/to/your-project/.cursor/rules/
+cp -r skills/ai-starter-pack /path/to/your-project/.cursor/rules/
+```
+
+Then open that project in Cursor and say: **"set up my coding environment"**
+
+**Global install (applies to all Cursor projects):**
+
+```bash
+mkdir -p ~/.cursor/rules
+cp .cursor/rules/ai-starter-pack.mdc ~/.cursor/rules/
+cp -r skills/ai-starter-pack ~/.cursor/rules/
+```
+
+---
+
+## Windsurf
+
+Windsurf reads `.windsurfrules` (project) or `~/.codeium/windsurf/memories/global_rules.md` (global).
+It also reads `AGENTS.md`.
+
+**Project install:**
+
+```bash
+# Clone or copy this repo into your project, then:
+cp -r skills/ai-starter-pack /path/to/your-project/skills/
+
+# Add bootstrap to .windsurfrules
+cat >> /path/to/your-project/.windsurfrules << 'EOF'
+
+# AI Starter Pack
+When the user says "set up my coding environment" or "bootstrap my agent",
+load and run skills/ai-starter-pack/SKILL.md to install components.
+EOF
+```
+
+**Global install:**
+
+```bash
+mkdir -p ~/.codeium/windsurf/memories
+cp -r skills/ai-starter-pack ~/.codeium/windsurf/memories/
+cat >> ~/.codeium/windsurf/memories/global_rules.md << 'EOF'
+
+# AI Starter Pack
+When the user says "set up my coding environment" or "bootstrap my agent",
+load and run the skill at ~/.codeium/windsurf/memories/ai-starter-pack/SKILL.md.
+EOF
+```
+
+---
+
+## GitHub Copilot (VS Code / JetBrains)
+
+Copilot reads `.github/copilot-instructions.md` automatically in VS Code.
+
+```bash
+mkdir -p /path/to/your-project/.github
+mkdir -p /path/to/your-project/.github/ai-starter-pack
+
+cp -r skills/ai-starter-pack /path/to/your-project/.github/ai-starter-pack/
+
+cat >> /path/to/your-project/.github/copilot-instructions.md << 'EOF'
+
+## AI Starter Pack
+When the user says "set up my coding environment" or "bootstrap my agent",
+load and run `.github/ai-starter-pack/SKILL.md` to install components.
+EOF
+```
+
+---
+
+## Aider
+
+Aider loads files via `--read`. Pass the skill at startup:
+
+```bash
+aider --read skills/ai-starter-pack/SKILL.md
+```
+
+Or add it to `.aider.conf.yml` in your project:
+
+```yaml
+read:
+  - skills/ai-starter-pack/SKILL.md
+```
+
+Then say: **"set up my coding environment"**
+
+---
+
+## Any other agent (generic)
+
+Copy the skill where the agent loads on-demand skills, then tell it to read
+`SKILL.md`. As a fallback, paste `SKILL.md` content directly into the context.
+
+The pack's only requirement: **an agent that can read and write files.**
+
+---
+
+## After installing in any tool
+
+Say one of:
+
+> "set up my coding environment"  
+> "bootstrap my agent"  
+> "install my starter pack"
+
+The pack shows a component menu, runs dedup checks, and writes only what you pick.
+
+---
+
+## Managing installed components
+
+- **List** — "what's in my starter pack here?"
+- **Add one** — "add caveman to this project"
+- **Update** — "update my starter pack"
+- **Remove** — "remove the design skill"
+- **rtk** — "install rtk" (opt-in binary; see `references/optional/rtk.md`)
 
 ## Self-propagation
 
-Once any agent has the pack loaded, it can set up *other* tools by writing into
-their directories. Install once in your main tool, then:
+Once loaded in one tool, the pack can populate another tool's directories.
+Install once in Claude Code, then say:
 
-> also set up my Codex environment
+> "also set up my Cursor environment"
 
-and it populates `~/.codex/...`, pack included — no second manual install.
+and it cascades — no second manual install needed.
 
-## Notes worth checking before relying on it
+## Notes
 
-- The skills-dir paths per host (`references/dedup.md`) use common conventions;
-  verify against your actual Codex / Antigravity installs, as those move.
-- `rtk init` flags (`references/optional/rtk.md`) should be checked against rtk's
-  current README — it's a fast-moving binary.
+- Skills-dir paths per host (`skills/ai-starter-pack/references/dedup.md`) use
+  common conventions; verify against your actual install if a tool moved its dirs.
+- `rtk init` flags (`references/optional/rtk.md`) should be checked against
+  rtk's current README — it's a fast-moving binary.
+- Windsurf path `~/.codeium/windsurf/memories/` is current as of mid-2025; check
+  Windsurf docs if the global rules location has changed.
