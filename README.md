@@ -18,6 +18,18 @@ Install **the pack** once per tool. The pack then installs individual components
 manual steps. After installing in any tool, say **"set up my coding environment"**
 and pick from the menu.
 
+### Fastest path — let an agent install it
+
+If you just handed an agent this repo (a URL, or an open checkout), say:
+
+> "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
+
+The agent fetches or clones the repo if the files aren't already local, reads
+`SKILL.md`, detects your host, shows the component menu, runs the dedup checks,
+and writes everything for you. **This is the primary flow.** The per-tool
+commands below are the manual fallback for when you'd rather place the files
+yourself or pre-install the pack so the trigger phrase works in a fresh chat.
+
 ### Claude Code
 
 **Option A — Plugin marketplace (recommended)**
