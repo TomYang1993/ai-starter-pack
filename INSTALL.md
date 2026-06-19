@@ -172,26 +172,40 @@ The pack's only requirement: **an agent that can read and write files.**
 
 ## After installing
 
-Say one of: **"set up my coding environment"**, **"bootstrap my agent"**, or
-**"install my starter pack"**. The pack shows the component menu, runs dedup
-checks, and writes only what you pick. Manage it later with:
+For initial setup, say:
+
+> "set up my coding environment"
+
+After pulling a newer AI Starter Pack, say:
+
+> "update my environment"
+
+The pack shows the component menu, runs dedup checks, and writes only what you
+pick. During updates, it replaces only AI Starter Pack-managed files that still
+match what the pack previously installed.
+
+## Advanced management
+
+These are optional follow-up commands for users who want more control:
 
 - **List** - "what's in my starter pack here?"
 - **Add one** - "add caveman to this project"
-- **Update** - "update my starter pack"
 - **Remove** - "remove the impeccable skill"
-- **rtk** - "install rtk" (opt-in binary; see
+- **rtk** - "install rtk" (opt-in global binary with per-tool hook setup; see
   `skills/ai-starter-pack/references/optional/rtk.md`)
-
-Once loaded in one tool, the pack can populate another's directories - install
-once in Claude Code, then say "also set up my Cursor environment" and it cascades.
 
 ## Notes
 
 Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
 use current documented conventions; verify against your actual install if a tool
 moved its dirs. `rtk init` flags
-(`skills/ai-starter-pack/references/optional/rtk.md`) track a fast-moving binary.
-Windsurf/Devin naming has shifted over time - prefer `.devin/rules/` for new
-workspace rules and keep `.windsurf/rules/` / `.windsurfrules` as fallback only
-when the client expects them.
+(`skills/ai-starter-pack/references/optional/rtk.md`) are per-tool hook setup,
+not routine pack updates. Windsurf/Devin naming has shifted over time - prefer
+`.devin/rules/` for new workspace rules and keep `.windsurf/rules/` /
+`.windsurfrules` as fallback only when the client expects them.
+
+Cross-tool setup is file-based, not magic. An agent can help write project-local
+files for another host when those paths are available in the workspace, and it
+can write global host files only when the user approves those file writes. It
+cannot silently change another app's private settings, install marketplace
+plugins, or bypass OS/sandbox permissions.

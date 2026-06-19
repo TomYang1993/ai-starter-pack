@@ -23,18 +23,9 @@ The agent detects your host, shows the component menu, runs the safety checks,
 and writes the selected files. For manual install commands, host-specific setup,
 and agent-readable fallbacks, see [`INSTALL.md`](INSTALL.md).
 
-After installing, say one of: **"set up my coding environment"**, **"bootstrap
-my agent"**, or **"install my starter pack"**. Manage it later with:
+After installing, the only prompt you need is:
 
-- **List** — "what's in my starter pack here?"
-- **Add one** — "add caveman to this project"
-- **Update** — "update my starter pack"
-- **Remove** — "remove the impeccable skill"
-- **rtk** — "install rtk" (opt-in binary; see
-  `skills/ai-starter-pack/references/optional/rtk.md`)
-
-Once loaded in one tool, the pack can populate another's directories - install
-once in Claude Code, then say "also set up my Cursor environment" and it cascades.
+> "set up my coding environment"
 
 ## What's in it
 
@@ -86,16 +77,15 @@ ai-starter-pack/
 
 After pulling a newer AI Starter Pack, say:
 
-> "update my starter pack"
+> "update my environment"
 
 The pack updates only AI Starter Pack-managed components that still match what it
 previously installed. If you edited a managed skill, updated an upstream skill
 yourself, added your own skills, or removed a component, the pack leaves that
 work alone unless you explicitly approve replacement or reinstall.
 
-For the full rules, see `skills/ai-starter-pack/references/update.md`. Duplicate
-detection and re-run behavior are in `skills/ai-starter-pack/references/dedup.md`
-for anyone who wants the mechanics.
+For manual install paths, optional components, and the full update rules, see
+[`INSTALL.md`](INSTALL.md) and `skills/ai-starter-pack/references/update.md`.
 
 ## Credits & Thanks
 

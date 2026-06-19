@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional rtk — written as portable files that work across Claude Code, Codex, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional rtk — written as portable files that work across Claude Code, Codex, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
