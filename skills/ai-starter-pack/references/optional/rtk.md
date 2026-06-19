@@ -1,80 +1,64 @@
-# rtk (optional binary — opt-in only)
+# rtk Adapter
 
-`rtk` ("Rust Token Killer") is a CLI proxy that rewrites verbose shell commands
-into compact output *before the model sees it*. Unlike the other components it is
-a compiled binary, not a skill — a skill can't intercept its own tool output
-after the fact. So this is real infrastructure: the binary is installed globally
-or on PATH once, then each host/tool needs its own hook registration.
+`rtk` ("Rust Token Killer") is optional infrastructure, not an AI Starter Pack
+skill. The upstream repo owns installation, releases, troubleshooting, and host
+integration details:
 
-Install it only when the user explicitly asks. It is **not** bundled with this
-pack; it is fetched from upstream at install time, so the user runs the same
-code they'd get installing it themselves. Narrate every command you run — the
-user should watch the install happen, not trust an opaque one-liner.
+https://github.com/rtk-ai/rtk
 
-## Preconditions
+Use this file only as the starter-pack adapter: when to offer rtk, what not to
+overwrite, and which reviewed host init commands are known.
 
-- Confirm the user wants rtk (it modifies PATH and the host's hook config).
-- Check whether `rtk --version` already works. If it does, do **not** reinstall
-  the binary; only offer to register the hook for the current host/tool.
+## Policy
+
+- Offer rtk only when the user explicitly asks for it.
+- Do not bundle or copy rtk. Fetch/install from upstream or send the user to the
+  upstream docs.
+- Narrate every command before running it. rtk modifies PATH and host hook/plugin
+  config, so the user should see what changes.
+- If `rtk --version` works, reuse the existing binary. Do not reinstall it just
+  because the starter pack is being updated.
+- Treat hook setup as per-tool/per-scope. A global rtk binary does not mean
+  Claude Code, Codex, Kilo Code, etc. are all configured.
 - If an older AI Starter Pack install has `asp-command-hygiene`, note that rtk
-  supersedes it and offer to remove that legacy skill after rtk is verified
-  working.
+  supersedes it and offer to remove that legacy skill after rtk is verified.
 
-## Step 1 — find a fetch primitive (detect and degrade)
+## Reviewed Host Init Commands
 
-Do not assume `curl` exists. Probe in order, use the first available:
-
-1. `curl --version`  → use curl.
-2. `wget --version`  → use wget.
-3. The agent's own web-fetch / download tool, if the host exposes one.
-4. None available → stop. Tell the user the two manual options:
-   the official one-line installer from the rtk repo, or downloading the release
-   binary for their OS/arch by hand. Do not fake the install.
-
-## Step 2 — install or reuse the binary
-
-If `rtk --version` already works, reuse that global binary and continue to the
-host hook step. Otherwise, prefer the project's official installer (it handles
-OS/arch detection, PATH, and chmod in one step); fall back to a release-binary
-download if a fetch primitive is present but you're avoiding piped execution.
-Show the user the exact command first. After install, verify:
-
-```
-rtk --version
-```
-
-If this fails, the most common cause is a name collision: there is an unrelated
-`rtk` (a Rust type toolkit) on crates.io. If the wrong one landed, reinstall from
-the rtk-ai project's git source specifically, then re-verify.
-
-## Step 3 — register the host hook
-
-rtk rewrites Bash commands via the host's pre-tool hook. This setup is
-independent per host/tool: installing rtk for Claude Code does not automatically
-enable it for Codex, Antigravity, or another shell surface. Use the host detected
-in the main install (step 1 of `SKILL.md`):
+These commands are copied from the upstream RTK README's quick-start section and
+should be refreshed by the maintainer update job, not re-read during every user
+install.
 
 | Host | Init command |
 |---|---|
-| Claude Code | `rtk init -g` |
+| Claude Code / default hook agents | `rtk init -g` |
 | Codex | `rtk init -g --codex` |
+| Cursor | `rtk init -g --agent cursor` |
+| Windsurf | `rtk init -g --agent windsurf` |
+| Cline / Roo Code | `rtk init --agent cline` |
+| Kilo Code | `rtk init --agent kilocode` |
 | Antigravity | `rtk init --agent antigravity` |
-| Other | check `rtk init --help` for the agent flag |
 
-Use the global (`-g`) form for a global scope, the plain form for project scope,
-matching the user's chosen `SCOPE`.
+Use the global (`-g`) form only when the user asked for global scope. For project
+scope, prefer the non-global form if upstream supports it for that host. If the
+host is missing from this table, check `rtk init --help` or the upstream README
+before guessing.
 
-## Step 4 — restart and verify
+## Normal Flow
 
-The hook loads when the host restarts. Tell the user to restart their tool, then
-confirm a command gets rewritten (e.g. `git status` becomes the compact form).
-Report success, or the exact error if it didn't take.
+1. Confirm the user wants rtk.
+2. Check `rtk --version`.
+3. If missing, follow the upstream README install path for the user's OS/package
+   manager.
+4. Run the reviewed init command for the current host/scope.
+5. Ask the user to restart the host, then verify with a shell command such as
+   `git status`.
 
-## Caveats to relay
+## Caveats to Relay
 
-- rtk only compresses **Bash tool** output. Host-native read/grep/glob tools
+- rtk compresses shell/Bash command output. Host-native read/grep/glob tools may
   bypass it.
-- It compresses output tokens, not the model's reasoning.
-- rtk setup usually does not need routine updates. Re-check the hook only when
-  the user adds a new host/tool, changes scope, reinstalls a host, or the host
-  updates its tool/hook API.
+- rtk compresses output tokens, not the model's reasoning.
+- rtk usually does not need routine starter-pack updates. Re-check upstream when
+  the user adds a new host/tool, changes scope, reinstalls a host, or a host
+  changes its hook/plugin API.

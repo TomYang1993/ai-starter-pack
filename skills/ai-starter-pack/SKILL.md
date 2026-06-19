@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional rtk — written as portable files that work across Claude Code, Codex, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional rtk — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -113,8 +113,9 @@ Idempotency comes from markers, so re-running is always safe:
   pick which sub-skills to install (or all). Stop and ask if no fetch tool is
   available.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
-  detect a fetch primitive, narrate each command, install for the detected host,
-  verify, and report. Stop and ask if no fetch tool is available.
+  treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
+  present, run only the reviewed per-host hook/init command when applicable,
+  verify, and report. Ask before changing PATH, hooks, plugins, or shell config.
 
 ### 5. Report
 

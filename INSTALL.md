@@ -58,6 +58,29 @@ Codex reads `AGENTS.md` at the repo root and discovers skills from
 ships a `.codex-plugin/plugin.json` manifest for packaging the pack as a Codex
 plugin.
 
+## Kilo Code
+
+Use the `AGENTS.md` bootstrap path unless your Kilo Code install exposes a
+project-specific native rules path and you have verified it.
+
+```bash
+mkdir -p /path/to/your-project/.agents/skills
+cp -r skills/ai-starter-pack /path/to/your-project/.agents/skills/ai-starter-pack
+```
+
+If the target project does not have `AGENTS.md`, copy this repo's `AGENTS.md`
+there. If it already has one, append a short bootstrap telling Kilo Code to load
+`.agents/skills/ai-starter-pack/SKILL.md` when the user asks to set up or update
+their environment.
+
+Then open that project in Kilo Code and say:
+
+> "set up my coding environment"
+
+Kilo Code also has plugin surfaces in some installs. The starter pack should not
+write those plugin hooks unless the user explicitly asks and the exact Kilo
+plugin/config path is verified for that installation.
+
 ## Cursor
 
 Cursor loads rules from `.cursor/rules/*.mdc`. This repo ships
@@ -198,11 +221,11 @@ These are optional follow-up commands for users who want more control:
 
 Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
 use current documented conventions; verify against your actual install if a tool
-moved its dirs. `rtk init` flags
-(`skills/ai-starter-pack/references/optional/rtk.md`) are per-tool hook setup,
-not routine pack updates. Windsurf/Devin naming has shifted over time - prefer
-`.devin/rules/` for new workspace rules and keep `.windsurf/rules/` /
-`.windsurfrules` as fallback only when the client expects them.
+moved its dirs. rtk setup uses upstream RTK docs, with only starter-pack-specific
+adapter notes in `skills/ai-starter-pack/references/optional/rtk.md`.
+Windsurf/Devin naming has shifted over time - prefer `.devin/rules/` for new
+workspace rules and keep `.windsurf/rules/` / `.windsurfrules` as fallback only
+when the client expects them.
 
 Cross-tool setup is file-based, not magic. An agent can help write project-local
 files for another host when those paths are available in the workspace, and it

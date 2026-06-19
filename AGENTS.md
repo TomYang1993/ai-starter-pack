@@ -1,6 +1,6 @@
 # AI Starter Pack — Agent Bootstrap
 
-This file is the entry point for agents that auto-read `AGENTS.md` (Codex, Windsurf, Aider, and others).
+This file is the entry point for agents that auto-read `AGENTS.md` (Codex, Kilo Code, Windsurf, Aider, and others).
 
 When the user says "set up my coding environment", "update my environment", "bootstrap my agent", "install my starter pack", or starts in a fresh repo and wants their usual defaults:
 

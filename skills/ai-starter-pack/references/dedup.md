@@ -27,6 +27,7 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
 | Aider | `AGENTS.md` or a file loaded with `--read` | `.aider.conf.yml` `read:` entry | none | none | `read-only` |
 | Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
+| Kilo Code | `AGENTS.md` | verify current host docs | `.agents/skills/` unless native Kilo rules are verified | `~/.agents/skills/` if supported | `skill-folder` by default, otherwise `read-only` |
 | Generic / other | `AGENTS.md` | `~/.agents/AGENTS.md` if supported | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
 
 Detection hints:
@@ -36,9 +37,13 @@ Detection hints:
 - A `.devin/`, `.windsurf/`, or `.windsurfrules` file → Windsurf / Devin.
 - A `.codex/` directory → Codex.
 - A `.github/copilot-instructions.md` file → Copilot.
+- Explicit user request for Kilo Code, `ASP_AGENT=kilo`, or a project-local
+  `.kilo/` directory → Kilo Code. Use `AGENTS.md` unless a native Kilo rules
+  path is present and verified.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
-  family (Codex / Aider / Antigravity / others all read `AGENTS.md`).
-- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|generic`
+  family (Codex / Kilo Code / Aider / Antigravity / others all read
+  `AGENTS.md`).
+- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|kilo|generic`
   overrides all of the above.
 
 If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with

@@ -3,7 +3,7 @@
 A one-step setup for a coding agent's everyday defaults. Works best in agents
 with first-class `SKILL.md` support (Claude Code and Codex) and also bootstraps
 rule/instruction-based tools such as Cursor, Windsurf/Devin, GitHub Copilot,
-Aider, Antigravity, and other `AGENTS.md` readers.
+Aider, Antigravity, Kilo Code, and other `AGENTS.md` readers.
 
 The pack is **self-installing**: the agent reading it uses its own file tools to
 place the right files where your host expects them. The installer itself is just
@@ -56,7 +56,7 @@ upstream repo, license, install path, and reviewed commit used for installs.
 ai-starter-pack/
 ├── README.md                      # overview, quick start, updates
 ├── INSTALL.md                     # manual and host-specific install paths
-├── AGENTS.md                      # root bootstrap for Codex / Windsurf / Aider / generic
+├── AGENTS.md                      # root bootstrap for Codex / Kilo Code / Aider / generic
 ├── LICENSE                        # MIT (this pack's original content)
 ├── .claude-plugin/                # Claude Code plugin marketplace manifests
 ├── .codex-plugin/                 # Codex plugin manifest
