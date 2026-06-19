@@ -73,7 +73,7 @@ region only.
 
 ### Layer 2 — on-demand skills in the skills dir
 
-For each of `caveman`, `design`, `command-hygiene`:
+For each of `caveman`, `design`, `command-hygiene`, `stop-slop`, `matt-pocock`:
 
 1. **Our copy present** — `SKILLS_DIR/asp-<name>/SKILL.md` exists:
    - Read its source-marker line. Same version → skip. Older → diff + confirm.
@@ -83,10 +83,20 @@ For each of `caveman`, `design`, `command-hygiene`:
    whose `name` is `caveman` / contains "caveman". For `command-hygiene`, also
    check whether `rtk` is already installed (run `rtk --version`); if rtk is
    active, command-hygiene is redundant — say so and default to skipping it.
+   - **`stop-slop`** — many users already have the upstream installed. Look for a
+     folder named `stop-slop` or a `SKILL.md` whose `name` is `stop-slop` (check
+     both `SKILLS_DIR` and the host's default skills dir, e.g. `~/.claude/skills/`).
+     If present, do not fetch a second copy.
+   - **`matt-pocock`** — look for folders matching the upstream sub-skill names
+     (e.g. `setup-matt-pocock-skills`, or any `SKILL.md` authored by Matt Pocock).
+     If the set is already present, report it and skip the ones that exist.
    - If found: do **not** write `asp-<name>`. Report the existing install and
      ask whether to leave it, replace it with the pack's version, or keep both
      (discouraged — two skills with the same job confuse triggering).
-3. **Absent** — create `SKILLS_DIR/asp-<name>/` and write `SKILL.md`.
+3. **Absent** — install: for bundled skills (`caveman`/`design`/`command-hygiene`)
+   create `SKILLS_DIR/asp-<name>/` and write `SKILL.md`; for fetched skills
+   (`stop-slop`/`matt-pocock`) follow `vendor/VENDORING.md` to copy the upstream
+   as-is with its MIT notice.
 
 ### Detection is best-effort, confirmation is the backstop
 

@@ -1,8 +1,9 @@
 {
-  "_comment": "Optional: canonical upstream files for users who want the original popular versions instead of this pack's original payloads. Pin 'commit' to a reviewed SHA at vendoring time. Both are MIT; their license notices must be copied alongside (see VENDORING.md).",
+  "_comment": "Upstream skills the pack can fetch at install time. The first two REPLACE this pack's own original payloads (vendor only if the user wants the canonical versions). The last two are fetch-ONLY skills that have no bundled stand-in — they install by copying the upstream as-is. Pin 'commit' to a reviewed SHA at vendoring time. All are MIT; their license notices must be copied alongside (see VENDORING.md).",
   "sources": [
     {
       "component": "rails",
+      "mode": "replaces-bundled-payload",
       "replaces": "payloads/rails.md",
       "name": "andrej-karpathy-skills (karpathy-guidelines)",
       "author": "Forrest Chang (forrestchang)",
@@ -14,6 +15,7 @@
     },
     {
       "component": "caveman",
+      "mode": "replaces-bundled-payload",
       "replaces": "payloads/caveman.md",
       "name": "caveman",
       "author": "Julius Brussee (JuliusBrussee)",
@@ -22,6 +24,33 @@
       "file": "SKILL.md",
       "commit": "PIN_ME",
       "note": "Canonical caveman skill. Verify the LICENSE in the repo at the pinned commit before copying."
+    },
+    {
+      "component": "stop-slop",
+      "mode": "fetch-only",
+      "replaces": null,
+      "name": "stop-slop",
+      "author": "Hardik Pandya (hardikpandya)",
+      "repo": "https://github.com/hardikpandya/stop-slop",
+      "license": "MIT",
+      "license_holder": "Copyright (c) 2025 Hardik Pandya",
+      "file": "SKILL.md",
+      "extra_files": ["references/phrases.md", "references/structures.md", "references/examples.md"],
+      "commit": "PIN_ME",
+      "note": "Removes AI writing tells from prose. No bundled stand-in — install by copying the upstream SKILL.md + its references as-is, with the MIT notice."
+    },
+    {
+      "component": "matt-pocock",
+      "mode": "fetch-only",
+      "replaces": null,
+      "name": "mattpocock/skills",
+      "author": "Matt Pocock (mattpocock)",
+      "repo": "https://github.com/mattpocock/skills",
+      "license": "MIT",
+      "license_holder": "Copyright (c) 2026 Matt Pocock",
+      "file": "skills/**/SKILL.md",
+      "commit": "PIN_ME",
+      "note": "A collection (~21) of production engineering skills (TDD, architecture review, planning, git guardrails, etc.). Let the user pick which sub-skills to install, or install the set. Copy each chosen skill folder as-is with the MIT notice. The upstream's own 'setup-matt-pocock-skills' skill can drive selection."
     }
   ]
 }

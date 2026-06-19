@@ -55,11 +55,14 @@ user picks by name, you do the writing.
 | `caveman` | on-demand | optional | Terse output style — cuts filler tokens, keeps technical accuracy |
 | `design` | on-demand | optional | Frontend/visual quality guidance — intentional, non-templated UI |
 | `command-hygiene` | on-demand | optional | Teaches the agent to issue quiet, low-noise shell commands (a pure-skill stand-in for rtk) |
+| `stop-slop` | on-demand (fetched) | off | Strips AI writing tells from prose. Fetched from upstream, not bundled. See `references/vendor/VENDORING.md` + `sources.json` |
+| `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git guardrails…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
 | `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
 
 If the user just says "everything" or "the usual", install `rails` +
-`caveman` + `design` + `command-hygiene` and *ask* before doing `rtk`, since it
-touches their PATH and hook config.
+`caveman` + `design` + `command-hygiene` and *ask* before doing `rtk`,
+`stop-slop`, or `matt-pocock`, since those fetch code from the network (PATH/hook
+for rtk; upstream skill folders for the other two).
 
 ### 3. Dedup BEFORE writing anything
 
@@ -91,6 +94,14 @@ Idempotency comes from markers, so re-running is always safe:
 - **caveman / design / command-hygiene** → copy `references/payloads/<name>.md` to
   `SKILLS_DIR/asp-<name>/SKILL.md`, creating the folder. Keep the frontmatter and
   the source marker line intact.
+- **stop-slop / matt-pocock** → only if explicitly chosen. These have **no
+  bundled payload** — they install by fetching the upstream skill as-is. Follow
+  `references/vendor/VENDORING.md` using the matching `sources.json` entry: detect
+  a fetch primitive, pin a commit, read the upstream LICENSE, copy the
+  `SKILL.md` (+ listed reference files) into `SKILLS_DIR/asp-<name>/`, and write
+  the upstream MIT notice to `LICENSES/<name>-upstream-MIT.txt`. For `matt-pocock`,
+  let the user pick which of the ~21 sub-skills to install (or all). Stop and ask
+  if no fetch tool is available.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
   detect a fetch primitive, narrate each command, install for the detected host,
   verify, and report. Stop and ask if no fetch tool is available.
