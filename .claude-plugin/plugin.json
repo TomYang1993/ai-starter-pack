@@ -1,7 +1,7 @@
 {
   "name": "ai-starter-pack",
   "version": "1.0.0",
-  "description": "Self-installing pack of coding-agent defaults. Say 'set up my coding environment' to choose guardrails, terse output, design help, writing cleanup, engineering skills, and optional tools such as rtk and CodeGraph.",
+  "description": "Self-installing pack of coding-agent defaults. Say 'set up my coding environment' to choose guardrails, terse output, writing cleanup, engineering skills, and optional tools such as rtk and CodeGraph.",
   "author": { "name": "TomYang1993" },
   "license": "MIT",
   "skills": ["./skills/ai-starter-pack"]

@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -18,8 +18,8 @@ The pack ships two kinds of content:
   (`CLAUDE.md`, `AGENTS.md`, Cursor/Windsurf rules, etc.). These must load every
   session, so they go in the always-on surface, *not* in a lazily-triggered skill.
 - **Collected upstream skills/rules** — original upstream skills such as
-  `caveman`, `impeccable`, `stop-slop`, and Matt Pocock's skill set, copied
-  as-is at a pinned commit with license notices preserved.
+  `caveman`, `stop-slop`, and Matt Pocock's skill set, copied as-is at a pinned
+  commit with license notices preserved.
 
 Some components are **not** pure skills. `rtk` is a compiled binary that
 compresses shell output below the model, and `codegraph` is a local CLI/MCP
@@ -66,14 +66,13 @@ user picks by name, you do the writing.
 |---|---|---|---|
 | `andrej-karpathy-skills` | always-on (fetched) | recommended | Forrest Chang's upstream Karpathy-style coding-agent guardrails |
 | `caveman` | on-demand (fetched) | optional | Julius Brussee's upstream terse-output skill |
-| `impeccable` | on-demand (fetched) | optional | Paul Bakaus's upstream frontend/UI design workflow skill |
 | `stop-slop` | on-demand (fetched) | off | Strips AI writing tells from prose. Fetched from upstream, not bundled. See `references/vendor/VENDORING.md` + `sources.json` |
 | `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git guardrails…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
 | `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
 | `codegraph` | local CLI/MCP (opt-in) | off | Pre-indexed code knowledge graph for fewer codebase-search tool calls. Needs CLI install, host MCP setup, and per-project `codegraph init`. See `references/optional/codegraph.md` |
 
 If the user just says "everything" or "the usual", offer
-`andrej-karpathy-skills` + `caveman` + `impeccable`. Ask once before any network
+`andrej-karpathy-skills` + `caveman`. Ask once before any network
 fetch, and ask separately before doing `rtk`, `codegraph`, `stop-slop`, or
 `matt-pocock` because those either modify PATH, MCP/hooks, project indexes, or
 install larger upstream sets.
@@ -117,7 +116,7 @@ Idempotency comes from markers, so re-running is always safe:
   never rewrite the file. Preserve everything already there. For Cursor or
   Windsurf/Devin native rules, create a project rule file instead if the user
   chose that host-native format.
-- **caveman / impeccable / stop-slop / matt-pocock** → only if explicitly chosen
+- **caveman / stop-slop / matt-pocock** → only if explicitly chosen
   or included in the user's confirmed "usual" set. These have **no bundled
   rewritten payload** — they install by fetching the upstream skill as-is. Follow
   `references/vendor/VENDORING.md` using the matching `sources.json` entry:

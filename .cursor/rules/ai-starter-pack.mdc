@@ -8,7 +8,7 @@ alwaysApply: true
 
 When the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", or wants their usual agent defaults configured:
 
-Load and execute `skills/ai-starter-pack/SKILL.md` from this repo. It contains the full install menu (andrej-karpathy-skills, caveman, impeccable, stop-slop, matt-pocock, rtk, codegraph), dedup logic, and write instructions per component.
+Load and execute `skills/ai-starter-pack/SKILL.md` from this repo. It contains the full install menu (andrej-karpathy-skills, caveman, stop-slop, matt-pocock, rtk, codegraph), dedup logic, and write instructions per component.
 
 For Cursor specifically, the host is detected as `cursor` in the dedup check:
 - `CONTEXT_FILE` → `AGENTS.md` by default, or `.cursor/rules/asp-andrej-karpathy-skills.mdc` for Cursor-native project rules

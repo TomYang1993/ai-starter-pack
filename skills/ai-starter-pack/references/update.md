@@ -91,9 +91,6 @@ commit. Avoid fetching arbitrary latest upstream commits during a user install.
   `ai-starter-pack:rails`. A legacy marker is managed legacy, not absent.
 - `matt-pocock`: this is a skill set. Track each installed sub-skill separately
   when possible. If the user installed only some sub-skills, update only those.
-- `impeccable`: prefer the upstream plugin install when the current host supports
-  plugins. If copied as a skill folder, preserve the full upstream folder shape
-  listed in `sources.json`.
 - `rtk`: treat as a binary/tool install, not a skill. Check version/hook status
   and ask before changing PATH, hooks, or shell configuration.
 - `codegraph`: treat as a CLI/MCP/project-index install, not a skill. Check

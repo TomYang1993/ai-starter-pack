@@ -17,8 +17,6 @@ installed verbatim with their license/notice files (see
   (MIT). Karpathy-style coding-agent guardrails.
 - `caveman` — Julius Brussee, [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman)
   (MIT). Terse-output skill.
-- `impeccable` — Paul Bakaus, [`pbakaus/impeccable`](https://github.com/pbakaus/impeccable)
-  (Apache-2.0). Frontend/UI design workflow skill.
 - `stop-slop` — Hardik Pandya, [`hardikpandya/stop-slop`](https://github.com/hardikpandya/stop-slop)
   (MIT, Copyright (c) 2025 Hardik Pandya). Removes AI writing tells from prose.
 - `matt-pocock` — Matt Pocock, [`mattpocock/skills`](https://github.com/mattpocock/skills)

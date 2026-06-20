@@ -1,7 +1,7 @@
 # Install
 
 Install **the pack** once per tool. The pack then installs individual components
-(`andrej-karpathy-skills`, `caveman`, `impeccable`, etc.) for you - no
+(`andrej-karpathy-skills`, `caveman`, optional tools, etc.) for you - no
 per-component manual steps. After installing in any tool, say **"set up my coding
 environment"** and pick from the menu.
 
@@ -247,7 +247,7 @@ These are optional follow-up commands for users who want more control:
 
 - **List** - "what's in my starter pack here?"
 - **Add one** - "add caveman to this project"
-- **Remove** - "remove the impeccable skill"
+- **Remove** - "remove the caveman skill"
 - **rtk** - "install rtk" (opt-in binary with per-tool hook setup; see
   `skills/ai-starter-pack/references/optional/rtk.md`)
 - **CodeGraph** - "install codegraph" (opt-in local CLI/MCP with per-tool host

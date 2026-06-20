@@ -31,23 +31,6 @@
       "note": "Canonical caveman skill. Verify the LICENSE in the repo at the pinned commit before copying."
     },
     {
-      "component": "impeccable",
-      "mode": "upstream-skill",
-      "replaces": null,
-      "name": "impeccable",
-      "author": "Paul Bakaus (pbakaus)",
-      "repo": "https://github.com/pbakaus/impeccable",
-      "homepage": "https://impeccable.style",
-      "license": "Apache-2.0",
-      "file": "skills/impeccable/SKILL.md",
-      "extra_files": ["skills/impeccable/reference/**", "skills/impeccable/scripts/**"],
-      "plugin_manifest": ".claude-plugin/plugin.json",
-      "commit": "d5403f9d653d9192c35143f50bee4651703354e0",
-      "reviewed_at": "2026-06-19",
-      "last_checked_at": "2026-06-19",
-      "note": "Frontend/UI design workflow skill. Prefer the upstream plugin install when the host supports plugins; otherwise copy the upstream skill folder as-is with Apache-2.0 license/notice files."
-    },
-    {
       "component": "stop-slop",
       "mode": "upstream-skill",
       "replaces": null,

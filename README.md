@@ -26,6 +26,23 @@ If initiating outside this repo, replace the relative path with the actual path,
 
 Then follow the agent's flow for necessary permissions and feedback.
 
+
+## Update
+
+After you pull a newer AI Starter Pack, just `type` or `say`:
+
+> "update ai-starter-pack"
+
+The agent should load the pack if needed, check what AI Starter Pack manages,
+update the unchanged parts, and ask before touching anything you edited yourself.
+No separate enable step is required once the pack is installed in that tool.
+If the agent cannot find the pack, use the explicit path form:
+
+> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update ai-starter-pack."
+
+For manual install paths, optional components, and the full update rules, see
+[`INSTALL.md`](INSTALL.md) and `skills/ai-starter-pack/references/update.md`.
+
 ## Supported Tools
 
 [Claude Code](https://code.claude.com/docs/en/overview)
@@ -45,29 +62,6 @@ Then follow the agent's flow for necessary permissions and feedback.
 Other agents can use the pack if they can read `SKILL.md` and write files.
 See [`INSTALL.md`](INSTALL.md) for host-specific paths.
 
-## Updates
-
-After you pull a newer AI Starter Pack, just `type` or `say`:
-
-> "update ai-starter-pack"
-
-The agent should load the pack if needed, check what AI Starter Pack manages,
-update the unchanged parts, and ask before touching anything you edited yourself.
-No separate enable step is required once the pack is installed in that tool.
-If the agent cannot find the pack, use the explicit path form:
-
-> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update ai-starter-pack."
-
-For manual install paths, optional components, and the full update rules, see
-[`INSTALL.md`](INSTALL.md) and `skills/ai-starter-pack/references/update.md`.
-
-## License
-
-AI Starter Pack's own glue, docs, and installer instructions are MIT licensed;
-see [`LICENSE`](LICENSE). Third-party components keep their original licenses and
-credits. The pack records notices under `skills/ai-starter-pack/NOTICE.md` and
-`skills/ai-starter-pack/LICENSES/`.
-
 ## Credits & Thanks
 
 | Component | Adds | Credit | GitHub stars |
@@ -85,3 +79,9 @@ Stars are rounded snapshots from GitHub, checked 2026-06-20.
 This repo is glue around you guys' work, all credit is yours.
 If you maintain one of these and want the attribution worded
 differently, open an issue.
+
+
+## License
+
+see [`LICENSE`](LICENSE). Third-party components keep their original licenses and
+credits. The pack records notices under `skills/ai-starter-pack/NOTICE.md`.

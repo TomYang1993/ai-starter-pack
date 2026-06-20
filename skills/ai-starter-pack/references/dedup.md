@@ -108,7 +108,7 @@ region only.
 
 ### Layer 2 — on-demand skills or converted rules
 
-For each of `caveman`, `impeccable`, `stop-slop`, `matt-pocock`:
+For each of `caveman`, `stop-slop`, `matt-pocock`:
 
 1. **Our copy present**:
    - `skill-folder`: `SKILLS_DIR/asp-<name>/SKILL.md` exists.
@@ -127,9 +127,6 @@ For each of `caveman`, `impeccable`, `stop-slop`, `matt-pocock`:
      folder named `stop-slop` or a `SKILL.md` whose `name` is `stop-slop` (check
      both `SKILLS_DIR` and the host's default skills dir, e.g. `~/.claude/skills/`).
      If present, do not fetch a second copy.
-   - **`impeccable`** — look for a folder named `impeccable`, a `SKILL.md` whose
-     `name` is `impeccable`, or an installed Impeccable plugin. If present, do
-     not fetch a second copy.
    - **`matt-pocock`** — look for folders matching the upstream sub-skill names
      (e.g. `setup-matt-pocock-skills`, or any `SKILL.md` authored by Matt Pocock).
      If the set is already present, report it and skip the ones that exist.
