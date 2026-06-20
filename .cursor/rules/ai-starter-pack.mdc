@@ -6,7 +6,7 @@ alwaysApply: true
 
 # AI Starter Pack
 
-When the user says "set up my coding environment", "update ai-starter-pack", "update my environment", "bootstrap my agent", "install my starter pack", or wants their usual agent defaults configured:
+When the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", or wants their usual agent defaults configured:
 
 Load and execute `skills/ai-starter-pack/SKILL.md` from this repo. It contains the full install menu (andrej-karpathy-skills, caveman, impeccable, stop-slop, matt-pocock, rtk), dedup logic, and write instructions per component.
 

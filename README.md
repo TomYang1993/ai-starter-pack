@@ -1,6 +1,7 @@
 # AI Starter Pack
 
-A one-step setup for a coding agent's essential setup. Works with almost any agentic tools out there.
+A one-step setup for a coding agent's everyday defaults. Works with almost any
+agentic tool.
 
 The pack is **self-installing**: the agent reading it uses its own file tools to
 place the right files where your host expects them. The installer itself is just
