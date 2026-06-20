@@ -1,0 +1,21 @@
+{
+  "name": "ai-starter-pack",
+  "plugins": [
+    {
+      "name": "ai-starter-pack",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "AI Starter Pack",
+        "description": "One-step setup for coding-agent defaults: guardrails, terse output, design help, writing cleanup, engineering skills, and optional rtk."
+      }
+    }
+  ]
+}

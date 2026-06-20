@@ -23,6 +23,10 @@ are testing duplicate detection. Multiple entrypoints can make the tool show the
 same pack twice; remove or ignore the older one after confirming which copy is
 current.
 
+Each tool installs its own copy/config. Claude Code should set up Claude Code;
+Codex should set up Codex; Cursor should set up Cursor. Ask for another tool by
+name only when you intentionally want cross-tool setup.
+
 ## Claude Code
 
 **Option A - Plugin marketplace (recommended)**
@@ -49,6 +53,22 @@ cp -r skills/ai-starter-pack .claude/skills/ai-starter-pack
 
 ## Codex (OpenAI)
 
+**Option A - Plugin marketplace (recommended)**
+
+```bash
+codex plugin marketplace add TomYang1993/ai-starter-pack
+codex plugin add ai-starter-pack@ai-starter-pack
+```
+
+Restart if prompted, then say:
+
+> "set up my coding environment"
+
+You can also open Codex's plugin directory with `/plugins`, choose the AI
+Starter Pack entry, and install it from there.
+
+**Option B - Manual skill install (local testing/fallback)**
+
 ```bash
 # Manual - global
 mkdir -p ~/.agents/skills
@@ -61,7 +81,8 @@ cp -r skills/ai-starter-pack .agents/skills/ai-starter-pack
 
 Codex reads `AGENTS.md` at the repo root and discovers skills from
 `.agents/skills/` in the repo or `~/.agents/skills/` for the user. This repo also
-ships a `.codex-plugin/plugin.json` manifest for packaging the pack as a Codex
+ships a `.codex-plugin/plugin.json` manifest and
+`.agents/plugins/marketplace.json` catalog for packaging the pack as a Codex
 plugin.
 
 ## Kilo Code

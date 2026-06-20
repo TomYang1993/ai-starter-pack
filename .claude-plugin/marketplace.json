@@ -1,12 +1,12 @@
 {
   "name": "ai-starter-pack",
-  "description": "One-step setup for coding-agent defaults: guardrails, terse output, design guidance, command hygiene, optional rtk.",
+  "description": "One-step setup for coding-agent defaults: guardrails, terse output, design help, writing cleanup, engineering skills, optional rtk.",
   "owner": { "name": "TomYang1993" },
   "plugins": [
     {
       "name": "ai-starter-pack",
       "source": "./",
-      "description": "One-step setup for a coding agent's everyday defaults: guardrails, terse output, design guidance, command hygiene, optional rtk.",
+      "description": "One-step setup for a coding agent's everyday defaults: guardrails, terse output, design help, writing cleanup, engineering skills, optional rtk.",
       "version": "1.0.0"
     }
   ]

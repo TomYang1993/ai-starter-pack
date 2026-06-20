@@ -37,6 +37,11 @@ duplicates or silently overwrite the user's edits.
 
 ### 1. Detect the host and target directories
 
+Default to the host/tool that is currently running this skill. Do **not** install
+into other tools' directories just because they exist on disk. Only target
+another host when the user explicitly names it (for example "set up Cursor too")
+or sets `ASP_AGENT`.
+
 Read `references/dedup.md` → "Host detection" and resolve:
 
 - `CONTEXT_FILE` — the always-loaded file (`CLAUDE.md` or `AGENTS.md`).

@@ -15,6 +15,11 @@ and are easy to review in a diff). Use **global** only if the user asks for
 
 ### Signals
 
+The active host is the tool currently running this installer. Install into that
+host by default. Other host directories in the same repo or home folder are only
+signals for ambiguity; they are not permission to configure those tools. If the
+user wants a different host, they must name it or set `ASP_AGENT`.
+
 Check, in order, and stop at the first confident match. If two hosts both look
 present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 
