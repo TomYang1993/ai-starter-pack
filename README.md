@@ -5,13 +5,14 @@ agentic tool.
 
 The pack is **self-installing**: the agent reading it uses its own file tools to
 place the right files where your host expects them. The installer itself is just
-files, but selected third-party components are fetched from their upstream repos
-at a pinned commit so the original authors' work stays intact.
+files. Third-party skills/rules are fetched from upstream at reviewed commits;
+optional tools such as rtk and CodeGraph follow their upstream installers.
 
 ## Install
 
 Install **the pack** once per tool. The pack then installs individual components
-(`andrej-karpathy-skills`, `caveman`, `impeccable`, etc.) for you.
+(`andrej-karpathy-skills`, `caveman`, `impeccable`, optional CodeGraph, etc.)
+for you.
 
 For Codex, use the built-in skill installer:
 
@@ -39,8 +40,6 @@ Then follow the agent's flow for necessary permissions and feedback.
 
 [GitHub Copilot](https://github.com/features/copilot)
 
-[Aider](https://aider.chat/)
-
 [Google Antigravity](https://antigravity.google/)
 
 Other agents can use the pack if they can read `SKILL.md` and write files.
@@ -66,8 +65,7 @@ For manual install paths, optional components, and the full update rules, see
 
 AI Starter Pack's own glue, docs, and installer instructions are MIT licensed;
 see [`LICENSE`](LICENSE). Third-party components keep their original licenses and
-credits. The pack fetches those upstream files at reviewed commits and stores
-notices under `skills/ai-starter-pack/NOTICE.md` and
+credits. The pack records notices under `skills/ai-starter-pack/NOTICE.md` and
 `skills/ai-starter-pack/LICENSES/`.
 
 ## Credits & Thanks
@@ -80,6 +78,7 @@ notices under `skills/ai-starter-pack/NOTICE.md` and
 | `stop-slop` | A writing cleanup skill that removes obvious AI tells from prose. | **[Hardik Pandya](https://hvpandya.com)** — [`stop-slop`](https://github.com/hardikpandya/stop-slop) (MIT) | 11.5k |
 | `matt-pocock` | A practical engineering skill set: TDD, debugging, planning, architecture, and more. | **[Matt Pocock](https://github.com/mattpocock)** — [`skills`](https://github.com/mattpocock/skills) (MIT) | 137k |
 | `rtk` | An optional binary that compresses shell output before it reaches the model. | **[rtk-ai](https://github.com/rtk-ai/rtk)** — RTK "Rust Token Killer" (Apache-2.0); fetched from upstream, never bundled | 64k |
+| `codegraph` | An optional local CLI/MCP code knowledge graph for faster codebase exploration. | **[Colby McHenry](https://github.com/colbymchenry)** — [`codegraph`](https://github.com/colbymchenry/codegraph) (MIT); fetched from upstream, never bundled | 52.2k |
 
 Stars are rounded snapshots from GitHub, checked 2026-06-20.
 

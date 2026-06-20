@@ -23,6 +23,8 @@ installed verbatim with their license/notice files (see
   (MIT, Copyright (c) 2025 Hardik Pandya). Removes AI writing tells from prose.
 - `matt-pocock` — Matt Pocock, [`mattpocock/skills`](https://github.com/mattpocock/skills)
   (MIT, Copyright (c) 2026 Matt Pocock). Collection of production engineering skills.
+- `codegraph` — Colby McHenry, [`colbymchenry/codegraph`](https://github.com/colbymchenry/codegraph)
+  (MIT). Optional local CLI/MCP code knowledge graph.
 
 ## Installed upstream files
 
@@ -35,3 +37,6 @@ here:
 
 `rtk` is never bundled or copied — it is fetched from upstream at install time,
 so no rtk files are redistributed by this pack.
+
+`codegraph` is never bundled or copied — it is fetched from upstream at install
+time, so no CodeGraph files or project indexes are redistributed by this pack.

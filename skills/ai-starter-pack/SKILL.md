@@ -1,14 +1,15 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional rtk — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, frontend design skills, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
 
 A self-installing pack. The agent reading this file **is** the installer — it uses
 its own file tools to place behavioral files where the current host expects them.
-Third-party components are fetched from their upstream repos at pinned commits
-and installed with their license notices intact.
+Third-party skills/rules are fetched from their upstream repos at pinned commits
+and installed with their license notices intact. Optional tools such as rtk and
+CodeGraph follow their upstream installers and are never bundled.
 
 The pack ships two kinds of content:
 
@@ -20,9 +21,11 @@ The pack ships two kinds of content:
   `caveman`, `impeccable`, `stop-slop`, and Matt Pocock's skill set, copied
   as-is at a pinned commit with license notices preserved.
 
-One component (`rtk`) is **not** a pure skill — it is a compiled binary that
-compresses shell output below the model. It is opt-in and installed by fetching
-from upstream, never bundled. See `references/optional/rtk.md`.
+Some components are **not** pure skills. `rtk` is a compiled binary that
+compresses shell output below the model, and `codegraph` is a local CLI/MCP
+tool that indexes projects for code-intelligence queries. Both are opt-in and
+installed by following upstream docs, never bundled. See
+`references/optional/rtk.md` and `references/optional/codegraph.md`.
 
 ## Run the install
 > **Paths in this document are relative to this skill's directory** — the
@@ -67,11 +70,13 @@ user picks by name, you do the writing.
 | `stop-slop` | on-demand (fetched) | off | Strips AI writing tells from prose. Fetched from upstream, not bundled. See `references/vendor/VENDORING.md` + `sources.json` |
 | `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git guardrails…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
 | `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
+| `codegraph` | local CLI/MCP (opt-in) | off | Pre-indexed code knowledge graph for fewer codebase-search tool calls. Needs CLI install, host MCP setup, and per-project `codegraph init`. See `references/optional/codegraph.md` |
 
 If the user just says "everything" or "the usual", offer
 `andrej-karpathy-skills` + `caveman` + `impeccable`. Ask once before any network
-fetch, and ask separately before doing `rtk`, `stop-slop`, or `matt-pocock`
-because those either modify PATH/hooks or install larger upstream sets.
+fetch, and ask separately before doing `rtk`, `codegraph`, `stop-slop`, or
+`matt-pocock` because those either modify PATH, MCP/hooks, project indexes, or
+install larger upstream sets.
 
 ### 3. Dedup BEFORE writing anything
 
@@ -126,6 +131,12 @@ Idempotency comes from markers, so re-running is always safe:
   treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
   present, run only the reviewed per-host hook/init command when applicable,
   verify, and report. Ask before changing PATH, hooks, plugins, or shell config.
+- **codegraph** → only if explicitly chosen. Follow
+  `references/optional/codegraph.md` exactly: treat upstream CodeGraph docs as
+  canonical, reuse an existing `codegraph` binary when present, run only the
+  reviewed host installer/project init commands when applicable, verify, and
+  report. Ask before changing PATH, MCP config, agent permissions, or creating a
+  project `.codegraph/` index.
 
 ### 5. Report
 

@@ -30,7 +30,6 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 | Cursor | `AGENTS.md` or `.cursor/rules/asp-andrej-karpathy-skills.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
 | Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-andrej-karpathy-skills.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
-| Aider | `AGENTS.md` or a file loaded with `--read` | `.aider.conf.yml` `read:` entry | none | none | `read-only` |
 | Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
 | Kilo Code | `AGENTS.md` | verify current host docs | `.agents/skills/` unless native Kilo rules are verified | `~/.agents/skills/` if supported | `skill-folder` by default, otherwise `read-only` |
 | Generic / other | `AGENTS.md` | `~/.agents/AGENTS.md` if supported | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
@@ -46,9 +45,8 @@ Detection hints:
   `.kilo/` directory → Kilo Code. Use `AGENTS.md` unless a native Kilo rules
   path is present and verified.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
-  family (Codex / Kilo Code / Aider / Antigravity / others all read
-  `AGENTS.md`).
-- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|aider|antigravity|kilo|generic`
+  family (Codex / Kilo Code / Antigravity / others all read `AGENTS.md`).
+- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|antigravity|kilo|generic`
   overrides all of the above.
 
 If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with
@@ -141,7 +139,25 @@ For each of `caveman`, `impeccable`, `stop-slop`, `matt-pocock`:
 3. **Absent** — install according to `TARGET_FORMAT`: skill folder for
    skill-capable hosts, native `.mdc`/`.md` rule for Cursor or Windsurf/Devin,
    explicit confirmation before broad Copilot instructions, and read-only report
-   for Aider-style flows.
+   for read-only flows.
+
+### Layer 3 — optional tools
+
+For `rtk` and `codegraph`, do not look for `asp-*` skill folders. They are
+external tools with their own binaries, host integrations, and update flows.
+
+- **rtk** — check `rtk --version`, then inspect only the current approved host
+  hook/plugin setup. A global rtk binary does not imply every host is configured.
+- **codegraph** — check `codegraph --version`, then inspect only the current
+  approved host MCP setup and the current project's `.codegraph/` directory. A
+  global CodeGraph binary does not imply every host is configured, and host MCP
+  setup does not imply every project has an index.
+- If the binary exists, report "binary already installed" and ask before running
+  any host init/install command.
+- If the host integration exists, report "host already configured" and ask before
+  reinstalling or changing scope.
+- If `.codegraph/` exists, report "project already indexed" and do not run
+  `codegraph init` unless the user asks.
 
 ### Detection is best-effort, confirmation is the backstop
 

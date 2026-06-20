@@ -96,6 +96,9 @@ commit. Avoid fetching arbitrary latest upstream commits during a user install.
   listed in `sources.json`.
 - `rtk`: treat as a binary/tool install, not a skill. Check version/hook status
   and ask before changing PATH, hooks, or shell configuration.
+- `codegraph`: treat as a CLI/MCP/project-index install, not a skill. Check
+  `codegraph --version`, host MCP setup, and project `.codegraph/` status.
+  Ask before changing PATH, MCP config, agent permissions, or rebuilding indexes.
 
 ## Reporting
 

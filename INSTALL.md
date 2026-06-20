@@ -217,23 +217,6 @@ EOF
 For Copilot agents, adding the same bootstrap to `AGENTS.md` is often cleaner
 because Copilot now recognizes `AGENTS.md` agent instructions directly.
 
-## Aider
-
-Aider loads files via `--read`. Pass the skill at startup:
-
-```bash
-aider --read skills/ai-starter-pack/SKILL.md
-```
-
-Or add it to `.aider.conf.yml` in your project:
-
-```yaml
-read:
-  - skills/ai-starter-pack/SKILL.md
-```
-
-Then say: **"set up my coding environment"**
-
 ## Any other agent
 
 Copy the skill where the agent loads on-demand skills, then tell it to read
@@ -265,15 +248,20 @@ These are optional follow-up commands for users who want more control:
 - **List** - "what's in my starter pack here?"
 - **Add one** - "add caveman to this project"
 - **Remove** - "remove the impeccable skill"
-- **rtk** - "install rtk" (opt-in global binary with per-tool hook setup; see
+- **rtk** - "install rtk" (opt-in binary with per-tool hook setup; see
   `skills/ai-starter-pack/references/optional/rtk.md`)
+- **CodeGraph** - "install codegraph" (opt-in local CLI/MCP with per-tool host
+  setup and per-project indexing; see
+  `skills/ai-starter-pack/references/optional/codegraph.md`)
 
 ## Notes
 
 Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
 use current documented conventions; verify against your actual install if a tool
-moved its dirs. rtk setup uses upstream RTK docs, with only starter-pack-specific
-adapter notes in `skills/ai-starter-pack/references/optional/rtk.md`.
+moved its dirs. rtk and CodeGraph setup use upstream docs, with only
+starter-pack-specific adapter notes in
+`skills/ai-starter-pack/references/optional/rtk.md` and
+`skills/ai-starter-pack/references/optional/codegraph.md`.
 Windsurf/Devin naming has shifted over time - prefer `.devin/rules/` for new
 workspace rules and keep `.windsurf/rules/` / `.windsurfrules` as fallback only
 when the client expects them.
