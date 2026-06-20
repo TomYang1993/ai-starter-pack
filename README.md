@@ -27,19 +27,24 @@ Then follow the agent's flow for necessary permissions and feedback.
 
 ## Supported Tools
 
-| Tool | Support | Install path |
-|---|---|---|
-| [Claude Code](https://code.claude.com/docs/en/overview) | Native skill/plugin support | Claude Code marketplace, Skills CLI, or manual `.claude/skills` install |
-| [Codex](https://developers.openai.com/codex) | Native skill support | `$skill-installer` recommended; plugin packaging also included |
-| [Kilo Code](https://kilo.ai/) | Project bootstrap | `AGENTS.md` plus `.agents/skills` |
-| [Cursor](https://cursor.com/) | Project rules | `.cursor/rules` plus local skill files |
-| [Devin Desktop / Windsurf](https://devin.ai/desktop) | Workspace rules | `.devin/rules`, Windsurf rule fallbacks, and `AGENTS.md` |
-| [GitHub Copilot](https://github.com/features/copilot) | Repo instructions | `.github/copilot-instructions.md`, `.github/instructions`, or `AGENTS.md` |
-| [Aider](https://aider.chat/) | Read-in workflow | `aider --read skills/ai-starter-pack/SKILL.md` |
-| [Google Antigravity](https://antigravity.google/) | Generic bootstrap | `AGENTS.md` / `SKILL.md` style setup where available |
+[Claude Code](https://code.claude.com/docs/en/overview)
 
-Other agents can use the pack if they can read `SKILL.md` and write files where
-their host stores instructions or skills.
+[Codex](https://developers.openai.com/codex)
+
+[Kilo Code](https://kilo.ai/)
+
+[Cursor](https://cursor.com/)
+
+[Devin Desktop / Windsurf](https://devin.ai/desktop)
+
+[GitHub Copilot](https://github.com/features/copilot)
+
+[Aider](https://aider.chat/)
+
+[Google Antigravity](https://antigravity.google/)
+
+Other agents can use the pack if they can read `SKILL.md` and write files.
+See [`INSTALL.md`](INSTALL.md) for host-specific paths.
 
 ## Updates
 
