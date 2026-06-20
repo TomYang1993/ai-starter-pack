@@ -13,13 +13,33 @@ at a pinned commit so the original authors' work stays intact.
 Install **the pack** once per tool. The pack then installs individual components
 (`andrej-karpathy-skills`, `caveman`, `impeccable`, etc.) for you.
 
-Just `type` or `say` the following in your selected tool:
+For Codex, use the built-in skill installer:
+
+> "Use $skill-installer to install: https://github.com/TomYang1993/ai-starter-pack/tree/main/skills/ai-starter-pack"
+
+For other tools, or when you already have this repo open, just `type` or `say`:
 
 > "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
 
 If initiating outside this repo, replace the relative path with the actual path, or just trust your agent to find this folder.
 
 Then follow the agent's flow for necessary permissions and feedback.
+
+## Supported Tools
+
+| Tool | Support | Install path |
+|---|---|---|
+| [Claude Code](https://code.claude.com/docs/en/overview) | Native skill/plugin support | Claude Code marketplace, Skills CLI, or manual `.claude/skills` install |
+| [Codex](https://developers.openai.com/codex) | Native skill support | `$skill-installer` recommended; plugin packaging also included |
+| [Kilo Code](https://kilo.ai/) | Project bootstrap | `AGENTS.md` plus `.agents/skills` |
+| [Cursor](https://cursor.com/) | Project rules | `.cursor/rules` plus local skill files |
+| [Devin Desktop / Windsurf](https://devin.ai/desktop) | Workspace rules | `.devin/rules`, Windsurf rule fallbacks, and `AGENTS.md` |
+| [GitHub Copilot](https://github.com/features/copilot) | Repo instructions | `.github/copilot-instructions.md`, `.github/instructions`, or `AGENTS.md` |
+| [Aider](https://aider.chat/) | Read-in workflow | `aider --read skills/ai-starter-pack/SKILL.md` |
+| [Google Antigravity](https://antigravity.google/) | Generic bootstrap | `AGENTS.md` / `SKILL.md` style setup where available |
+
+Other agents can use the pack if they can read `SKILL.md` and write files where
+their host stores instructions or skills.
 
 ## Updates
 
@@ -36,6 +56,14 @@ If the agent cannot find the pack, use the explicit path form:
 
 For manual install paths, optional components, and the full update rules, see
 [`INSTALL.md`](INSTALL.md) and `skills/ai-starter-pack/references/update.md`.
+
+## License
+
+AI Starter Pack's own glue, docs, and installer instructions are MIT licensed;
+see [`LICENSE`](LICENSE). Third-party components keep their original licenses and
+credits. The pack fetches those upstream files at reviewed commits and stores
+notices under `skills/ai-starter-pack/NOTICE.md` and
+`skills/ai-starter-pack/LICENSES/`.
 
 ## Credits & Thanks
 

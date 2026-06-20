@@ -7,7 +7,12 @@ environment"** and pick from the menu.
 
 ## Fastest path - let an agent install it
 
-If you just handed an agent this repo (a URL, or an open checkout), say:
+For Codex, use the built-in skill installer:
+
+> "Use $skill-installer to install: https://github.com/TomYang1993/ai-starter-pack/tree/main/skills/ai-starter-pack"
+
+For other tools, or when you just handed an agent this repo (a URL, or an open
+checkout), say:
 
 > "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
 
@@ -53,7 +58,22 @@ cp -r skills/ai-starter-pack .claude/skills/ai-starter-pack
 
 ## Codex (OpenAI)
 
-**Option A - Plugin marketplace (recommended)**
+**Option A - Skill installer (recommended)**
+
+In Codex, say:
+
+```text
+Use $skill-installer to install: https://github.com/TomYang1993/ai-starter-pack/tree/main/skills/ai-starter-pack
+```
+
+Restart Codex if the skill does not appear, then say:
+
+> "set up my coding environment"
+
+**Option B - Plugin marketplace (packaged/advanced)**
+
+Use this when you want the pack installed as a Codex plugin package rather than
+as a plain skill.
 
 ```bash
 codex plugin marketplace add TomYang1993/ai-starter-pack
@@ -67,7 +87,7 @@ Restart if prompted, then say:
 You can also open Codex's plugin directory with `/plugins`, choose the AI
 Starter Pack entry, and install it from there.
 
-**Option B - Manual skill install (local testing/fallback)**
+**Option C - Manual skill install (local testing/fallback)**
 
 ```bash
 # Manual - global
@@ -79,9 +99,9 @@ mkdir -p .agents/skills
 cp -r skills/ai-starter-pack .agents/skills/ai-starter-pack
 ```
 
-Codex reads `AGENTS.md` at the repo root and discovers skills from
-`.agents/skills/` in the repo or `~/.agents/skills/` for the user. This repo also
-ships a `.codex-plugin/plugin.json` manifest and
+Codex reads `AGENTS.md` at the repo root and discovers skills from user and
+repo skill directories. The `$skill-installer` path is the normal Codex skill
+install flow. This repo also ships a `.codex-plugin/plugin.json` manifest and
 `.agents/plugins/marketplace.json` catalog for packaging the pack as a Codex
 plugin.
 
