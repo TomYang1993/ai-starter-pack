@@ -17,6 +17,12 @@ and writes everything for you. **This is the primary flow.** The per-tool
 commands below are the manual fallback for when you would rather place the files
 yourself or pre-install the pack so the trigger phrase works in a fresh chat.
 
+Use one pack entrypoint per tool. If the pack is already installed through a
+marketplace/plugin, do not also copy the same skill folder manually unless you
+are testing duplicate detection. Multiple entrypoints can make the tool show the
+same pack twice; remove or ignore the older one after confirming which copy is
+current.
+
 ## Claude Code
 
 **Option A - Plugin marketplace (recommended)**
@@ -201,7 +207,11 @@ For initial setup, say:
 
 After pulling a newer AI Starter Pack, say:
 
-> "update my environment"
+> "update ai-starter-pack"
+
+If the tool does not auto-load installed skills or cannot find the pack, say:
+
+> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update ai-starter-pack."
 
 The pack shows the component menu, runs dedup checks, and writes only what you
 pick. During updates, it replaces only AI Starter Pack-managed files that still

@@ -51,6 +51,24 @@ If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with
 file and `.agents/skills/` is the shared skill location used by current Codex and
 the open Agent Skills ecosystem. Tell the user what you picked.
 
+## Pack entrypoint duplicates
+
+Some hosts can load AI Starter Pack through more than one mechanism, such as a
+marketplace/plugin install, a Skills CLI install, and a manually copied skill
+folder. Treat these as duplicate entrypoints for the **pack itself**, not as
+separate environments to configure.
+
+Before installing the pack or when diagnosing duplicate triggers:
+
+1. Look for the same `ai-starter-pack` skill/plugin in every known entrypoint for
+   the current host and scope (for example Claude Code marketplace/plugin plus
+   `.claude/skills/ai-starter-pack` or `~/.claude/skills/ai-starter-pack`).
+2. Prefer the host-native package/plugin entrypoint when it exists and is current.
+3. Do not copy another skill folder just because one entrypoint was already
+   present. Report the duplicate and ask whether to keep the current entrypoint,
+   remove the older copy, or intentionally keep both for testing.
+4. Component install/update dedup still runs after the pack entrypoint is chosen.
+
 ## Dedup checks
 
 The goal: never write a file the user already has, never clobber their edits,
