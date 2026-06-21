@@ -1,13 +1,13 @@
 # AI Starter Pack
 
-A one-step setup for a coding agent's essential tools like `andrej-karpathy-skills`, `caveman`, etc. Works with almost any
-agentic tool.
+A one-step setup for coding-agent tools like `caveman`, `codegraph`, and more.
+Works with almost any agentic tool.
 
 ## Install
 
 Clone the repo.
 
-When you already have this repo open, trust thge repo, just `type` or `say` in your desired AI tool:
+When you already have this repo open, trust the repo, then type or say in your desired AI tool:
 
 > "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
 
@@ -16,11 +16,10 @@ If initiating outside this repo, replace the relative path with the actual path,
 Then follow the agent's flow for necessary permissions and feedback.
 
 Install **the pack** once per tool. The pack then installs individual components
-(`andrej-karpathy-skills`, `caveman`, optional CodeGraph, etc.)
-for you.
+(`caveman`, optional CodeGraph, etc.) for you.
 
-You may be used to other install methods for optimized tool usage and easier flow, see
-[`INSTALL.md`](INSTALL.md) for your favorite tools.
+You may be used to other install methods for optimized tool usage and easier flow. See
+[`INSTALL.md`](INSTALL.md) for host-specific install paths.
 
 ## Update
 
@@ -57,7 +56,6 @@ And more.
 
 | Component | Adds | Credit | GitHub stars |
 |---|---|---|---:|
-| `andrej-karpathy-skills` | Practical coding-agent guardrails: think first, keep changes small, verify the work. | **[Forrest Chang](https://github.com/forrestchang)** — [`andrej-karpathy-skills`](https://github.com/forrestchang/andrej-karpathy-skills) (MIT), based on guidance from **[Andrej Karpathy](https://github.com/karpathy)** | 179k |
 | `caveman` | A terse mode for shorter replies and fewer wasted tokens. | **[Julius Brussee](https://github.com/JuliusBrussee)** — [`caveman`](https://github.com/JuliusBrussee/caveman) (MIT) | 74.8k |
 | `stop-slop` | A writing cleanup skill that removes obvious AI tells from prose. | **[Hardik Pandya](https://hvpandya.com)** — [`stop-slop`](https://github.com/hardikpandya/stop-slop) (MIT) | 11.5k |
 | `matt-pocock` | A practical engineering skill set: TDD, debugging, planning, architecture, and more. | **[Matt Pocock](https://github.com/mattpocock)** — [`skills`](https://github.com/mattpocock/skills) (MIT) | 137k |

@@ -14,20 +14,6 @@ default.
 
 Every installed component should include a small metadata block.
 
-For always-on context/rule blocks:
-
-```md
-<!-- BEGIN ai-starter-pack:andrej-karpathy-skills
-managed: true
-upstream_repo: https://github.com/forrestchang/andrej-karpathy-skills
-installed_commit: <commit>
-content_sha256: <sha256-of-installed-upstream-content>
-installed_at: <YYYY-MM-DD>
--->
-...upstream content...
-<!-- END ai-starter-pack:andrej-karpathy-skills -->
-```
-
 For skill/rule folders, put the metadata immediately after frontmatter when the
 format allows it:
 
@@ -86,9 +72,6 @@ commit. Avoid fetching arbitrary latest upstream commits during a user install.
 
 ## Component Notes
 
-- `andrej-karpathy-skills`: detect both the current marker
-  `ai-starter-pack:andrej-karpathy-skills` and the legacy marker
-  `ai-starter-pack:rails`. A legacy marker is managed legacy, not absent.
 - `matt-pocock`: this is a skill set. Track each installed sub-skill separately
   when possible. If the user installed only some sub-skills, update only those.
 - `rtk`: treat as a binary/tool install, not a skill. Check version/hook status

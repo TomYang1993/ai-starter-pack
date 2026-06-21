@@ -20,8 +20,6 @@ overwrite, and which reviewed host init commands are known.
   because the starter pack is being updated.
 - Treat hook setup as per-tool/per-scope. A global rtk binary does not mean
   Claude Code, Codex, Kilo Code, etc. are all configured.
-- If an older AI Starter Pack install has `asp-command-hygiene`, note that rtk
-  supersedes it and offer to remove that legacy skill after rtk is verified.
 
 ## Reviewed Host Init Commands
 

@@ -13,8 +13,6 @@ chosen, these components are fetched from upstream at a pinned commit and
 installed verbatim with their license/notice files (see
 `references/vendor/VENDORING.md` and `references/vendor/sources.json`).
 
-- `andrej-karpathy-skills` — Forrest Chang, [`forrestchang/andrej-karpathy-skills`](https://github.com/forrestchang/andrej-karpathy-skills)
-  (MIT). Karpathy-style coding-agent guardrails.
 - `caveman` — Julius Brussee, [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman)
   (MIT). Terse-output skill.
 - `stop-slop` — Hardik Pandya, [`hardikpandya/stop-slop`](https://github.com/hardikpandya/stop-slop)

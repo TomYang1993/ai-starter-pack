@@ -1,7 +1,7 @@
 # Install
 
 Install **the pack** once per tool. The pack then installs individual components
-(`andrej-karpathy-skills`, `caveman`, optional tools, etc.) for you - no
+(`caveman`, optional tools, etc.) for you - no
 per-component manual steps. After installing in any tool, say **"set up my coding
 environment"** and pick from the menu.
 
@@ -107,26 +107,33 @@ plugin.
 
 ## Kilo Code
 
-Use the `AGENTS.md` bootstrap path unless your Kilo Code install exposes a
-project-specific native rules path and you have verified it.
+Kilo Code has native Agent Skills support. For a project-local install:
 
 ```bash
-mkdir -p /path/to/your-project/.agents/skills
-cp -r skills/ai-starter-pack /path/to/your-project/.agents/skills/ai-starter-pack
+mkdir -p /path/to/your-project/.kilo/skills
+cp -r skills/ai-starter-pack /path/to/your-project/.kilo/skills/ai-starter-pack
 ```
 
-If the target project does not have `AGENTS.md`, copy this repo's `AGENTS.md`
-there. If it already has one, append a short bootstrap telling Kilo Code to load
-`.agents/skills/ai-starter-pack/SKILL.md` when the user asks to set up or update
-their environment.
+For a global install:
 
-Then open that project in Kilo Code and say:
+```bash
+mkdir -p ~/.kilo/skills
+cp -r skills/ai-starter-pack ~/.kilo/skills/ai-starter-pack
+```
+
+Then start a new Kilo Code session and say:
 
 > "set up my coding environment"
 
-Kilo Code also has plugin surfaces in some installs. The starter pack should not
-write those plugin hooks unless the user explicitly asks and the exact Kilo
-plugin/config path is verified for that installation.
+Kilo Code also reads `.agents/skills/` as a compatibility directory, so a shared
+Codex/Kilo project can use that path deliberately. Prefer `.kilo/skills/` for a
+Kilo-only install because it is Kilo's native location. The skill folder name
+should match the `name:` in `SKILL.md`; this pack already uses
+`ai-starter-pack`.
+
+If you use `AGENTS.md`, keep it as a bootstrap/context file that points to the
+installed skill. Kilo also supports extra `skills.paths` and `skills.urls` in
+`kilo.jsonc` when you intentionally want a shared or remote skill source.
 
 ## Cursor
 

@@ -29,12 +29,6 @@ For each entry in `sources.json` the user wants:
 5. **Record provenance** in `NOTICE.md`: component, repo, commit SHA, retrieval
    date.
 
-## Watch for forks
-
-There are several near-identical Karpathy repos (forrestchang is the original;
-others are forks that may differ or re-license). Vendor from the repo named in
-`sources.json` and pin its commit, so you don't accidentally copy a fork.
-
 ## Refreshing later
 
 To update an upstream component: re-fetch at a new commit, diff against the

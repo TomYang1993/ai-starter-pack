@@ -27,11 +27,11 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 |---|---|---|---|---|---|
 | Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
 | Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
-| Cursor | `AGENTS.md` or `.cursor/rules/asp-andrej-karpathy-skills.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
-| Windsurf / Devin | `AGENTS.md` or `.devin/rules/asp-andrej-karpathy-skills.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
+| Cursor | `AGENTS.md` or `.cursor/rules/ai-starter-pack.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
+| Windsurf / Devin | `AGENTS.md` or `.devin/rules/ai-starter-pack.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
 | Antigravity | `AGENTS.md` | verify current host docs | `.agents/skills/` if supported | `~/.agents/skills/` if supported | `skill-folder` if supported, otherwise `read-only` |
-| Kilo Code | `AGENTS.md` | verify current host docs | `.agents/skills/` unless native Kilo rules are verified | `~/.agents/skills/` if supported | `skill-folder` by default, otherwise `read-only` |
+| Kilo Code | `AGENTS.md` | verify current host docs | `.kilo/skills/` native, or `.agents/skills/` compatibility | `~/.kilo/skills/` | `skill-folder` |
 | Generic / other | `AGENTS.md` | `~/.agents/AGENTS.md` if supported | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
 
 Detection hints:
@@ -42,8 +42,9 @@ Detection hints:
 - A `.codex/` directory → Codex.
 - A `.github/copilot-instructions.md` file → Copilot.
 - Explicit user request for Kilo Code, `ASP_AGENT=kilo`, or a project-local
-  `.kilo/` directory → Kilo Code. Use `AGENTS.md` unless a native Kilo rules
-  path is present and verified.
+  `.kilo/` directory → Kilo Code. Use `.kilo/skills/` for Kilo-native skill
+  installs; use `.agents/skills/` only when the user asks for a shared
+  compatibility path.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
   family (Codex / Kilo Code / Antigravity / others all read `AGENTS.md`).
 - `ASP_AGENT=claude|cursor|windsurf|codex|copilot|antigravity|kilo|generic`
@@ -75,43 +76,16 @@ Before installing the pack or when diagnosing duplicate triggers:
 ## Dedup checks
 
 The goal: never write a file the user already has, never clobber their edits,
-and make re-running a no-op. Two layers, two strategies.
+and make re-running a no-op.
 
-### Layer 1 — andrej-karpathy-skills in the context/rule file
-
-1. If `CONTEXT_FILE` is missing → no conflict, install creates it.
-2. If it exists, search for
-   `<!-- BEGIN ai-starter-pack:andrej-karpathy-skills`:
-   - **Marker found, same upstream commit** → already current, skip.
-   - **Marker found, older upstream commit** → extract the old block, show the
-     user a diff against the newly fetched upstream content, install only on
-     confirmation by replacing the bytes *between* the BEGIN/END markers. Leave
-     the rest of the file byte-for-byte unchanged.
-3. If no new marker exists, search for the legacy marker
-   `<!-- BEGIN ai-starter-pack:rails`:
-   - **Legacy marker found** → treat it as an existing install. Do not append a
-     duplicate. Offer to migrate the marker name to `andrej-karpathy-skills`
-     while updating to the selected upstream commit.
-4. If no marker, scan for signs the user already has equivalent rules
-   (independent install). Heuristic phrases: "surface assumptions", "surgical",
-   "minimal change", "success criteria", "do not over-engineer", or a heading
-   like "Karpathy". If two or more appear:
-   - Report: "Your context file already contains guardrail-style rules that
-     overlap with `andrej-karpathy-skills`." Ask: leave as-is / append ours
-     anyway / show me both.
-   - Default to **leave as-is** — duplicate guardrails waste context and can
-     contradict each other.
-5. Only if none of the above → append the marked block after one blank line.
-
-Never rewrite or reorder the existing context file. Append or splice the marked
-region only.
-
-### Layer 2 — on-demand skills or converted rules
+### Layer 1 — on-demand skills or converted rules
 
 For each of `caveman`, `stop-slop`, `matt-pocock`:
 
 1. **Our copy present**:
-   - `skill-folder`: `SKILLS_DIR/asp-<name>/SKILL.md` exists.
+   - `skill-folder`: `SKILLS_DIR/asp-<name>/SKILL.md` exists. For Kilo-native
+     installs, also check `SKILLS_DIR/<upstream-skill-name>/SKILL.md` because
+     Kilo expects the directory to match the skill's `name:`.
    - `cursor-rule`: `.cursor/rules/asp-<name>.mdc` exists.
    - `windsurf-rule`: `.devin/rules/asp-<name>.md` or
      `.windsurf/rules/asp-<name>.md` exists.
@@ -136,9 +110,11 @@ For each of `caveman`, `stop-slop`, `matt-pocock`:
 3. **Absent** — install according to `TARGET_FORMAT`: skill folder for
    skill-capable hosts, native `.mdc`/`.md` rule for Cursor or Windsurf/Devin,
    explicit confirmation before broad Copilot instructions, and read-only report
-   for read-only flows.
+   for read-only flows. For Kilo-native skill folders, preserve the upstream
+   folder/name and record ASP ownership in metadata instead of adding an
+   `asp-` prefix.
 
-### Layer 3 — optional tools
+### Layer 2 — optional tools
 
 For `rtk` and `codegraph`, do not look for `asp-*` skill folders. They are
 external tools with their own binaries, host integrations, and update flows.
@@ -160,16 +136,10 @@ external tools with their own binaries, host integrations, and update flows.
 
 File-name and phrase heuristics will miss renamed or reworded installs. That is
 fine: when unsure, *surface what you found and ask* rather than writing blind.
-A duplicate guardrail or a clobbered edit is far worse than one extra question.
+A duplicate install or a clobbered edit is far worse than one extra question.
 
 ## Marker reference
 
-- andrej-karpathy-skills block in context file:
-  ```
-  <!-- BEGIN ai-starter-pack:andrej-karpathy-skills <upstream-commit> -->
-  ...payload...
-  <!-- END ai-starter-pack:andrej-karpathy-skills -->
-  ```
 - On-demand skill/rule, first body line after frontmatter when possible:
   ```
   # source: ai-starter-pack <component> v1

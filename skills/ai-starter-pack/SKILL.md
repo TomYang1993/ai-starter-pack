@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original coding guardrails, terse-output style, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -13,10 +13,6 @@ CodeGraph follow their upstream installers and are never bundled.
 
 The pack ships two kinds of content:
 
-- **Always-on `andrej-karpathy-skills`** — Forrest Chang's upstream `andrej-karpathy-skills`
-  guardrails, installed into the host's always-loaded context/rule file
-  (`CLAUDE.md`, `AGENTS.md`, Cursor/Windsurf rules, etc.). These must load every
-  session, so they go in the always-on surface, *not* in a lazily-triggered skill.
 - **Collected upstream skills/rules** — original upstream skills such as
   `caveman`, `stop-slop`, and Matt Pocock's skill set, copied as-is at a pinned
   commit with license notices preserved.
@@ -47,7 +43,7 @@ or sets `ASP_AGENT`.
 
 Read `references/dedup.md` → "Host detection" and resolve:
 
-- `CONTEXT_FILE` — the always-loaded file (`CLAUDE.md` or `AGENTS.md`).
+- `CONTEXT_FILE` — the host's project context/rule file, when relevant.
 - `SKILLS_DIR` — where on-demand skills or converted native rules live for this
   host and scope.
 - `TARGET_FORMAT` — `skill-folder`, `cursor-rule`, `windsurf-rule`,
@@ -64,18 +60,17 @@ user picks by name, you do the writing.
 
 | Component | Type | Default | What it does |
 |---|---|---|---|
-| `andrej-karpathy-skills` | always-on (fetched) | recommended | Forrest Chang's upstream Karpathy-style coding-agent guardrails |
 | `caveman` | on-demand (fetched) | optional | Julius Brussee's upstream terse-output skill |
 | `stop-slop` | on-demand (fetched) | off | Strips AI writing tells from prose. Fetched from upstream, not bundled. See `references/vendor/VENDORING.md` + `sources.json` |
-| `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git guardrails…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
+| `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git workflow…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
 | `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
 | `codegraph` | local CLI/MCP (opt-in) | off | Pre-indexed code knowledge graph for fewer codebase-search tool calls. Needs CLI install, host MCP setup, and per-project `codegraph init`. See `references/optional/codegraph.md` |
 
-If the user just says "everything" or "the usual", offer
-`andrej-karpathy-skills` + `caveman`. Ask once before any network
-fetch, and ask separately before doing `rtk`, `codegraph`, `stop-slop`, or
-`matt-pocock` because those either modify PATH, MCP/hooks, project indexes, or
-install larger upstream sets.
+If the user just says "the usual", offer `caveman`. If they say "everything",
+show the full menu and ask before each off-by-default or infrastructure item.
+Ask separately before doing `rtk`, `codegraph`, `stop-slop`, or `matt-pocock`
+because those either modify PATH, MCP/hooks, project indexes, or install larger
+upstream sets.
 
 ### 3. Dedup BEFORE writing anything
 
@@ -91,31 +86,22 @@ For every selected component, run the matching check in `references/dedup.md`
   report "already current".
 - **Installed by this pack, older version** → show a diff, ask before replacing.
 - **Installed independently by the user** (e.g. they already ran the upstream
-  caveman installer, or already have Karpathy-style rules in their context file) →
+  caveman installer) →
   do **not** write a second copy. Report what you found and ask whether to leave
   it, replace it, or merge.
 - **Absent** → install.
 
 Idempotency comes from markers, so re-running is always safe:
 
-- Context-file/rule blocks are wrapped in
-  `<!-- BEGIN ai-starter-pack:andrej-karpathy-skills <upstream-commit> -->` …
-  `<!-- END ai-starter-pack:andrej-karpathy-skills -->`.
-- Each on-demand skill/rule is named `asp-<component>` and carries
-  `# source: ai-starter-pack <component> <upstream-repo>@<commit>` near the top
-  of the body.
+- Rule formats that need pack-specific names use `asp-<component>`.
+- Skill-folder hosts normally keep the upstream skill name/folder, especially
+  Kilo Code, where the folder name should match the `name:` in `SKILL.md`.
+- Every installed component carries
+  `# source: ai-starter-pack <component> <upstream-repo>@<commit>` or the richer
+  ASP metadata block near the top of the body.
 
 ### 4. Write the selected components
 
-- **andrej-karpathy-skills** → fetch the `andrej-karpathy-skills` entry from
-  `references/vendor/sources.json` by following `references/vendor/VENDORING.md`.
-  Use the upstream file content verbatim inside the marked block. If
-  `CONTEXT_FILE` does not exist, create it with the marked block. If it exists
-  and has no `ai-starter-pack:andrej-karpathy-skills` or legacy
-  `ai-starter-pack:rails` marker, append the marked block after one blank line —
-  never rewrite the file. Preserve everything already there. For Cursor or
-  Windsurf/Devin native rules, create a project rule file instead if the user
-  chose that host-native format.
 - **caveman / stop-slop / matt-pocock** → only if explicitly chosen
   or included in the user's confirmed "usual" set. These have **no bundled
   rewritten payload** — they install by fetching the upstream skill as-is. Follow
@@ -141,8 +127,7 @@ Idempotency comes from markers, so re-running is always safe:
 
 Summarize per component: installed / skipped (already current) / skipped (user
 already had it) / updated. Tell the user the trigger phrases for the on-demand
-skills and confirm `andrej-karpathy-skills` is active for the next session. Do
-not re-read or narrate these instructions back to the user.
+skills. Do not re-read or narrate these instructions back to the user.
 
 ## Provenance and licensing
 
@@ -153,14 +138,13 @@ own MIT content is limited to installer glue and documentation.
 
 ## Adding, listing, updating, removing
 
-- **list** → scan `CONTEXT_FILE` for the `andrej-karpathy-skills` marker, legacy
-  `rails` marker, and `SKILLS_DIR` for `asp-*` folders; report what's present
-  and at what version.
+- **list** → scan `SKILLS_DIR` for ASP-managed metadata/markers, legacy `asp-*`
+  folders, and optional tool status; report what's present and at what version.
 - **add** → run steps 1–5 for just the named component.
 - **update** → read `references/update.md` and follow its ownership rules. Only
   update AI Starter Pack-managed components that are unchanged or explicitly
   approved. Never overwrite user-edited, user-updated, or user-added skills by
   default.
-- **remove** → delete the marked block (`andrej-karpathy-skills`, or legacy
-  `rails`) or the `asp-<name>` folder (skills). Never touch content outside the
-  markers.
+- **remove** → delete only the matching ASP-managed folder/rule, including
+  legacy `asp-<name>` installs, or follow the optional tool's uninstall notes.
+  Never touch unrelated user content.
