@@ -1,6 +1,6 @@
 # AI Starter Pack
 
-A one-step setup for a coding agent's essential setup. Works with almost any
+A one-step setup for a coding agent's essential tools like `andrej-karpathy-skills`, `caveman`, etc. Works with almost any
 agentic tool.
 
 ## Install
@@ -16,7 +16,7 @@ If initiating outside this repo, replace the relative path with the actual path,
 Then follow the agent's flow for necessary permissions and feedback.
 
 Install **the pack** once per tool. The pack then installs individual components
-(`andrej-karpathy-skills`, `caveman`, `impeccable`, optional CodeGraph, etc.)
+(`andrej-karpathy-skills`, `caveman`, optional CodeGraph, etc.)
 for you.
 
 You may be used to other install methods for optimized tool usage and easier flow, see
@@ -31,7 +31,7 @@ When you are in this repo, pull the latest, and just `type` or `say` in your des
 The agent should load the pack if needed, check what AI Starter Pack manages,
 update the unchanged parts, and ask before touching anything you edited yourself.
 
-This is the most genral way to update.
+This is the most general way to update.
 
 You may be used to other update methods.
 
@@ -51,8 +51,7 @@ You may be used to other update methods.
 
 [Google Antigravity](https://antigravity.google/)
 
-Other agents can use the pack if they can read `SKILL.md` and write files.
-See [`INSTALL.md`](INSTALL.md) for host-specific paths.
+And more.
 
 ## Credits & Thanks
 
