@@ -1,6 +1,6 @@
 # AI Starter Pack
 
-A one-step setup for coding-agent tools like `caveman`, `codegraph`, and more.
+A one-step setup for coding-agent tools like `caveman`, `ponytail`, `codegraph`, and more.
 Works with almost any agentic tool.
 
 ## Install
@@ -16,7 +16,7 @@ If initiating outside this repo, replace the relative path with the actual path,
 Then follow the agent's flow for necessary permissions and feedback.
 
 Install **the pack** once per tool. The pack then installs individual components
-(`caveman`, optional CodeGraph, etc.) for you.
+(`caveman`, optional Ponytail, CodeGraph, etc.) for you.
 
 You may be used to other install methods for optimized tool usage and easier flow. See
 [`INSTALL.md`](INSTALL.md) for host-specific install paths.
@@ -56,13 +56,14 @@ And more.
 
 | Component | Adds | Credit | GitHub stars |
 |---|---|---|---:|
-| `caveman` | A terse mode for shorter replies and fewer wasted tokens. | **[Julius Brussee](https://github.com/JuliusBrussee)** — [`caveman`](https://github.com/JuliusBrussee/caveman) (MIT) | 74.8k |
-| `stop-slop` | A writing cleanup skill that removes obvious AI tells from prose. | **[Hardik Pandya](https://hvpandya.com)** — [`stop-slop`](https://github.com/hardikpandya/stop-slop) (MIT) | 11.5k |
-| `matt-pocock` | A practical engineering skill set: TDD, debugging, planning, architecture, and more. | **[Matt Pocock](https://github.com/mattpocock)** — [`skills`](https://github.com/mattpocock/skills) (MIT) | 137k |
-| `rtk` | An optional binary that compresses shell output before it reaches the model. | **[rtk-ai](https://github.com/rtk-ai/rtk)** — RTK "Rust Token Killer" (Apache-2.0); fetched from upstream, never bundled | 64k |
-| `codegraph` | An optional local CLI/MCP code knowledge graph for faster codebase exploration. | **[Colby McHenry](https://github.com/colbymchenry)** — [`codegraph`](https://github.com/colbymchenry/codegraph) (MIT); fetched from upstream, never bundled | 52.2k |
+| `caveman` | A terse mode for shorter replies and fewer wasted tokens. | **[Julius Brussee](https://github.com/JuliusBrussee)** — [`caveman`](https://github.com/JuliusBrussee/caveman) (MIT) | 75.4k |
+| `stop-slop` | A writing cleanup skill that removes obvious AI tells from prose. | **[Hardik Pandya](https://hvpandya.com)** — [`stop-slop`](https://github.com/hardikpandya/stop-slop) (MIT) | 11.7k |
+| `matt-pocock` | A practical engineering skill set: TDD, debugging, planning, architecture, and more. | **[Matt Pocock](https://github.com/mattpocock)** — [`skills`](https://github.com/mattpocock/skills) (MIT) | 139k |
+| `rtk` | An optional binary that compresses shell output before it reaches the model. | **[rtk-ai](https://github.com/rtk-ai/rtk)** — RTK "Rust Token Killer" (Apache-2.0); fetched from upstream, never bundled | 64.4k |
+| `codegraph` | An optional local CLI/MCP code knowledge graph for faster codebase exploration. | **[Colby McHenry](https://github.com/colbymchenry)** — [`codegraph`](https://github.com/colbymchenry/codegraph) (MIT); fetched from upstream, never bundled | 52.5k |
+| `ponytail` | An optional plugin/ruleset that pushes agents toward the smallest sufficient implementation. | **[Dietrich Gebert](https://github.com/DietrichGebert)** — [`ponytail`](https://github.com/DietrichGebert/ponytail) (MIT); installed from upstream, never bundled | 45k |
 
-Stars are rounded snapshots from GitHub, checked 2026-06-20.
+Stars are rounded snapshots from GitHub, checked 2026-06-21.
 
 This repo is glue around you guys' work, all credit is yours.
 If you maintain one of these and want the attribution worded

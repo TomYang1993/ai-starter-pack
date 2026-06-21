@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk and CodeGraph — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -18,10 +18,12 @@ The pack ships two kinds of content:
   commit with license notices preserved.
 
 Some components are **not** pure skills. `rtk` is a compiled binary that
-compresses shell output below the model, and `codegraph` is a local CLI/MCP
-tool that indexes projects for code-intelligence queries. Both are opt-in and
+compresses shell output below the model, `codegraph` is a local CLI/MCP tool
+that indexes projects for code-intelligence queries, and `ponytail` is an
+upstream agent plugin/ruleset that reduces over-building. They are opt-in and
 installed by following upstream docs, never bundled. See
-`references/optional/rtk.md` and `references/optional/codegraph.md`.
+`references/optional/rtk.md`, `references/optional/codegraph.md`, and
+`references/optional/ponytail.md`.
 
 ## Run the install
 > **Paths in this document are relative to this skill's directory** — the
@@ -65,12 +67,13 @@ user picks by name, you do the writing.
 | `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git workflow…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
 | `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
 | `codegraph` | local CLI/MCP (opt-in) | off | Pre-indexed code knowledge graph for fewer codebase-search tool calls. Needs CLI install, host MCP setup, and per-project `codegraph init`. See `references/optional/codegraph.md` |
+| `ponytail` | plugin/ruleset (opt-in) | off | Dietrich Gebert's upstream anti-overbuilding rules and commands. Needs the upstream plugin, extension, or matching rule file for the current host. See `references/optional/ponytail.md` |
 
 If the user just says "the usual", offer `caveman`. If they say "everything",
 show the full menu and ask before each off-by-default or infrastructure item.
-Ask separately before doing `rtk`, `codegraph`, `stop-slop`, or `matt-pocock`
-because those either modify PATH, MCP/hooks, project indexes, or install larger
-upstream sets.
+Ask separately before doing `rtk`, `codegraph`, `ponytail`, `stop-slop`, or
+`matt-pocock` because those either modify PATH, plugins, MCP/hooks, project
+indexes, lifecycle hooks, rule files, or install larger upstream sets.
 
 ### 3. Dedup BEFORE writing anything
 
@@ -122,6 +125,13 @@ Idempotency comes from markers, so re-running is always safe:
   reviewed host installer/project init commands when applicable, verify, and
   report. Ask before changing PATH, MCP config, agent permissions, or creating a
   project `.codegraph/` index.
+- **ponytail** → only if explicitly chosen. Follow
+  `references/optional/ponytail.md` exactly: treat upstream Ponytail docs as
+  canonical, prefer its recommended plugin/extension install for command-capable
+  hosts, use instruction-only rule copies only for hosts where upstream
+  recommends that path, and report the resulting Ponytail commands or mode
+  controls. Ask before installing plugins, trusting hooks, changing shell/env
+  config, or writing rule/context files.
 
 ### 5. Report
 

@@ -1,12 +1,12 @@
 {
   "name": "ai-starter-pack",
-  "description": "One-step setup for coding-agent defaults: terse output, writing cleanup, engineering skills, optional tools such as rtk and CodeGraph.",
+  "description": "One-step setup for coding-agent defaults: terse output, writing cleanup, engineering skills, optional tools such as rtk, CodeGraph, and Ponytail.",
   "owner": { "name": "TomYang1993" },
   "plugins": [
     {
       "name": "ai-starter-pack",
       "source": "./",
-      "description": "One-step setup for a coding agent's everyday defaults: terse output, writing cleanup, engineering skills, optional tools such as rtk and CodeGraph.",
+      "description": "One-step setup for a coding agent's everyday defaults: terse output, writing cleanup, engineering skills, optional tools such as rtk, CodeGraph, and Ponytail.",
       "version": "1.0.0"
     }
   ]

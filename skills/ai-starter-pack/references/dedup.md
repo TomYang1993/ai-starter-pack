@@ -116,8 +116,9 @@ For each of `caveman`, `stop-slop`, `matt-pocock`:
 
 ### Layer 2 — optional tools
 
-For `rtk` and `codegraph`, do not look for `asp-*` skill folders. They are
-external tools with their own binaries, host integrations, and update flows.
+For `rtk`, `codegraph`, and `ponytail`, do not look for `asp-*` skill folders.
+They are external tools or upstream plugin/ruleset installs with their own host
+integrations and update flows.
 
 - **rtk** — check `rtk --version`, then inspect only the current approved host
   hook/plugin setup. A global rtk binary does not imply every host is configured.
@@ -125,10 +126,14 @@ external tools with their own binaries, host integrations, and update flows.
   approved host MCP setup and the current project's `.codegraph/` directory. A
   global CodeGraph binary does not imply every host is configured, and host MCP
   setup does not imply every project has an index.
+- **ponytail** — inspect only the current approved host's Ponytail plugin,
+  extension, hook, command, or instruction-rule setup. A Ponytail install in one
+  host does not imply another host is configured. A rule-only copy is not the
+  same as a command-capable plugin install.
 - If the binary exists, report "binary already installed" and ask before running
   any host init/install command.
-- If the host integration exists, report "host already configured" and ask before
-  reinstalling or changing scope.
+- If the host integration exists, report "host already configured" and ask
+  before reinstalling, trusting hooks, or changing scope.
 - If `.codegraph/` exists, report "project already indexed" and do not run
   `codegraph init` unless the user asks.
 

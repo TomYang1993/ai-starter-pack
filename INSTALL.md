@@ -260,15 +260,19 @@ These are optional follow-up commands for users who want more control:
 - **CodeGraph** - "install codegraph" (opt-in local CLI/MCP with per-tool host
   setup and per-project indexing; see
   `skills/ai-starter-pack/references/optional/codegraph.md`)
+- **Ponytail** - "install ponytail" (opt-in upstream plugin/ruleset with
+  per-tool setup; see
+  `skills/ai-starter-pack/references/optional/ponytail.md`)
 
 ## Notes
 
 Skills-dir/rules paths per host (`skills/ai-starter-pack/references/dedup.md`)
 use current documented conventions; verify against your actual install if a tool
-moved its dirs. rtk and CodeGraph setup use upstream docs, with only
+moved its dirs. rtk, CodeGraph, and Ponytail setup use upstream docs, with only
 starter-pack-specific adapter notes in
-`skills/ai-starter-pack/references/optional/rtk.md` and
-`skills/ai-starter-pack/references/optional/codegraph.md`.
+`skills/ai-starter-pack/references/optional/rtk.md`,
+`skills/ai-starter-pack/references/optional/codegraph.md`, and
+`skills/ai-starter-pack/references/optional/ponytail.md`.
 Windsurf/Devin naming has shifted over time - prefer `.devin/rules/` for new
 workspace rules and keep `.windsurf/rules/` / `.windsurfrules` as fallback only
 when the client expects them.

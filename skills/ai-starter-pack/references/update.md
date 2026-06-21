@@ -79,6 +79,10 @@ commit. Avoid fetching arbitrary latest upstream commits during a user install.
 - `codegraph`: treat as a CLI/MCP/project-index install, not a skill. Check
   `codegraph --version`, host MCP setup, and project `.codegraph/` status.
   Ask before changing PATH, MCP config, agent permissions, or rebuilding indexes.
+- `ponytail`: treat as an upstream plugin/ruleset install, not an ASP-authored
+  skill. Check only the current host's Ponytail plugin, extension, hooks,
+  commands, or instruction-rule copy. Ask before reinstalling, trusting hooks,
+  changing modes, or replacing rule files.
 
 ## Reporting
 

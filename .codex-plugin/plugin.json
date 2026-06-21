@@ -1,6 +1,6 @@
 {
   "name": "ai-starter-pack",
   "version": "1.0.0",
-  "description": "Packaged Codex install for AI Starter Pack: terse output, writing cleanup, engineering skills, and optional tools such as rtk and CodeGraph.",
+  "description": "Packaged Codex install for AI Starter Pack: terse output, writing cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail.",
   "skills": "./skills/"
 }
