@@ -58,26 +58,72 @@ than guessing. Honor `ASP_AGENT` / `ASP_SCOPE` env vars if set.
 
 ### 2. Offer the menu
 
-Present every component as available, then ask yes/no for each one. Do not
-silently install anything just because it is in the pack. Keep the pitch short:
-what it is, why it might help, its popularity/quality signal, and what kind of
-permission or file change it needs.
+Present every component as available, then ask the user to choose the components
+once up front. Do not silently install anything just because it is in the pack.
+Keep the pitch short: what it is, why it might help, its popularity/quality
+signal, and what kind of permission or file change it needs.
 
-| Component | Type | Pitch to the user | Install impact |
-|---|---|---|---|
-| `caveman` | on-demand skill (fetched) | Very popular terse-output skill from Julius Brussee. Good when the user wants shorter replies and less token waste. | Fetches the upstream skill as-is. |
-| `stop-slop` | on-demand skill (fetched) | Popular prose cleanup skill from Hardik Pandya. Good for removing obvious AI writing tells from docs, posts, and messages. | Fetches the upstream skill as-is. |
-| `matt-pocock` | skill set (fetched) | Very popular production engineering skill set from Matt Pocock. Good for TDD, debugging, planning, architecture review, and git workflow. | Fetches upstream skill folders; let the user choose sub-skills or all. |
-| `rtk` | binary/tool (opt-in) | Popular shell-output compression tool from rtk-ai. Good when terminal output burns too much context. | May install a binary and per-host hooks; see `references/optional/rtk.md`. |
-| `codegraph` | CLI/MCP/project index (opt-in) | Popular local code knowledge graph from Colby McHenry. Good for faster codebase exploration with fewer search/read loops. | May install CLI/MCP config and create per-project `.codegraph/`; see `references/optional/codegraph.md`. |
-| `ponytail` | plugin/ruleset (opt-in) | Popular anti-overbuilding plugin/ruleset from Dietrich Gebert. Good when the user wants agents to choose the smallest sufficient implementation. | May install plugin/hooks/rules depending on host; see `references/optional/ponytail.md`. |
+If the host supports an interactive terminal picker, use a multi-select
+checkbox UI where the user can move with arrow keys, toggle with Space, and
+confirm with Enter. If the host only supports chat, show the same checkbox list
+and ask the user to reply with names or numbers. Do not present component
+selection as a Markdown table.
 
-If the user asks for "the usual" or "everything", still walk through the
-components and ask before installing each one. For each component, a good shape
-is: "Here is what it does, here is why it is useful, here is what it changes.
-Install it? yes/no." Infrastructure items (`rtk`, `codegraph`, `ponytail`) need
-especially explicit confirmation because they can modify PATH, plugins,
-MCP/hooks, project indexes, lifecycle hooks, or rule files.
+Suggested checklist copy:
+
+```text
+Choose what to install. Space toggles, Enter confirms.
+
+[ ] caveman
+    Very popular terse-output skill from Julius Brussee.
+    Helps with shorter replies and less token waste.
+    Impact: fetches the upstream skill as-is.
+
+[ ] stop-slop
+    Popular prose cleanup skill from Hardik Pandya.
+    Helps remove obvious AI writing tells from docs, posts, and messages.
+    Impact: fetches the upstream skill as-is.
+
+[ ] matt-pocock
+    Very popular production engineering skill set from Matt Pocock.
+    Helps with TDD, debugging, planning, architecture review, and git workflow.
+    Impact: fetches upstream skill folders; user can choose sub-skills or all.
+
+[ ] rtk
+    Popular shell-output compression tool from rtk-ai.
+    Helps when terminal output burns too much context.
+    Impact: may install a binary and per-host hooks.
+
+[ ] codegraph
+    Popular local code knowledge graph from Colby McHenry.
+    Helps agents explore codebases with fewer search/read loops.
+    Impact: may install CLI/MCP config and create a per-project .codegraph/.
+
+[ ] ponytail
+    Popular anti-overbuilding plugin/ruleset from Dietrich Gebert.
+    Helps agents choose the smallest sufficient implementation.
+    Impact: may install plugin hooks or rules depending on host.
+```
+
+If the user asks for "everything", preselect all components and ask for one
+confirmation. Otherwise, show the checklist and let the user choose. Once the
+selection is confirmed, say which components were selected and start installing
+them in menu order:
+
+1. `caveman`
+2. `stop-slop`
+3. `matt-pocock`
+4. `rtk`
+5. `codegraph`
+6. `ponytail`
+
+Do not ask again whether to install a selected component. Pause only when user
+action is actually needed: permission to run a command, network/file-system
+access, a host-specific approval screen, a duplicate/conflict decision, a
+`matt-pocock` sub-skill choice, or an optional-tool setup choice from its
+adapter file. Infrastructure items (`rtk`, `codegraph`, `ponytail`) still need
+explicit permission at the moment they modify PATH, plugins, MCP/hooks, project
+indexes, lifecycle hooks, or rule files.
 
 ### 3. Dedup BEFORE writing anything
 

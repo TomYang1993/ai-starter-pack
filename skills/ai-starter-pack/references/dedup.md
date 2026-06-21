@@ -17,11 +17,28 @@ and are easy to review in a diff). Use **global** only if the user asks for
 
 The active host is the tool currently running this installer. Install into that
 host by default. Other host directories in the same repo or home folder are only
-signals for ambiguity; they are not permission to configure those tools. If the
-user wants a different host, they must name it or set `ASP_AGENT`.
+inventory and duplicate-check signals; they are not permission to configure
+those tools, and they must not override the current runtime.
 
-Check, in order, and stop at the first confident match. If two hosts both look
-present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
+Resolve the host in this order:
+
+1. Explicit override: `ASP_AGENT=claude|cursor|windsurf|codex|copilot|antigravity|kilo|generic`.
+2. Explicit user target in the prompt, e.g. "set up Kilo Code" or "configure
+   Cursor too".
+3. The current agent/runtime identity, when the host exposes it or the agent
+   knows it is running inside Claude Code, Codex, Kilo Code, Cursor, etc.
+4. Existing host-specific files/directories in the **target project** only as
+   weak evidence. If these conflict or only point to tools other than the
+   current runtime, ask which host to configure.
+
+Do **not** infer the active host from the AI Starter Pack source repo itself, a
+GitHub URL checkout, or unrelated host directories in the user's home folder.
+For example, if the user is running this flow in Kilo Code and the project also
+has `.claude/` or `CLAUDE.md`, the active host is still Kilo Code unless the user
+explicitly asks to configure Claude Code.
+
+If the active host cannot be identified confidently, ask the user which tool and
+scope they want. Do not guess from filesystem hints alone.
 
 | Host | Project context/rule file | Global context/rule file | Project skill/rule dir | Global skill/rule dir | Target format |
 |---|---|---|---|---|---|
@@ -36,24 +53,28 @@ present (e.g. both `CLAUDE.md` and `AGENTS.md` exist), ask the user.
 
 Detection hints:
 
-- A `.claude/` directory or an existing `CLAUDE.md` → Claude Code.
-- A `.cursor/` directory or `.cursorrules` file → Cursor.
-- A `.devin/`, `.windsurf/`, or `.windsurfrules` file → Windsurf / Devin.
-- A `.codex/` directory → Codex.
-- A `.github/copilot-instructions.md` file → Copilot.
+- Current runtime says Claude Code, or user explicitly targets Claude Code →
+  Claude Code. A `.claude/` directory or `CLAUDE.md` is only supporting evidence.
+- Current runtime says Cursor, or user explicitly targets Cursor → Cursor. A
+  `.cursor/` directory or `.cursorrules` file is only supporting evidence.
+- Current runtime says Windsurf/Devin, or user explicitly targets them →
+  Windsurf / Devin. `.devin/`, `.windsurf/`, or `.windsurfrules` are supporting
+  evidence.
+- Current runtime says Codex, or user explicitly targets Codex → Codex. A
+  `.codex/` directory is only supporting evidence.
+- Current runtime says GitHub Copilot, or user explicitly targets Copilot →
+  Copilot. `.github/copilot-instructions.md` is supporting evidence.
 - Explicit user request for Kilo Code, `ASP_AGENT=kilo`, or a project-local
   `.kilo/` directory → Kilo Code. Use `.kilo/skills/` for Kilo-native skill
   installs; use `.agents/skills/` only when the user asks for a shared
   compatibility path.
 - An `AGENTS.md` with no Claude markers → treat as the generic `AGENTS.md`
   family (Codex / Kilo Code / Antigravity / others all read `AGENTS.md`).
-- `ASP_AGENT=claude|cursor|windsurf|codex|copilot|antigravity|kilo|generic`
-  overrides all of the above.
 
-If nothing matches, the safest default is `AGENTS.md` + `.agents/skills/` with
-`TARGET_FORMAT=skill-folder`, since `AGENTS.md` is the most widely-read context
-file and `.agents/skills/` is the shared skill location used by current Codex and
-the open Agent Skills ecosystem. Tell the user what you picked.
+If nothing matches, ask the user. The old safest default of
+`AGENTS.md` + `.agents/skills/` is only acceptable after telling the user that
+the host was not detected and getting confirmation to use a generic Agent Skills
+install.
 
 ## Pack entrypoint duplicates
 
