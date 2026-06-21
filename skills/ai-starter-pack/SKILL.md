@@ -58,23 +58,26 @@ than guessing. Honor `ASP_AGENT` / `ASP_SCOPE` env vars if set.
 
 ### 2. Offer the menu
 
-Present the components and ask which to install. Keep it plain-language — the
-user picks by name, you do the writing.
+Present every component as available, then ask yes/no for each one. Do not
+silently install anything just because it is in the pack. Keep the pitch short:
+what it is, why it might help, its popularity/quality signal, and what kind of
+permission or file change it needs.
 
-| Component | Type | Default | What it does |
+| Component | Type | Pitch to the user | Install impact |
 |---|---|---|---|
-| `caveman` | on-demand (fetched) | optional | Julius Brussee's upstream terse-output skill |
-| `stop-slop` | on-demand (fetched) | off | Strips AI writing tells from prose. Fetched from upstream, not bundled. See `references/vendor/VENDORING.md` + `sources.json` |
-| `matt-pocock` | skill set (fetched) | off | Matt Pocock's production engineering skills (TDD, architecture review, planning, git workflow…). Fetched from upstream; let the user pick sub-skills. See `references/vendor/VENDORING.md` + `sources.json` |
-| `rtk` | binary (opt-in) | off | Real deterministic shell-output compression. Needs a fetch + binary install. See `references/optional/rtk.md` |
-| `codegraph` | local CLI/MCP (opt-in) | off | Pre-indexed code knowledge graph for fewer codebase-search tool calls. Needs CLI install, host MCP setup, and per-project `codegraph init`. See `references/optional/codegraph.md` |
-| `ponytail` | plugin/ruleset (opt-in) | off | Dietrich Gebert's upstream anti-overbuilding rules and commands. Needs the upstream plugin, extension, or matching rule file for the current host. See `references/optional/ponytail.md` |
+| `caveman` | on-demand skill (fetched) | Very popular terse-output skill from Julius Brussee. Good when the user wants shorter replies and less token waste. | Fetches the upstream skill as-is. |
+| `stop-slop` | on-demand skill (fetched) | Popular prose cleanup skill from Hardik Pandya. Good for removing obvious AI writing tells from docs, posts, and messages. | Fetches the upstream skill as-is. |
+| `matt-pocock` | skill set (fetched) | Very popular production engineering skill set from Matt Pocock. Good for TDD, debugging, planning, architecture review, and git workflow. | Fetches upstream skill folders; let the user choose sub-skills or all. |
+| `rtk` | binary/tool (opt-in) | Popular shell-output compression tool from rtk-ai. Good when terminal output burns too much context. | May install a binary and per-host hooks; see `references/optional/rtk.md`. |
+| `codegraph` | CLI/MCP/project index (opt-in) | Popular local code knowledge graph from Colby McHenry. Good for faster codebase exploration with fewer search/read loops. | May install CLI/MCP config and create per-project `.codegraph/`; see `references/optional/codegraph.md`. |
+| `ponytail` | plugin/ruleset (opt-in) | Popular anti-overbuilding plugin/ruleset from Dietrich Gebert. Good when the user wants agents to choose the smallest sufficient implementation. | May install plugin/hooks/rules depending on host; see `references/optional/ponytail.md`. |
 
-If the user just says "the usual", offer `caveman`. If they say "everything",
-show the full menu and ask before each off-by-default or infrastructure item.
-Ask separately before doing `rtk`, `codegraph`, `ponytail`, `stop-slop`, or
-`matt-pocock` because those either modify PATH, plugins, MCP/hooks, project
-indexes, lifecycle hooks, rule files, or install larger upstream sets.
+If the user asks for "the usual" or "everything", still walk through the
+components and ask before installing each one. For each component, a good shape
+is: "Here is what it does, here is why it is useful, here is what it changes.
+Install it? yes/no." Infrastructure items (`rtk`, `codegraph`, `ponytail`) need
+especially explicit confirmation because they can modify PATH, plugins,
+MCP/hooks, project indexes, lifecycle hooks, or rule files.
 
 ### 3. Dedup BEFORE writing anything
 
@@ -95,14 +98,21 @@ For every selected component, run the matching check in `references/dedup.md`
   it, replace it, or merge.
 - **Absent** → install.
 
-Idempotency comes from markers, so re-running is always safe:
+Re-running is safe because the installer checks both ASP-owned installs and
+user-owned installs before writing:
 
+- ASP-owned installs carry
+  `# source: ai-starter-pack <component> <upstream-repo>@<commit>` or the richer
+  ASP metadata block near the top of the body.
+- User-owned installs usually do **not** have ASP metadata, so detect them by
+  host location, folder name, `SKILL.md` frontmatter `name:`, upstream repo
+  hints, and component-specific heuristics from `references/dedup.md`.
 - Rule formats that need pack-specific names use `asp-<component>`.
 - Skill-folder hosts normally keep the upstream skill name/folder, especially
   Kilo Code, where the folder name should match the `name:` in `SKILL.md`.
-- Every installed component carries
-  `# source: ai-starter-pack <component> <upstream-repo>@<commit>` or the richer
-  ASP metadata block near the top of the body.
+- If a likely user-owned equivalent exists, do not install another copy by
+  default. Report what was found and ask whether to leave it, replace it, or
+  keep both.
 
 ### 4. Write the selected components
 
