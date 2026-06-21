@@ -1,38 +1,26 @@
 # AI Starter Pack
 
-A one-step setup for coding-agent tools like `caveman`, `ponytail`, `codegraph`, and more.
+A one-step setup for your AI coding environment, including `caveman`, `ponytail`, `codegraph`, and more.
 Works with almost any agentic tool.
 
 ## Install
 
-Clone the repo.
+No clone needed. Type or say this in your desired AI tool:
 
-When you already have this repo open, trust the repo, then type or say in your desired AI tool:
-
-> "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
-
-If initiating outside this repo, replace the relative path with the actual path, or just trust your agent to find this folder.
+> "Read https://github.com/TomYang1993/ai-starter-pack and set up my coding environment. Start from `skills/ai-starter-pack/SKILL.md`."
 
 Then follow the agent's flow for necessary permissions and feedback.
 
-Install **the pack** once per tool. The pack then installs individual components
-(`caveman`, optional Ponytail, CodeGraph, etc.) for you.
-
-You may be used to other install methods for optimized tool usage and easier flow. See
-[`INSTALL.md`](INSTALL.md) for host-specific install paths.
+For persistent installs, marketplace/plugin installs, or local auditing, see
+[`INSTALL.md`](INSTALL.md).
 
 ## Update
 
-When you are in this repo, pull the latest, and just `type` or `say` in your desired AI tool:
+Type or say this in your desired AI tool:
 
-> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update ai-starter-pack."
+> "Read https://github.com/TomYang1993/ai-starter-pack and update my coding environment. Start from `skills/ai-starter-pack/SKILL.md`."
 
-The agent should load the pack if needed, check what AI Starter Pack manages,
-update the unchanged parts, and ask before touching anything you edited yourself.
-
-This is the most general way to update.
-
-You may be used to other update methods.
+The agent should load the pack if needed, check what AI Starter Pack manages, update the unchanged parts, and ask before touching anything you edited yourself.
 
 ## Supported Tools
 

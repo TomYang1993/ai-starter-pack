@@ -1,26 +1,43 @@
 # Install
 
-Install **the pack** once per tool. The pack then installs individual components
-(`caveman`, optional tools, etc.) for you - no
-per-component manual steps. After installing in any tool, say **"set up my coding
-environment"** and pick from the menu.
+You can run the pack directly from GitHub. Installing the pack into a tool is
+optional; it only makes the trigger phrase shorter in future chats.
 
-## Fastest path - let an agent install it
+## Fastest path - no clone
+
+For any agent that can read public GitHub URLs, say:
+
+> "Read https://github.com/TomYang1993/ai-starter-pack and set up my coding environment. Start from `skills/ai-starter-pack/SKILL.md`."
+
+The agent reads `SKILL.md`, fetches only the referenced files it needs from the
+same GitHub ref, detects your host, shows the component menu, runs the dedup
+checks, and writes everything for you. **This is the primary flow.**
+
+For updates, say:
+
+> "Read https://github.com/TomYang1993/ai-starter-pack and update my coding environment. Start from `skills/ai-starter-pack/SKILL.md`."
+
+## Local checkout path
+
+When you already have this repo open locally, say:
+
+> "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
+
+Clone the repo when you want to audit the files locally, pin a commit, develop
+the pack, or use the manual copy commands below.
+
+## Persistent install path
+
+Install **the pack** once per tool when you want the shorter phrase
+**"set up my coding environment"** to work in fresh chats without pasting the raw
+GitHub URL. The pack then installs individual components (`caveman`, optional
+tools, etc.) for you - no per-component manual steps.
 
 For Codex, use the built-in skill installer:
 
 > "Use $skill-installer to install: https://github.com/TomYang1993/ai-starter-pack/tree/main/skills/ai-starter-pack"
 
-For other tools, or when you just handed an agent this repo (a URL, or an open
-checkout), say:
-
-> "Read `skills/ai-starter-pack/SKILL.md` from this repo and set up my coding environment."
-
-The agent fetches or clones the repo if the files are not already local, reads
-`SKILL.md`, detects your host, shows the component menu, runs the dedup checks,
-and writes everything for you. **This is the primary flow.** The per-tool
-commands below are the manual fallback for when you would rather place the files
-yourself or pre-install the pack so the trigger phrase works in a fresh chat.
+The per-tool commands below are for persistent installs or manual fallback.
 
 Use one pack entrypoint per tool. If the pack is already installed through a
 marketplace/plugin, do not also copy the same skill folder manually unless you
@@ -236,13 +253,13 @@ For initial setup, say:
 
 > "set up my coding environment"
 
-After pulling a newer AI Starter Pack, say:
+When you want to refresh the environment managed by AI Starter Pack, say:
 
-> "update ai-starter-pack"
+> "update my coding environment"
 
 If the tool does not auto-load installed skills or cannot find the pack, say:
 
-> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update ai-starter-pack."
+> "Read `skills/ai-starter-pack/SKILL.md` from this repo and update my coding environment."
 
 The pack shows the component menu, runs dedup checks, and writes only what you
 pick. During updates, it replaces only AI Starter Pack-managed files that still

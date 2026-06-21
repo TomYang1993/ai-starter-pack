@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update ai-starter-pack", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my coding environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -8,8 +8,8 @@ description: Set up a coding agent's everyday environment in one step — upstre
 A self-installing pack. The agent reading this file **is** the installer — it uses
 its own file tools to place behavioral files where the current host expects them.
 Third-party skills/rules are fetched from their upstream repos at pinned commits
-and installed with their license notices intact. Optional tools such as rtk and
-CodeGraph follow their upstream installers and are never bundled.
+and installed with their license notices intact. Optional tools such as rtk,
+CodeGraph, and Ponytail follow their upstream installers and are never bundled.
 
 The pack ships two kinds of content:
 
@@ -26,10 +26,11 @@ installed by following upstream docs, never bundled. See
 `references/optional/ponytail.md`.
 
 ## Run the install
-> **Paths in this document are relative to this skill's directory** — the
-> folder that contains this `SKILL.md` (e.g. `references/vendor/sources.json`,
-> `LICENSES/...`). Resolve them from there regardless of where the skill is
-> installed.
+> **Paths in this document are relative to this skill's location** — the folder
+> or URL directory that contains this `SKILL.md` (e.g.
+> `references/vendor/sources.json`, `LICENSES/...`). If this file was loaded
+> from a raw GitHub URL, resolve relative references against the same repo and
+> ref. Fetch only the referenced files you need.
 
 
 Follow these steps in order. Do not skip the dedup checks — re-running this pack,
