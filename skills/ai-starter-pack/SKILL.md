@@ -7,15 +7,17 @@ description: Set up a coding agent's everyday environment in one step — upstre
 
 A self-installing pack. The agent reading this file **is** the installer — it uses
 its own file tools to place behavioral files where the current host expects them.
-Third-party skills/rules are fetched from their upstream repos at pinned commits
-and installed with their license notices intact. Optional tools such as rtk,
-CodeGraph, and Ponytail follow their upstream installers and are never bundled.
+Third-party skills/rules are installed from their upstream originals with their
+license notices intact. Before installing or updating a component, fetch the
+upstream README/docs for that component and follow the current upstream
+instructions. Optional tools such as rtk, CodeGraph, and Ponytail follow their
+upstream installers and are never bundled.
 
 The pack ships two kinds of content:
 
 - **Collected upstream skills/rules** — original upstream skills such as
-  `caveman`, `stop-slop`, and Matt Pocock's skill set, copied as-is at a pinned
-  commit with license notices preserved.
+  `caveman`, `stop-slop`, and Matt Pocock's skill set, installed from upstream
+  docs and copied as-is only when the upstream docs require file copying.
 
 Some components are **not** pure skills. `rtk` is a compiled binary that
 compresses shell output below the model, `codegraph` is a local CLI/MCP tool
@@ -164,31 +166,30 @@ user-owned installs before writing:
 
 - **caveman / stop-slop / matt-pocock** → only if explicitly chosen
   or included in the user's confirmed "usual" set. These have **no bundled
-  rewritten payload** — they install by fetching the upstream skill as-is. Follow
-  `references/vendor/VENDORING.md` using the matching `sources.json` entry:
-  detect a fetch primitive, fetch the reviewed `commit` recorded in
-  `sources.json`, read the upstream LICENSE/NOTICE, copy the listed upstream
-  files into the install target, and write the upstream license text to
-  `LICENSES/<component>-upstream-LICENSE.txt`. For `matt-pocock`, let the user
-  pick which sub-skills to install (or all). Stop and ask if no fetch tool is
-  available.
+  rewritten payload**. Follow `references/vendor/VENDORING.md`: use
+  `sources.json` for repo identity and hints, fetch the upstream README first,
+  follow the upstream install instructions, and fetch only the exact payload
+  files/folders plus LICENSE/NOTICE files needed for the selected component. For
+  `matt-pocock`, let the user pick which sub-skills to install (or all). Stop
+  and ask if no fetch tool is available or the upstream README is unclear.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
   treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
-  present, run only the reviewed per-host hook/init command when applicable,
+  present, fetch the upstream README only when install/update/repair is needed,
   verify, and report. Ask before changing PATH, hooks, plugins, or shell config.
 - **codegraph** → only if explicitly chosen. Follow
   `references/optional/codegraph.md` exactly: treat upstream CodeGraph docs as
-  canonical, reuse an existing `codegraph` binary when present, run only the
-  reviewed host installer/project init commands when applicable, verify, and
-  report. Ask before changing PATH, MCP config, agent permissions, or creating a
-  project `.codegraph/` index.
+  canonical, reuse an existing `codegraph` binary when present, fetch the
+  upstream README only when install/update/repair is needed, verify, and report.
+  Ask before changing PATH, MCP config, agent permissions, or creating a project
+  `.codegraph/` index.
 - **ponytail** → only if explicitly chosen. Follow
   `references/optional/ponytail.md` exactly: treat upstream Ponytail docs as
-  canonical, prefer its recommended plugin/extension install for command-capable
-  hosts, use instruction-only rule copies only for hosts where upstream
-  recommends that path, and report the resulting Ponytail commands or mode
-  controls. Ask before installing plugins, trusting hooks, changing shell/env
-  config, or writing rule/context files.
+  canonical, fetch the upstream README only when install/update/repair is
+  needed, prefer its current recommended plugin/extension install for
+  command-capable hosts, use instruction-only rule copies only for hosts where
+  upstream recommends that path, and report the resulting Ponytail commands or
+  mode controls. Ask before installing plugins, trusting hooks, changing
+  shell/env config, or writing rule/context files.
 
 ### 5. Report
 
@@ -199,9 +200,10 @@ skills. Do not re-read or narrate these instructions back to the user.
 ## Provenance and licensing
 
 Do not summarize, rewrite, or clone well-known community skills into ASP-branded
-payloads. For collected third-party components, install the original upstream
-files at a pinned commit and preserve their license/notice files. This pack's
-own MIT content is limited to installer glue and documentation.
+payloads. For collected third-party components, use the upstream README/docs as
+the source of truth, fetch only the selected upstream payload files when needed,
+and preserve license/notice files. This pack's own MIT content is limited to
+installer glue and documentation.
 
 ## Adding, listing, updating, removing
 

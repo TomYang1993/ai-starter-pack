@@ -7,7 +7,7 @@ hooks, commands, rules, benchmark claims, and licensing:
 https://github.com/DietrichGebert/ponytail
 
 Use this file only as the starter-pack adapter: when to offer Ponytail, what not
-to overwrite, and which reviewed host install paths are known.
+to overwrite, and how to safely follow upstream docs.
 
 ## Policy
 
@@ -31,32 +31,24 @@ to overwrite, and which reviewed host install paths are known.
   `PONYTAIL_DEFAULT_MODE`, or write `~/.config/ponytail/config.json` without the
   user's approval.
 
-## Reviewed Install Paths
+## Upstream README First
 
-These commands are copied from Ponytail's upstream README and should be
-refreshed by the maintainer update job, not re-read during every user install.
-
-| Host | Recommended upstream path |
-|---|---|
-| Claude Code | `/plugin marketplace add DietrichGebert/ponytail` then `/plugin install ponytail@ponytail` |
-| Claude Code desktop | Use the UI: Customize -> personal plugins -> Create plugin and add marketplace -> Add from repository -> enter the repo URL |
-| Codex CLI / desktop | `codex plugin marketplace add DietrichGebert/ponytail`, open `/plugins`, install Ponytail, open `/hooks`, review/trust its lifecycle hooks, then start a new thread |
-| GitHub Copilot CLI | `copilot plugin marketplace add DietrichGebert/ponytail` then `copilot plugin install ponytail@ponytail` |
-| Gemini CLI | `gemini extensions install https://github.com/DietrichGebert/ponytail` |
-| Antigravity CLI | `agy plugin install https://github.com/DietrichGebert/ponytail` |
-| Pi agent harness | `pi install git:github.com/DietrichGebert/ponytail` |
-| OpenCode | Run from a Ponytail checkout and add `{ "plugin": ["./.opencode/plugins/ponytail.mjs"] }` to `opencode.json`; use an absolute plugin path for a shared checkout |
-| OpenClaw | `clawhub install ponytail`; install command skills the same way if wanted |
-| Cursor | Copy Ponytail's upstream `.cursor/rules/` file(s) into the target rule location |
-| Windsurf | Copy Ponytail's upstream `.windsurf/rules/` file(s) into the target rule location |
-| GitHub Copilot editor | Copy Ponytail's upstream `.github/copilot-instructions.md` into the target instruction location |
-| Kiro | Copy Ponytail's upstream `.kiro/steering/ponytail.md` into global or project steering |
-| Zed / CodeWhale / other AGENTS.md readers | Use Ponytail's upstream `AGENTS.md` or the host mapping in Ponytail's agent-portability docs |
-
-For command-capable hosts, report the commands the user should see after
-install: `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`,
-`/ponytail-gain`, and `/ponytail-help`. In Codex these are skills, invoked with
-`@` such as `@ponytail-review`.
+- If Ponytail is already configured for the current host and the user is not
+  updating/repairing it, do not fetch upstream docs during a normal setup run.
+  Report it as already present.
+- If Ponytail is missing, the user asked to update/repair it, the host is
+  unfamiliar, or the existing install is rule-only and the user wants plugin
+  commands, fetch the upstream README from
+  `https://github.com/DietrichGebert/ponytail` and follow the current host
+  instructions.
+- Treat the upstream README as canonical. Do not rely on memorized commands or
+  old command tables in this pack.
+- Fetch only the README/docs needed to identify the current host install path
+  and, for rule-only hosts, the exact upstream rule files. Do not clone the whole
+  repo unless upstream explicitly requires it.
+- For command-capable hosts, after following the README, report the Ponytail
+  commands or mode controls the user should expect. Do not invent command names;
+  read them from upstream.
 
 ## Normal Flow
 
@@ -68,14 +60,16 @@ install: `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`,
    - Instruction-only rule/context file copied from Ponytail upstream.
 3. If present, report "Ponytail already configured for this host" and ask before
    reinstalling, changing mode, or switching from rule-only to plugin install.
-4. If absent, follow the reviewed install path for the current host.
-5. For Codex, remind the user to install from `/plugins`, review/trust hooks in
-   `/hooks`, then restart the desktop app or start a new thread.
-6. For Claude Code, use slash plugin commands when available; for the desktop UI,
-   direct the user through the Ponytail README's UI marketplace flow.
-7. For instruction-only hosts, copy only the upstream matching rule file(s).
+4. If install, update, repair, mode changes, or plugin/rule conversion is needed,
+   fetch the upstream README and follow the current instructions for the current
+   host.
+5. For command-capable hosts, follow the README's plugin/extension flow and any
+   hook-trust or restart steps it requires.
+6. For instruction-only hosts, copy only the upstream matching rule file(s).
    Preserve Ponytail's wording and license. Do not synthesize a local ASP
    rewrite.
+7. Narrate exact commands or file writes, ask for permission, run only the
+   approved steps, and report what changed.
 8. Verify by checking the host exposes Ponytail commands or that the target rule
    file exists. If verification needs a fresh session, tell the user.
 

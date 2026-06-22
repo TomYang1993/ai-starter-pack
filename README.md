@@ -61,4 +61,4 @@ differently, open an issue.
 ## License
 
 see [`LICENSE`](LICENSE). Third-party components keep their original licenses and
-credits. The pack records notices under `skills/ai-starter-pack/NOTICE.md`.
+credits. See `skills/ai-starter-pack/NOTICE.md` for the pack's notice policy.

@@ -7,7 +7,7 @@ integration details:
 https://github.com/rtk-ai/rtk
 
 Use this file only as the starter-pack adapter: when to offer rtk, what not to
-overwrite, and which reviewed host init commands are known.
+overwrite, and how to safely follow upstream docs.
 
 ## Policy
 
@@ -21,35 +21,35 @@ overwrite, and which reviewed host init commands are known.
 - Treat hook setup as per-tool/per-scope. A global rtk binary does not mean
   Claude Code, Codex, Kilo Code, etc. are all configured.
 
-## Reviewed Host Init Commands
+## Upstream README First
 
-These commands are copied from the upstream RTK README's quick-start section and
-should be refreshed by the maintainer update job, not re-read during every user
-install.
-
-| Host | Init command |
-|---|---|
-| Claude Code / default hook agents | `rtk init -g` |
-| Codex | `rtk init -g --codex` |
-| Cursor | `rtk init -g --agent cursor` |
-| Windsurf | `rtk init -g --agent windsurf` |
-| Cline / Roo Code | `rtk init --agent cline` |
-| Kilo Code | `rtk init --agent kilocode` |
-| Antigravity | `rtk init --agent antigravity` |
-
-Use the global (`-g`) form only when the user asked for global scope. For project
-scope, prefer the non-global form if upstream supports it for that host. If the
-host is missing from this table, check `rtk init --help` or the upstream README
-before guessing.
+- If `rtk --version` works and the current host hook is already configured, do
+  not fetch upstream docs during a normal setup run. Report it as already
+  present.
+- If rtk is missing, the host hook is missing, the user asked to update/repair
+  rtk, or the host is unfamiliar, fetch the upstream README from
+  `https://github.com/rtk-ai/rtk` and follow the current install instructions.
+- Treat the upstream README as canonical. Do not rely on memorized commands or
+  old command tables in this pack.
+- Fetch only the README/docs needed to identify the install/init command. Do not
+  clone the whole repo unless upstream explicitly requires it.
+- Use global commands only when the user asked for global scope. For
+  project-local setup, prefer the upstream project-local command if one exists.
 
 ## Normal Flow
 
 1. Confirm the user wants rtk.
 2. Check `rtk --version`.
-3. If missing, follow the upstream README install path for the user's OS/package
-   manager.
-4. Run the reviewed init command for the current host/scope.
-5. Ask the user to restart the host, then verify with a shell command such as
+3. Inspect only the current host/scope for an existing rtk hook/plugin setup.
+4. If the binary and current host hook are already present, report "rtk already
+   configured for this host" and stop.
+5. If install, update, repair, or hook setup is needed, fetch the upstream README
+   and follow the current instructions for the user's OS/package manager, host,
+   and scope.
+6. Narrate the exact command, ask for permission, run it, and report what
+   changed.
+7. Ask the user to restart the host when upstream says to, then verify with a
+   shell command such as
    `git status`.
 
 ## Caveats to Relay

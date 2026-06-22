@@ -7,7 +7,7 @@ and benchmark claims:
 https://github.com/colbymchenry/codegraph
 
 Use this file only as the starter-pack adapter: when to offer CodeGraph, what
-not to overwrite, and which reviewed setup commands are known.
+not to overwrite, and how to safely follow upstream docs.
 
 ## Policy
 
@@ -25,40 +25,38 @@ not to overwrite, and which reviewed setup commands are known.
 - Project indexes live in `.codegraph/`. Do not delete, rebuild, or reinitialize
   an existing index unless the user asks.
 
-## Reviewed Commands
+## Upstream README First
 
-These commands are copied from the upstream CodeGraph README's quick-start
-section and should be refreshed by the maintainer update job, not re-read during
-every user install.
-
-| Step | Command |
-|---|---|
-| macOS / Linux bundled install | `curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh` |
-| Windows bundled install | `irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | iex` |
-| npm install | `npm i -g @colbymchenry/codegraph` |
-| Configure installed agents | `codegraph install` |
-| One-shot npx setup | `npx @colbymchenry/codegraph` |
-| Initialize current project | `codegraph init` |
-| Upgrade | `codegraph upgrade` |
-| Check for upgrade | `codegraph upgrade --check` |
-| Remove host integrations | `codegraph uninstall` |
-| Remove project index | `codegraph uninit` |
-
-Prefer the upstream installer path that matches the user's OS and package
-manager. Avoid piping remote scripts without explaining the risk and asking for
-approval. If the user already has Node and wants the least surprising path, the
-npm install is usually easier to review.
+- If `codegraph --version` works, the current host MCP/setup is present, and the
+  current project already has the intended `.codegraph/` index, do not fetch
+  upstream docs during a normal setup run. Report it as already present.
+- If the binary is missing, host setup is missing, the project index is missing,
+  the user asked to update/repair CodeGraph, or the host is unfamiliar, fetch the
+  upstream README from `https://github.com/colbymchenry/codegraph` and follow the
+  current instructions.
+- Treat the upstream README as canonical. Do not rely on memorized commands or
+  old command tables in this pack.
+- Fetch only the README/docs needed to identify install, host setup, update, or
+  project-index commands. Do not clone the whole repo unless upstream explicitly
+  requires it.
+- Prefer the upstream installer path that matches the user's OS and package
+  manager. Avoid piping remote scripts without explaining the risk and asking for
+  approval.
 
 ## Normal Flow
 
 1. Confirm the user wants CodeGraph.
 2. Check `codegraph --version`.
-3. If missing, follow the upstream README install path for the user's OS/package
-   manager.
-4. Run `codegraph install` only for the host(s) the user approves.
-5. In each project the user wants indexed, check for `.codegraph/`.
-6. If `.codegraph/` is absent, run `codegraph init` from that project root.
-7. Ask the user to restart the host if the upstream installer says to, then
+3. Inspect only the current approved host for CodeGraph MCP/setup.
+4. In the current project, check for `.codegraph/` when the user wants project
+   indexing.
+5. If binary, host setup, and project index are already present, report what is
+   already configured and stop.
+6. If install, update, repair, host setup, or project indexing is needed, fetch
+   the upstream README and follow the current instructions for that step.
+7. Narrate exact commands, ask for permission, run only the approved steps, and
+   report what changed.
+8. Ask the user to restart the host if the upstream installer says to, then
    verify that the CodeGraph tools are visible in a fresh agent session when
    possible.
 
