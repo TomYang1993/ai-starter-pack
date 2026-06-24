@@ -13,7 +13,7 @@
       "commit": "25d22f864ad68cc447a4cb93aefde918aa4aec9f",
       "reviewed_at": "2026-06-19",
       "last_checked_at": "2026-06-19",
-      "note": "Canonical caveman skill. Read the upstream README first; use file/commit as last-reviewed location hints only."
+      "note": "Canonical caveman skill. Read the upstream README first. For general/defaults setup, treat Caveman as a pure skill that defaults to the active host's user/global skill location, and tell the user before broad agent config changes. For project-specific setup, use upstream project-local options when available or ask before broader host changes. Use file/commit as last-reviewed location hints only."
     },
     {
       "component": "stop-slop",
@@ -29,7 +29,7 @@
       "commit": "8da1f030185bdfe8471220585162991eaeb970e9",
       "reviewed_at": "2026-06-19",
       "last_checked_at": "2026-06-19",
-      "note": "Removes AI writing tells from prose. No bundled ASP rewrite — read the upstream README first, then copy only the upstream SKILL.md + required references as-is when the README calls for file copying."
+      "note": "Removes AI writing tells from prose. No bundled ASP rewrite — read the upstream README first, then copy only the upstream SKILL.md + required references as-is when the README calls for file copying. Stop Slop works as either project-local or general/user skill; default to user/global placement for general/defaults setup and use project-local placement when the user chooses project setup."
     },
     {
       "component": "matt-pocock",
@@ -44,7 +44,7 @@
       "commit": "6eeb81b5fcfeeb5bd531dd47ab2f9f2bbea27461",
       "reviewed_at": "2026-06-19",
       "last_checked_at": "2026-06-19",
-      "note": "A collection of production engineering skills (TDD, architecture review, planning, git workflow, etc.). Read the upstream README first. Let the user pick which sub-skills to install, or install the set. Copy each chosen skill folder as-is with the MIT notice when the README calls for file copying."
+      "note": "A collection of production engineering skills (TDD, architecture review, planning, git workflow, etc.). Read the upstream README first. As of the last review, upstream recommends `npx skills add mattpocock/skills`; use that installer. For general/defaults setup, explain that ASP intentionally uses the CLI's global scope for reusable pure skills, then add `-g/--global` or choose Global if prompted. For project setup, do not add `-g/--global`, choose Project if prompted for scope, let the user pick sub-skills or all, and include setup-matt-pocock-skills when upstream recommends it. Special case: setup-matt-pocock-skills may be globally available as a trigger, but its work is per-project; running it in one repo does not configure every repo. Copy folders manually only when upstream no longer provides a usable installer path."
     }
   ]
 }

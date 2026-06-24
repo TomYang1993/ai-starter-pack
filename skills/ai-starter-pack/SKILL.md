@@ -42,22 +42,39 @@ duplicates or silently overwrite the user's edits. Resolve concrete install
 targets only after the selected component's upstream docs or adapter have made
 the target clear.
 
-### 1. Detect the host
+### 1. Detect the host and setup intent
 
 Default to the host/tool that is currently running this skill. Do **not** install
 into other tools' directories just because they exist on disk. Only target
 another host when the user explicitly names it (for example "set up Cursor too")
 or sets `ASP_AGENT`.
 
-Read `references/dedup.md` → "Host detection" and resolve only:
+Read `references/dedup.md` → "Host detection" and resolve:
 
 - `HOST` — the active coding agent to configure.
+- `SETUP_INTENT` — either `general` for user/global pure-skill defaults in this
+  agent/tool, or `project` for this specific repo/workspace.
 
 If detection is ambiguous, ask the user which agent they want rather than
-guessing. Honor `ASP_AGENT` when set. Do **not** ask for global vs project-local
-scope here; some upstream installers define that themselves. For example, the
-`skills` CLI currently defaults to project-local installs unless `-g/--global`
-is used.
+guessing. Honor `ASP_AGENT` when set.
+
+Ask for setup intent unless the user's request explicitly says project-local,
+global, or everywhere. Make general/global the default for pure skills, and
+explicitly offer project-local as the alternative:
+
+```text
+Pure text skills are installed globally by default so this agent can use them in
+every project. Do you want that, or should this setup be project-local for the
+current repo?
+```
+
+Treat "this repo/project/workspace" as `project`. Treat "all projects",
+"global", and "everywhere" as `general`. For softer phrases such as "my coding
+environment" or "usual defaults", or for a session opened from a parent folder
+such as `~/projects` with no specific project target, present the global default
+and ask whether the user wants project-local instead. This setup-intent question
+applies to pure skills only; optional tools use their own adapter-specific
+prompts.
 
 ### 2. Offer the menu
 
@@ -80,17 +97,18 @@ Choose what to install. Space toggles, Enter confirms.
 [ ] caveman
     Very popular terse-output skill from Julius Brussee.
     Helps with shorter replies and less token waste.
-    Impact: fetches the upstream skill as-is.
+    Impact: pure skill; defaults to global/user-level, project-local if chosen.
 
 [ ] stop-slop
     Popular prose cleanup skill from Hardik Pandya.
     Helps remove obvious AI writing tells from docs, posts, and messages.
-    Impact: fetches the upstream skill as-is.
+    Impact: pure text skill; defaults to global/user-level, project-local if chosen.
 
 [ ] matt-pocock
     Very popular production engineering skill set from Matt Pocock.
     Helps with TDD, debugging, planning, architecture review, and git workflow.
-    Impact: follows upstream install docs; user can choose sub-skills or all.
+    Impact: follows upstream skills CLI; defaults to global/user-level here.
+    Special case: setup-matt-pocock-skills still configures each project.
 
 [ ] rtk
     Popular shell-output compression tool from rtk-ai.
@@ -124,8 +142,9 @@ Do not ask again whether to install a selected component. Pause only when user
 action is actually needed: permission to run a command, network/file-system
 access, a host-specific approval screen, a duplicate/conflict decision, a
 `matt-pocock` sub-skill choice, or an optional-tool setup choice from its
-adapter file. Do not ask a pack-wide scope question. Ask about scope only when
-the selected component's upstream instructions or adapter require it.
+adapter file. Use the setup-intent answer from step 1 for pure-skill scope; do
+not re-ask per pure skill unless upstream instructions conflict or the user
+changes their mind.
 Infrastructure items (`rtk`, `codegraph`, `ponytail`) still need explicit
 permission at the moment they modify PATH, plugins, MCP/hooks, project indexes,
 lifecycle hooks, or rule files.
@@ -143,10 +162,12 @@ For every selected component:
 1. Fetch and read that component's current upstream README/docs, or the
    component adapter named below.
 2. Determine the concrete install method and target for the active `HOST` from
-   those docs. Do not replace upstream defaults with pack defaults. If upstream
-   says its installer defaults to project-local, accept that default unless the
-   user already asked for global/everywhere.
-3. Run the matching check in `references/dedup.md` → "Dedup checks" against the
+   those docs.
+3. For pure skills, apply the setup intent after reading upstream: `general`
+   means user/global install, and `project` means project-local install. Be
+   explicit when that means passing `-g/--global` or choosing Global for an
+   upstream installer whose no-flag default is project-local.
+4. Run the matching check in `references/dedup.md` → "Dedup checks" against the
    concrete target(s) the component will touch.
 
 In summary:
@@ -185,10 +206,33 @@ user-owned installs before writing:
   follow the upstream install instructions for the active `HOST`, and fetch only
   the exact payload files/folders plus LICENSE/NOTICE files needed for the
   selected component. If upstream provides an installer command for the active
-  host, prefer that installer over hand-copying files. For `matt-pocock`, let the
-  upstream installer or user pick which sub-skills to install (or all), and make
-  sure `setup-matt-pocock-skills` is included when upstream recommends it. Stop
-  and ask if no fetch/install tool is available or the upstream README is
+  host, prefer that installer over hand-copying files. Pure skills default to
+  user/global placement because their content is reusable across projects; use
+  project-local placement only when the user chose project setup or upstream
+  offers no safe global target. Apply component-specific scope rules:
+  - Special cases when defaulting pure skills global: `setup-matt-pocock-skills`
+    can be globally available as a trigger but still configures only the repo it
+    runs inside; optional tools (`rtk`, CodeGraph, Ponytail) are not pure skills
+    and do not inherit this default; if the active host has no safe global skill
+    target, explain that and ask before falling back to project-local.
+  - `caveman`: default to the active host's user/global skill location when
+    `SETUP_INTENT=general`, and tell the user before running commands if
+    upstream may configure the active agent broadly. If `SETUP_INTENT=project`,
+    use upstream project-local options when available; otherwise explain the
+    broader impact and ask before continuing.
+  - `stop-slop`: default to the active host's user/global skill location when
+    `SETUP_INTENT=general`; use project-local placement when
+    `SETUP_INTENT=project`.
+  - `matt-pocock`: the current upstream quickstart is the `skills` CLI. For
+    `SETUP_INTENT=general`, say that ASP is intentionally using the CLI's global
+    path for reusable skills, then pass `-g/--global` or choose Global if the CLI
+    asks. For `SETUP_INTENT=project`, run the upstream command without
+    `-g/--global`, let the CLI resolve host paths, choose Project if it asks for
+    scope, and include `setup-matt-pocock-skills` when upstream recommends it.
+    Special case: `setup-matt-pocock-skills` may be available globally as a
+    trigger, but its work is still per-project; running it in one repo does not
+    configure every repo.
+  Stop and ask if no fetch/install tool is available or the upstream README is
   unclear.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
   treat upstream RTK docs as canonical, reuse an existing `rtk` binary when

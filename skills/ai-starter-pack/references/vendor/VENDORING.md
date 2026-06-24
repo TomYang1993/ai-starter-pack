@@ -30,22 +30,31 @@ For each entry in `sources.json` the user wants:
    plus comparing local `HEAD` with the upstream default branch. If the checkout
    is stale, unverifiable, dirty, or on an unexpected remote, ignore it and fetch
    current upstream docs/payload directly.
-3. **Use local hints only after reading upstream.** The `file`, `extra_files`,
+3. **Use upstream installers with the chosen scope.** If upstream recommends the
+   `skills` CLI (`npx skills add ...`), prefer that command over manual copying
+   and let the CLI choose agent-specific paths. For pure skills, general/defaults
+   setup means user/global placement by default: pass `-g/--global` or choose
+   Global if the CLI asks. For project setup, omit `-g/--global` and choose
+   Project if the CLI asks. Add `-a <agent>` only when the active host is clear
+   and the flag is needed to avoid an agent-selection prompt. Do not apply this
+   pure-skill global default to optional tools such as `rtk`, CodeGraph, or
+   Ponytail; follow their adapters instead.
+4. **Use local hints only after reading upstream.** The `file`, `extra_files`,
    and `commit` fields in `sources.json` are last-reviewed hints for locating
    payload files. They are not a reason to ignore newer upstream README
    instructions.
-4. **Fetch the smallest payload.** If upstream requires copying files, fetch only
+5. **Fetch the smallest payload.** If upstream requires copying files, fetch only
    the listed skill file/folder(s) and required references, plus LICENSE/NOTICE.
    Do not clone the whole repo unless the README makes that unavoidable.
-5. **Read the actual LICENSE/NOTICE** from upstream. Confirm the license still
+6. **Read the actual LICENSE/NOTICE** from upstream. Confirm the license still
    matches `sources.json`; if it changed, stop and ask before installing.
-6. **Copy upstream content as-is.** Keep the upstream's content, not the pack's.
+7. **Copy upstream content as-is.** Keep the upstream's content, not the pack's.
    Add the pack's source-marker or ASP metadata near the copied content so dedup
    still works.
-7. **Copy the notice.** Write the upstream license text and any required notice
+8. **Copy the notice.** Write the upstream license text and any required notice
    text to `LICENSES/<component>-upstream-LICENSE.txt`. Keep their copyright
    lines intact — do not replace them with yours.
-8. **Record provenance in the installed target**, not this repo's static
+9. **Record provenance in the installed target**, not this repo's static
    `NOTICE.md`: component, repo, source URL or resolved commit SHA if available,
    retrieval date, and adjacent license file.
 

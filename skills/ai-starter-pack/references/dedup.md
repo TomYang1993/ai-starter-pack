@@ -5,18 +5,23 @@ running install steps 1 and 3.
 
 ## Host detection
 
-Resolve only the active `HOST` in step 1. Do not choose install scope or target
-directories until a selected component's upstream README/docs or adapter have
-shown the concrete install method for that host.
+Resolve the active `HOST` and `SETUP_INTENT` in step 1. Do not choose component
+scope or target directories until a selected component's upstream README/docs or
+adapter have shown the concrete install method for that host and intent. For
+pure skills, `SETUP_INTENT=general` means user/global install by default, and
+`SETUP_INTENT=project` means project-local install.
 
 ### Scope
 
-Do not ask a pack-wide project/global question. Treat scope as component-specific
-because upstream tools may already define it. For example, the `skills` CLI
-defaults to project-local and uses `-g/--global` only when requested. Use global
-only when the selected component's upstream flow requires it or the user asks for
-"all my projects" / "everywhere". Honor `ASP_SCOPE=project|global` only after it
-is compatible with the selected component's upstream install path.
+Ask one setup-intent question for pure skills: global/user-level is the default,
+and project-local is the explicit alternative. Treat scope as component-specific
+after that because upstream tools may use different flags or prompts. For
+example, the `skills` CLI defaults to project-local when no scope flag is given,
+so pure-skill general setup must pass `-g/--global` or choose Global when the CLI
+asks. Honor `ASP_SCOPE=project|global` only after it is compatible with the
+selected component's upstream install path and user intent. Optional tools such
+as `rtk`, CodeGraph, and Ponytail are not governed by the pure-skill global
+default; their adapters decide when to ask.
 
 ### Signals
 
@@ -45,6 +50,18 @@ explicitly asks to configure Claude Code.
 If the active host cannot be identified confidently, ask the user which tool and
 agent they want. Do not guess from filesystem hints alone.
 
+Resolve `SETUP_INTENT` after host detection:
+
+- `general` — the user explicitly says "all projects", "global", "everywhere",
+  or accepts the default global pure-skill setup after being offered
+  project-local as the alternative.
+- `project` — the user is configuring the current repo/workspace, or explicitly
+  says "this project", "this repo", or similar.
+- If the current directory is a parent/workspace folder such as `~/projects`, or
+  the prompt only says "set up my coding environment" or "usual defaults",
+  present general/global as the default and ask whether they instead want
+  project-local setup before installing pure skills.
+
 The table below is a reference for dedup and manual fallbacks after upstream docs
 have resolved the selected component's actual target. It is not the install plan
 for every component.
@@ -53,7 +70,7 @@ for every component.
 |---|---|---|---|---|---|
 | Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
 | Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.codex/skills/` | `skill-folder` |
-| OpenCode | `AGENTS.md` or `opencode.json` | `~/.config/opencode/opencode.json` | `.opencode/skills/` or upstream-selected `.agents/skills/` | `~/.config/opencode/skills/` | `skill-folder` |
+| OpenCode | `AGENTS.md` or `opencode.json` | `~/.config/opencode/opencode.json` | `.agents/skills/` when using the upstream `skills` CLI for project scope | `~/.config/opencode/skills/` for pure-skill general/global scope with upstream `-g/--global` | `skill-folder` |
 | Cursor | `AGENTS.md` or `.cursor/rules/ai-starter-pack.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
 | Windsurf / Devin | `AGENTS.md` or `.devin/rules/ai-starter-pack.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
@@ -74,8 +91,11 @@ Detection hints:
   `.codex/` directory is only supporting evidence.
 - Current runtime says OpenCode, or user explicitly targets OpenCode →
   OpenCode. `.opencode/` and `opencode.json` are supporting evidence. OpenCode
-  can also load `.agents/skills/`, so let the selected component's upstream
-  installer decide between native and compatibility paths.
+  is installed by the upstream `skills` CLI to `.agents/skills/` for project
+  scope and `~/.config/opencode/skills/` for pure-skill general/global scope.
+  Let the selected component's upstream installer decide paths; add
+  `-g/--global` only when `SETUP_INTENT=general` or the user explicitly asked
+  for global/everywhere.
 - Current runtime says GitHub Copilot, or user explicitly targets Copilot →
   Copilot. `.github/copilot-instructions.md` is supporting evidence.
 - Explicit user request for Kilo Code, `ASP_AGENT=kilo`, or a project-local
@@ -98,8 +118,11 @@ Before checking for duplicates for a selected component:
    referenced by `SKILL.md`.
 2. Determine the exact command, file path, plugin path, hook path, or project
    index the component will touch for the active `HOST`.
-3. Use the table above only as a fallback or inventory guide. Do not override an
-   upstream installer's default scope or path with a pack-level default.
+3. Combine upstream install mechanics with `SETUP_INTENT`. For pure skills,
+   `general` means user/global install by default, even when the upstream
+   command's no-flag default is project-local. Explain that scope choice before
+   adding a global flag or choosing Global. For `project`, use the upstream
+   project-local path or prompt choice.
 4. Then run the dedup checks below against those exact targets.
 
 ## Pack entrypoint duplicates
@@ -132,7 +155,8 @@ and make re-running a no-op.
 ### Layer 1 — on-demand skills or converted rules
 
 Here `SKILLS_DIR`, `TARGET_FORMAT`, and scope mean the values resolved during
-"Component target discovery", not values chosen in step 1.
+"Component target discovery", after applying `SETUP_INTENT`, not values chosen
+solely from host detection.
 
 For each of `caveman`, `stop-slop`, `matt-pocock`:
 
