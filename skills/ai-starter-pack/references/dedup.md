@@ -5,13 +5,18 @@ running install steps 1 and 3.
 
 ## Host detection
 
-Resolve four values: `CONTEXT_FILE`, `SKILLS_DIR`, `TARGET_FORMAT`, `SCOPE`.
+Resolve only the active `HOST` in step 1. Do not choose install scope or target
+directories until a selected component's upstream README/docs or adapter have
+shown the concrete install method for that host.
 
 ### Scope
 
-Default to **project-local** (writes land in the current repo, travel with it,
-and are easy to review in a diff). Use **global** only if the user asks for
-"all my projects" / "everywhere". Override with `ASP_SCOPE=project|global`.
+Do not ask a pack-wide project/global question. Treat scope as component-specific
+because upstream tools may already define it. For example, the `skills` CLI
+defaults to project-local and uses `-g/--global` only when requested. Use global
+only when the selected component's upstream flow requires it or the user asks for
+"all my projects" / "everywhere". Honor `ASP_SCOPE=project|global` only after it
+is compatible with the selected component's upstream install path.
 
 ### Signals
 
@@ -22,7 +27,7 @@ those tools, and they must not override the current runtime.
 
 Resolve the host in this order:
 
-1. Explicit override: `ASP_AGENT=claude|cursor|windsurf|codex|copilot|antigravity|kilo|generic`.
+1. Explicit override: `ASP_AGENT=claude|cursor|windsurf|codex|opencode|copilot|antigravity|kilo|generic`.
 2. Explicit user target in the prompt, e.g. "set up Kilo Code" or "configure
    Cursor too".
 3. The current agent/runtime identity, when the host exposes it or the agent
@@ -38,12 +43,17 @@ has `.claude/` or `CLAUDE.md`, the active host is still Kilo Code unless the use
 explicitly asks to configure Claude Code.
 
 If the active host cannot be identified confidently, ask the user which tool and
-scope they want. Do not guess from filesystem hints alone.
+agent they want. Do not guess from filesystem hints alone.
+
+The table below is a reference for dedup and manual fallbacks after upstream docs
+have resolved the selected component's actual target. It is not the install plan
+for every component.
 
 | Host | Project context/rule file | Global context/rule file | Project skill/rule dir | Global skill/rule dir | Target format |
 |---|---|---|---|---|---|
 | Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
-| Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.agents/skills/` | `skill-folder` |
+| Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.codex/skills/` | `skill-folder` |
+| OpenCode | `AGENTS.md` or `opencode.json` | `~/.config/opencode/opencode.json` | `.opencode/skills/` or upstream-selected `.agents/skills/` | `~/.config/opencode/skills/` | `skill-folder` |
 | Cursor | `AGENTS.md` or `.cursor/rules/ai-starter-pack.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
 | Windsurf / Devin | `AGENTS.md` or `.devin/rules/ai-starter-pack.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
@@ -62,6 +72,10 @@ Detection hints:
   evidence.
 - Current runtime says Codex, or user explicitly targets Codex → Codex. A
   `.codex/` directory is only supporting evidence.
+- Current runtime says OpenCode, or user explicitly targets OpenCode →
+  OpenCode. `.opencode/` and `opencode.json` are supporting evidence. OpenCode
+  can also load `.agents/skills/`, so let the selected component's upstream
+  installer decide between native and compatibility paths.
 - Current runtime says GitHub Copilot, or user explicitly targets Copilot →
   Copilot. `.github/copilot-instructions.md` is supporting evidence.
 - Explicit user request for Kilo Code, `ASP_AGENT=kilo`, or a project-local
@@ -76,6 +90,18 @@ If nothing matches, ask the user. The old safest default of
 the host was not detected and getting confirmation to use a generic Agent Skills
 install.
 
+## Component target discovery
+
+Before checking for duplicates for a selected component:
+
+1. Read the component's current upstream README/docs or the optional-tool adapter
+   referenced by `SKILL.md`.
+2. Determine the exact command, file path, plugin path, hook path, or project
+   index the component will touch for the active `HOST`.
+3. Use the table above only as a fallback or inventory guide. Do not override an
+   upstream installer's default scope or path with a pack-level default.
+4. Then run the dedup checks below against those exact targets.
+
 ## Pack entrypoint duplicates
 
 Some hosts can load AI Starter Pack through more than one mechanism, such as a
@@ -88,11 +114,15 @@ Before installing the pack or when diagnosing duplicate triggers:
 1. Look for the same `ai-starter-pack` skill/plugin in every known entrypoint for
    the current host and scope (for example Claude Code marketplace/plugin plus
    `.claude/skills/ai-starter-pack` or `~/.claude/skills/ai-starter-pack`).
-2. Prefer the host-native package/plugin entrypoint when it exists and is current.
-3. Do not copy another skill folder just because one entrypoint was already
-   present. Report the duplicate and ask whether to keep the current entrypoint,
-   remove the older copy, or intentionally keep both for testing.
-4. Component install/update dedup still runs after the pack entrypoint is chosen.
+2. If exactly one entrypoint exists, use it and continue.
+3. If multiple entrypoints exist, choose the one tagged or described as
+   recommended. If none is tagged recommended, choose the first discovered
+   entrypoint in the scan order from step 1.
+4. Do not copy another skill folder just because one entrypoint was already
+   present. Report which entrypoint was chosen, and mention any ignored duplicate
+   entrypoints without asking unless the chosen entrypoint is unreadable,
+   stale/broken, or conflicts with an explicit user request.
+5. Component install/update dedup still runs after the pack entrypoint is chosen.
 
 ## Dedup checks
 
@@ -100,6 +130,9 @@ The goal: never write a file the user already has, never clobber their edits,
 and make re-running a no-op.
 
 ### Layer 1 — on-demand skills or converted rules
+
+Here `SKILLS_DIR`, `TARGET_FORMAT`, and scope mean the values resolved during
+"Component target discovery", not values chosen in step 1.
 
 For each of `caveman`, `stop-slop`, `matt-pocock`:
 
@@ -128,12 +161,12 @@ For each of `caveman`, `stop-slop`, `matt-pocock`:
    - If found: do **not** write `asp-<name>`. Report the existing install and
      ask whether to leave it, replace it with the pack's version, or keep both
      (discouraged — two skills with the same job confuse triggering).
-3. **Absent** — install according to `TARGET_FORMAT`: skill folder for
-   skill-capable hosts, native `.mdc`/`.md` rule for Cursor or Windsurf/Devin,
-   explicit confirmation before broad Copilot instructions, and read-only report
-   for read-only flows. For Kilo-native skill folders, preserve the upstream
-   folder/name and record ASP ownership in metadata instead of adding an
-   `asp-` prefix.
+3. **Absent** — install with the upstream-resolved method and target. For manual
+   fallbacks, use `TARGET_FORMAT`: skill folder for skill-capable hosts, native
+   `.mdc`/`.md` rule for Cursor or Windsurf/Devin, explicit confirmation before
+   broad Copilot instructions, and read-only report for read-only flows. For
+   Kilo-native skill folders, preserve the upstream folder/name and record ASP
+   ownership in metadata instead of adding an `asp-` prefix.
 
 ### Layer 2 — optional tools
 

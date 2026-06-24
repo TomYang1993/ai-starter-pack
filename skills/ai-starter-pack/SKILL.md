@@ -1,6 +1,6 @@
 ---
 name: ai-starter-pack
-description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail — written as portable files that work across Claude Code, Codex, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my coding environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
+description: Set up a coding agent's everyday environment in one step — upstream-original terse-output style, prose cleanup, engineering skills, and optional tools such as rtk, CodeGraph, and Ponytail — written as portable files that work across Claude Code, Codex, OpenCode, Kilo Code, Antigravity, and any agent that follows the SKILL.md / AGENTS.md standard. Use this whenever the user says "set up my coding environment", "update my coding environment", "bootstrap my agent", "install my starter pack", "configure a new project for me", or starts working in a fresh repo or a freshly installed coding tool and wants their usual defaults in place. Also use when the user asks to add, list, update, or remove any of these components.
 ---
 
 # AI Starter Pack
@@ -37,26 +37,26 @@ installed by following upstream docs, never bundled. See
 
 Follow these steps in order. Do not skip the dedup checks — re-running this pack,
 or running it on a machine that already has some of these files, must never create
-duplicates or silently overwrite the user's edits.
+duplicates or silently overwrite the user's edits. Resolve concrete install
+targets only after the selected component's upstream docs or adapter have made
+the target clear.
 
-### 1. Detect the host and target directories
+### 1. Detect the host
 
 Default to the host/tool that is currently running this skill. Do **not** install
 into other tools' directories just because they exist on disk. Only target
 another host when the user explicitly names it (for example "set up Cursor too")
 or sets `ASP_AGENT`.
 
-Read `references/dedup.md` → "Host detection" and resolve:
+Read `references/dedup.md` → "Host detection" and resolve only:
 
-- `CONTEXT_FILE` — the host's project context/rule file, when relevant.
-- `SKILLS_DIR` — where on-demand skills or converted native rules live for this
-  host and scope.
-- `TARGET_FORMAT` — `skill-folder`, `cursor-rule`, `windsurf-rule`,
-  `copilot-instruction`, or `read-only`.
-- `SCOPE` — project-local (default) or global, per the user's preference.
+- `HOST` — the active coding agent to configure.
 
-If detection is ambiguous, ask the user which agent and scope they want rather
-than guessing. Honor `ASP_AGENT` / `ASP_SCOPE` env vars if set.
+If detection is ambiguous, ask the user which agent they want rather than
+guessing. Honor `ASP_AGENT` when set. Do **not** ask for global vs project-local
+scope here; some upstream installers define that themselves. For example, the
+`skills` CLI currently defaults to project-local installs unless `-g/--global`
+is used.
 
 ### 2. Offer the menu
 
@@ -89,7 +89,7 @@ Choose what to install. Space toggles, Enter confirms.
 [ ] matt-pocock
     Very popular production engineering skill set from Matt Pocock.
     Helps with TDD, debugging, planning, architecture review, and git workflow.
-    Impact: fetches upstream skill folders; user can choose sub-skills or all.
+    Impact: follows upstream install docs; user can choose sub-skills or all.
 
 [ ] rtk
     Popular shell-output compression tool from rtk-ai.
@@ -123,19 +123,32 @@ Do not ask again whether to install a selected component. Pause only when user
 action is actually needed: permission to run a command, network/file-system
 access, a host-specific approval screen, a duplicate/conflict decision, a
 `matt-pocock` sub-skill choice, or an optional-tool setup choice from its
-adapter file. Infrastructure items (`rtk`, `codegraph`, `ponytail`) still need
-explicit permission at the moment they modify PATH, plugins, MCP/hooks, project
-indexes, lifecycle hooks, or rule files.
+adapter file. Do not ask a pack-wide scope question. Ask about scope only when
+the selected component's upstream instructions or adapter require it.
+Infrastructure items (`rtk`, `codegraph`, `ponytail`) still need explicit
+permission at the moment they modify PATH, plugins, MCP/hooks, project indexes,
+lifecycle hooks, or rule files.
 
-### 3. Dedup BEFORE writing anything
+### 3. Resolve upstream install plan and dedup BEFORE writing anything
 
 If the tool can see multiple AI Starter Pack entrypoints (for example plugin plus
 manual skill folder), use `references/dedup.md` → "Pack entrypoint duplicates"
-before continuing. Pick one current entrypoint and avoid installing another copy
-of the pack itself.
+before continuing. Use the single entrypoint when only one exists; when multiple
+exist, choose the one tagged or described as recommended, otherwise choose the
+first discovered entrypoint. Avoid installing another copy of the pack itself.
 
-For every selected component, run the matching check in `references/dedup.md`
-→ "Dedup checks". In summary:
+For every selected component:
+
+1. Fetch and read that component's current upstream README/docs, or the
+   component adapter named below.
+2. Determine the concrete install method and target for the active `HOST` from
+   those docs. Do not replace upstream defaults with pack defaults. If upstream
+   says its installer defaults to project-local, accept that default unless the
+   user already asked for global/everywhere.
+3. Run the matching check in `references/dedup.md` → "Dedup checks" against the
+   concrete target(s) the component will touch.
+
+In summary:
 
 - **Already installed by this pack** (our marker present, same version) → skip,
   report "already current".
@@ -168,10 +181,14 @@ user-owned installs before writing:
   or included in the user's confirmed "usual" set. These have **no bundled
   rewritten payload**. Follow `references/vendor/VENDORING.md`: use
   `sources.json` for repo identity and hints, fetch the upstream README first,
-  follow the upstream install instructions, and fetch only the exact payload
-  files/folders plus LICENSE/NOTICE files needed for the selected component. For
-  `matt-pocock`, let the user pick which sub-skills to install (or all). Stop
-  and ask if no fetch tool is available or the upstream README is unclear.
+  follow the upstream install instructions for the active `HOST`, and fetch only
+  the exact payload files/folders plus LICENSE/NOTICE files needed for the
+  selected component. If upstream provides an installer command for the active
+  host, prefer that installer over hand-copying files. For `matt-pocock`, let the
+  upstream installer or user pick which sub-skills to install (or all), and make
+  sure `setup-matt-pocock-skills` is included when upstream recommends it. Stop
+  and ask if no fetch/install tool is available or the upstream README is
+  unclear.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
   treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
   present, fetch the upstream README only when install/update/repair is needed,
