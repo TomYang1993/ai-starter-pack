@@ -10,8 +10,9 @@ its own file tools to place behavioral files where the current host expects them
 Third-party skills/rules are installed from their upstream originals with their
 license notices intact. Before installing or updating a component, fetch the
 upstream README/docs for that component and follow the current upstream
-instructions. Optional tools such as rtk, CodeGraph, and Ponytail follow their
-upstream installers and are never bundled.
+instructions. Treat local repo checkouts as caches, not as the source of truth.
+Optional tools such as rtk, CodeGraph, and Ponytail follow their upstream
+installers and are never bundled.
 
 The pack ships two kinds of content:
 
