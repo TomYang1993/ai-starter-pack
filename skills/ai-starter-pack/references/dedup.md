@@ -1,27 +1,30 @@
 # Host detection and dedup
 
 Detail kept out of `SKILL.md` so the orchestrator stays short. Read this when
-running install steps 1 and 3.
+running host detection and dedup.
 
 ## Host detection
 
-Resolve the active `HOST` and `SETUP_INTENT` in step 1. Do not choose component
-scope or target directories until a selected component's upstream README/docs or
-adapter have shown the concrete install method for that host and intent. For
-pure skills, `SETUP_INTENT=general` means user/global install by default, and
-`SETUP_INTENT=project` means project-local install.
+Resolve only the active `HOST` during host detection. Do not choose component
+scope or target directories until after the user has chosen components and the
+selected component's upstream README/docs or adapter have shown the concrete
+install method for that host and intent. For pure skills,
+`SETUP_INTENT=general` means agent-side/user install by default, and
+`SETUP_INTENT=project` means project-level install.
 
 ### Scope
 
-Ask one setup-intent question for pure skills: global/user-level is the default,
-and project-local is the explicit alternative. Treat scope as component-specific
-after that because upstream tools may use different flags or prompts. For
-example, the `skills` CLI defaults to project-local when no scope flag is given,
-so pure-skill general setup must pass `-g/--global` or choose Global when the CLI
-asks. Honor `ASP_SCOPE=project|global` only after it is compatible with the
-selected component's upstream install path and user intent. Optional tools such
-as `rtk`, CodeGraph, and Ponytail are not governed by the pure-skill global
-default; their adapters decide when to ask.
+After the user chooses components, explain placement only if at least one pure
+skill was selected. Use "agent-side defaults" as the user-facing term for the
+recommended `general` intent; mention "global" only as a clarification or when a
+tool flag uses that word. Use "project-level" for `project`. Treat scope as
+component-specific after that because upstream tools may use different flags or
+prompts. For example, the `skills` CLI defaults to project-local when no scope
+flag is given, so pure-skill agent-side setup must pass `-g/--global` or choose
+Global when the CLI asks. Honor `ASP_SCOPE=project|global` only after it is
+compatible with the selected component's upstream install path and user intent.
+Optional tools such as `rtk`, CodeGraph, and Ponytail are not governed by the
+pure-skill agent-side default; their adapters decide when to ask.
 
 ### Signals
 
@@ -50,17 +53,19 @@ explicitly asks to configure Claude Code.
 If the active host cannot be identified confidently, ask the user which tool and
 agent they want. Do not guess from filesystem hints alone.
 
-Resolve `SETUP_INTENT` after host detection:
+Resolve `SETUP_INTENT` after the component menu, only when pure skills were
+selected:
 
-- `general` — the user explicitly says "all projects", "global", "everywhere",
-  or accepts the default global pure-skill setup after being offered
-  project-local as the alternative.
+- `general` — the user accepts the recommended agent-side defaults, or says
+  "agent-side", "all projects", "global", "everywhere", "usual defaults", or
+  similar.
 - `project` — the user is configuring the current repo/workspace, or explicitly
-  says "this project", "this repo", or similar.
+  says "project-level", "this project", "this repo", or similar.
 - If the current directory is a parent/workspace folder such as `~/projects`, or
   the prompt only says "set up my coding environment" or "usual defaults",
-  present general/global as the default and ask whether they instead want
-  project-local setup before installing pure skills.
+  still show the component menu first. After selection, explain that agent-side
+  defaults are recommended for the curated pure skills and ask whether the user
+  instead wants project-level setup.
 
 The table below is a reference for dedup and manual fallbacks after upstream docs
 have resolved the selected component's actual target. It is not the install plan
@@ -70,7 +75,7 @@ for every component.
 |---|---|---|---|---|---|
 | Claude Code | `CLAUDE.md` | `~/.claude/CLAUDE.md` | `.claude/skills/` | `~/.claude/skills/` | `skill-folder` |
 | Codex | `AGENTS.md` | `~/.codex/AGENTS.md` | `.agents/skills/` | `~/.codex/skills/` | `skill-folder` |
-| OpenCode | `AGENTS.md` or `opencode.json` | `~/.config/opencode/opencode.json` | `.agents/skills/` when using the upstream `skills` CLI for project scope | `~/.config/opencode/skills/` for pure-skill general/global scope with upstream `-g/--global` | `skill-folder` |
+| OpenCode | `AGENTS.md` or `opencode.json` | `~/.config/opencode/opencode.json` | `.agents/skills/` when using the upstream `skills` CLI for project scope | `~/.config/opencode/skills/` for pure-skill agent-side/general scope with upstream `-g/--global` | `skill-folder` |
 | Cursor | `AGENTS.md` or `.cursor/rules/ai-starter-pack.mdc` | Cursor Settings → Rules | `.cursor/rules/` | Cursor Settings → Rules | `cursor-rule` |
 | Windsurf / Devin | `AGENTS.md` or `.devin/rules/ai-starter-pack.md` | `~/.codeium/windsurf/memories/global_rules.md` | `.devin/rules/` | `~/.codeium/windsurf/memories/` | `windsurf-rule` |
 | GitHub Copilot | `AGENTS.md` or `.github/copilot-instructions.md` | none | `.github/instructions/` | none | `copilot-instruction` |
@@ -92,7 +97,7 @@ Detection hints:
 - Current runtime says OpenCode, or user explicitly targets OpenCode →
   OpenCode. `.opencode/` and `opencode.json` are supporting evidence. OpenCode
   is installed by the upstream `skills` CLI to `.agents/skills/` for project
-  scope and `~/.config/opencode/skills/` for pure-skill general/global scope.
+  scope and `~/.config/opencode/skills/` for pure-skill agent-side/general scope.
   Let the selected component's upstream installer decide paths; add
   `-g/--global` only when `SETUP_INTENT=general` or the user explicitly asked
   for global/everywhere.
@@ -119,7 +124,7 @@ Before checking for duplicates for a selected component:
 2. Determine the exact command, file path, plugin path, hook path, or project
    index the component will touch for the active `HOST`.
 3. Combine upstream install mechanics with `SETUP_INTENT`. For pure skills,
-   `general` means user/global install by default, even when the upstream
+   `general` means agent-side/user install by default, even when the upstream
    command's no-flag default is project-local. Explain that scope choice before
    adding a global flag or choosing Global. For `project`, use the upstream
    project-local path or prompt choice.

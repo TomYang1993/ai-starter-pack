@@ -32,13 +32,14 @@ For each entry in `sources.json` the user wants:
    current upstream docs/payload directly.
 3. **Use upstream installers with the chosen scope.** If upstream recommends the
    `skills` CLI (`npx skills add ...`), prefer that command over manual copying
-   and let the CLI choose agent-specific paths. For pure skills, general/defaults
-   setup means user/global placement by default: pass `-g/--global` or choose
-   Global if the CLI asks. For project setup, omit `-g/--global` and choose
-   Project if the CLI asks. Add `-a <agent>` only when the active host is clear
-   and the flag is needed to avoid an agent-selection prompt. Do not apply this
-   pure-skill global default to optional tools such as `rtk`, CodeGraph, or
-   Ponytail; follow their adapters instead.
+   and let the CLI choose agent-specific paths. For pure skills,
+   agent-side/defaults setup means installing into the active agent's own skill
+   area by default: pass `-g/--global` or choose Global if that is the upstream
+   flag/prompt for agent-side placement. For project-level setup, omit
+   `-g/--global` and choose Project if the CLI asks. Add `-a <agent>` only when
+   the active host is clear and the flag is needed to avoid an agent-selection
+   prompt. Do not apply this pure-skill agent-side default to optional tools
+   such as `rtk`, CodeGraph, or Ponytail; follow their adapters instead.
 4. **Use local hints only after reading upstream.** The `file`, `extra_files`,
    and `commit` fields in `sources.json` are last-reviewed hints for locating
    payload files. They are not a reason to ignore newer upstream README

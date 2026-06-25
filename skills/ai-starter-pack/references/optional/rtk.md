@@ -35,8 +35,10 @@ overwrite, and how to safely follow upstream docs.
   old command tables in this pack.
 - Fetch only the README/docs needed to identify the install/init command. Do not
   clone the whole repo unless upstream explicitly requires it.
-- Use global commands only when the user asked for global scope. For
-  project-local setup, prefer the upstream project-local command if one exists.
+- Use tool-wide commands only when the user asked to configure the agent/tool
+  broadly. If upstream calls that "global", explain the effect before running
+  the command. For project-level setup, prefer the upstream project-local command
+  if one exists.
 
 ## Normal Flow
 
