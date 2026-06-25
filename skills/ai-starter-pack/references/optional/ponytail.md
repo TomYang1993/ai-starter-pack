@@ -21,6 +21,10 @@ to overwrite, and how to safely follow upstream docs.
   that path for the current host.
 - Narrate every command before running it. Ponytail can add plugins, lifecycle
   hooks, commands, always-on rules, and optional config.
+- The agent owns execution after approval. If upstream shows slash-command or
+  TUI steps such as `/plugin ...`, first look for a callable host CLI equivalent
+  and run the approved commands yourself. If no safe CLI/tool equivalent exists,
+  ask the user to perform the exact manual step, then resume verification.
 - Claude Code and Codex Ponytail plugins run small Node.js lifecycle hooks, so
   `node` must be on the host's non-interactive PATH. If Node is missing, do not
   invent a workaround; explain that the skills may still work but always-on
@@ -49,6 +53,11 @@ to overwrite, and how to safely follow upstream docs.
 - For command-capable hosts, after following the README, report the Ponytail
   commands or mode controls the user should expect. Do not invent command names;
   read them from upstream.
+- If upstream requires steps to be split across prompts, preserve that order in
+  separate agent-run commands after approval. For Claude Code plugin slash
+  commands, check the `claude plugin ...` CLI equivalent before asking the user
+  to type `/plugin` manually. If the equivalent is missing or unsafe, guide the
+  user through the split prompts exactly as upstream requires.
 
 ## Normal Flow
 
@@ -64,12 +73,15 @@ to overwrite, and how to safely follow upstream docs.
    fetch the upstream README and follow the current instructions for the current
    host.
 5. For command-capable hosts, follow the README's plugin/extension flow and any
-   hook-trust or restart steps it requires.
+   hook-trust or restart steps it requires. Translate slash/TUI plugin actions
+   to host CLI commands when safe and available, then run the approved steps
+   yourself. If translation is not available, use a guided manual fallback and
+   continue verification after the user completes it.
 6. For instruction-only hosts, copy only the upstream matching rule file(s).
    Preserve Ponytail's wording and license. Do not synthesize a local ASP
    rewrite.
 7. Narrate exact commands or file writes, ask for permission, run only the
-   approved steps, and report what changed.
+   approved steps yourself when tools allow it, and report what changed.
 8. Verify by checking the host exposes Ponytail commands or that the target rule
    file exists. If verification needs a fresh session, tell the user.
 

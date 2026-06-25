@@ -6,7 +6,10 @@ description: Set up a coding agent's everyday environment in one step — upstre
 # AI Starter Pack
 
 A self-installing pack. The agent reading this file **is** the installer — it uses
-its own file tools to place behavioral files where the current host expects them.
+its own file tools and callable CLIs to perform the setup where the current host
+expects it. User permission means: ask, then run the approved command or file
+write yourself. Hand commands to the user only when no callable path exists or
+the host requires an external approval/UI step the agent cannot operate.
 Third-party skills/rules are installed from their upstream originals with their
 license notices intact. Before installing or updating a component, fetch the
 upstream README/docs for that component and follow the current upstream
@@ -149,6 +152,14 @@ Infrastructure items (`rtk`, `codegraph`, `ponytail`) still need explicit
 permission at the moment they modify PATH, plugins, MCP/hooks, project indexes,
 lifecycle hooks, or rule files.
 
+When upstream instructions are written as slash commands, TUI actions, or
+multiple prompts, do not assume the user must perform them. First look for the
+host's callable CLI or shell equivalent, ask permission with the exact steps,
+and run the approved steps in the required order. If no safe callable equivalent
+exists, try an available UI automation/control tool when appropriate. Fall back
+to guided manual steps only when the agent cannot run or operate the step; give
+the user the exact command/action, wait for completion, then resume verification.
+
 ### 3. Resolve upstream install plan and dedup BEFORE writing anything
 
 If the tool can see multiple AI Starter Pack entrypoints (for example plugin plus
@@ -248,9 +259,11 @@ user-owned installs before writing:
   `references/optional/ponytail.md` exactly: treat upstream Ponytail docs as
   canonical, fetch the upstream README only when install/update/repair is
   needed, prefer its current recommended plugin/extension install for
-  command-capable hosts, use instruction-only rule copies only for hosts where
-  upstream recommends that path, and report the resulting Ponytail commands or
-  mode controls. Ask before installing plugins, trusting hooks, changing
+  command-capable hosts, translate slash/TUI plugin steps to callable host CLI
+  commands when safe and available, otherwise fall back to guided manual steps,
+  use instruction-only rule copies only for hosts where upstream recommends that
+  path, and report the resulting Ponytail commands or mode controls. Ask before
+  installing plugins, trusting hooks, changing
   shell/env config, or writing rule/context files.
 
 ### 5. Report

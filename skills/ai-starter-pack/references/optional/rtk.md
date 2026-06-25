@@ -16,6 +16,8 @@ overwrite, and how to safely follow upstream docs.
   upstream docs.
 - Narrate every command before running it. rtk modifies PATH and host hook/plugin
   config, so the user should see what changes.
+- Permission is not a handoff. After the user approves a command or file change,
+  run the approved step yourself when the current tools allow it.
 - If `rtk --version` works, reuse the existing binary. Do not reinstall it just
   because the starter pack is being updated.
 - Treat hook setup as per-tool/per-scope. A global rtk binary does not mean

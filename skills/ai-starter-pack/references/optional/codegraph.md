@@ -17,6 +17,8 @@ not to overwrite, and how to safely follow upstream docs.
   to the upstream docs.
 - Narrate every command before running it. CodeGraph can modify PATH, host MCP
   configuration, agent permissions/instructions, and per-project indexes.
+- Permission is not a handoff. After the user approves a command or file change,
+  run the approved step yourself when the current tools allow it.
 - If `codegraph --version` works, reuse the existing binary. Do not reinstall it
   just because the starter pack is being updated.
 - Treat host setup and project indexing as separate steps. A global CodeGraph
