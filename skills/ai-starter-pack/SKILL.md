@@ -96,7 +96,7 @@ Choose what to install. Space toggles, Enter confirms.
     Very popular production engineering skill set from Matt Pocock.
     Helps with TDD, debugging, planning, architecture review, and git workflow.
     Impact: follows upstream skills CLI; user can choose sub-skills or all.
-    Special case: setup-matt-pocock-skills still configures each project.
+    Special case: setup-matt-pocock-skills is a per-repo setup trigger.
 
 [ ] rtk
     Popular shell-output compression tool from rtk-ai.
@@ -252,13 +252,15 @@ user-owned installs before writing:
   - `matt-pocock`: the current upstream quickstart is the `skills` CLI. For
     `SETUP_INTENT=general`, say that ASP is intentionally using agent-side
     placement for reusable skills, then pass `-g/--global` or choose Global if
-    the CLI asks. For `SETUP_INTENT=project`, run the upstream command without
-    `-g/--global`, let the CLI resolve host paths, choose Project if it asks for
-    scope, and include `setup-matt-pocock-skills` when upstream recommends it;
-    even from an agent-side install, that setup trigger configures only the repo
-    where it is run.
-  Stop and ask if no fetch/install tool is available or the upstream README is
-  unclear.
+    the CLI asks. Install `setup-matt-pocock-skills` when upstream recommends
+    selecting it, but do not run it during agent-side/defaults setup; tell the
+    user it configures only the repo where it is invoked. For
+    `SETUP_INTENT=project`, run the upstream command without `-g/--global`, let
+    the CLI resolve host paths, choose Project if it asks for scope, and run or
+    offer `setup-matt-pocock-skills` only when the user wants the current repo
+    configured.
+  For any pure-skill component, stop and ask if no fetch/install tool is
+  available or the upstream README is unclear.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
   treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
   present, fetch the upstream README only when install/update/repair is needed,
