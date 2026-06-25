@@ -237,14 +237,10 @@ user-owned installs before writing:
   host, prefer that installer over hand-copying files. Pure skills default to
   agent-side placement because their content is reusable across projects; use
   project-level placement only when the user chose project setup or upstream
-  offers no safe agent-side target. Apply component-specific scope rules:
-  - Special cases when defaulting pure skills agent-side:
-    `setup-matt-pocock-skills`
-    can be available from the agent-side skill area as a trigger but still
-    configures only the repo it runs inside; optional tools (`rtk`, CodeGraph,
-    Ponytail) are not pure skills and do not inherit this default; if the active
-    host has no safe agent-side skill target, explain that and ask before
-    falling back to project-level.
+  offers no safe agent-side target. Optional tools (`rtk`, CodeGraph, Ponytail)
+  are not pure skills and do not inherit this default. If the active host has no
+  safe agent-side skill target, explain that and ask before falling back to
+  project-level. Apply component-specific scope rules:
   - `caveman`: default to the active host's agent-side skill location when
     `SETUP_INTENT=general`, and tell the user before running commands if
     upstream may configure the active agent broadly. If `SETUP_INTENT=project`,
@@ -258,10 +254,9 @@ user-owned installs before writing:
     placement for reusable skills, then pass `-g/--global` or choose Global if
     the CLI asks. For `SETUP_INTENT=project`, run the upstream command without
     `-g/--global`, let the CLI resolve host paths, choose Project if it asks for
-    scope, and include `setup-matt-pocock-skills` when upstream recommends it.
-    Special case: `setup-matt-pocock-skills` may be available from the
-    agent-side skill area as a trigger, but its work is still per-project;
-    running it in one repo does not configure every repo.
+    scope, and include `setup-matt-pocock-skills` when upstream recommends it;
+    even from an agent-side install, that setup trigger configures only the repo
+    where it is run.
   Stop and ask if no fetch/install tool is available or the upstream README is
   unclear.
 - **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
