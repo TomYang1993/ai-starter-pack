@@ -24,21 +24,12 @@ The agent should load the pack if needed, check what AI Starter Pack manages, up
 
 ## Supported Tools
 
-[Claude Code](https://code.claude.com/docs/en/overview)
+These are the agent/tool combinations we have tested so far. Other tools may
+work through the same skill standards, but they are not listed here until tested.
 
-[Codex](https://developers.openai.com/codex)
-
-[Kilo Code](https://kilo.ai/)
-
-[Cursor](https://cursor.com/)
-
-[Devin Desktop / Windsurf](https://devin.ai/desktop)
-
-[GitHub Copilot](https://github.com/features/copilot)
-
-[Google Antigravity](https://antigravity.google/)
-
-And more.
+- [Claude Code](https://code.claude.com/docs/en/overview) — tested with Opus 4.8 xhigh.
+- [Codex](https://developers.openai.com/codex) — tested with GPT 5.5 xhigh.
+- OpenCode — tested with DeepSeek v4 flash.
 
 ## Credits & Thanks
 

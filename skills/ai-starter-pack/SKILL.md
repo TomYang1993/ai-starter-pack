@@ -77,6 +77,21 @@ popularity/quality signal, and what kind of permission or file change it needs.
 Do not lead with placement jargon or ask for terse placement-prefixed replies.
 The user is choosing capabilities first.
 
+Before the checklist, give the user one short framing line so they understand the
+two kinds of component and where each lands by default:
+
+- **Pure skills** — `caveman`, `stop-slop`, `matt-pocock`. Recommended and
+  default to **agent-side** for the detected `HOST` (installed into this agent's
+  own skill area, reusable across all projects), unless the user later chooses
+  project-level. These are broadly useful habits, so agent-side is the default.
+- **Optional tools** — `rtk`, `codegraph`, `ponytail`. Infrastructure (binaries,
+  MCP/hooks, plugins/rules); each follows its own upstream setup and asks before
+  changing PATH, hooks, MCP, plugins, indexes, or rule files.
+
+State this default once, here — do not resolve placement yet. The actual
+agent-side vs project-level choice for the selected pure skills happens in
+step 3.
+
 If the host supports an interactive terminal picker, use a multi-select
 checkbox UI where the user can move with arrow keys, toggle with Space, and
 confirm with Enter. If the host only supports chat, show the same checkbox list
