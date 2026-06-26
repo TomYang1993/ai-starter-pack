@@ -14,6 +14,12 @@ Third-party skills/rules are installed from their upstream originals with their
 license notices intact. Before installing or updating a component, fetch the
 upstream README/docs for that component and follow the current upstream
 instructions. Treat local repo checkouts as caches, not as the source of truth.
+Do not use a local clone's README, install commands, or payload files just
+because it exists on disk. Fetch upstream docs/payload directly from the remote
+repo; if remote fetch is unavailable, stop and ask rather than silently falling
+back to a local copy. Use local upstream checkouts only as hints for remotes or
+existing user state unless the user explicitly requests offline/local-source
+installation.
 Optional tools such as rtk, CodeGraph, and Ponytail follow their upstream
 installers and are never bundled.
 
@@ -191,10 +197,10 @@ For every selected component:
    component adapter named below.
 2. Determine the concrete install method and target for the active `HOST` from
    those docs.
-3. For pure skills, apply the setup intent after reading upstream: `general`
-   means agent-side/user install, and `project` means project-level install. Be
-   explicit when that means using a tool flag such as `-g/--global` or choosing
-   Global for an upstream installer whose no-flag default is project-local.
+3. For pure skills, apply `SETUP_INTENT` after reading upstream (see step 3 and
+   `references/dedup.md` → "Scope"). Be explicit when `general` means passing a
+   tool flag such as `-g/--global` or choosing Global for an installer whose
+   no-flag default is project-local.
 4. Run the matching check in `references/dedup.md` → "Dedup checks" against the
    concrete target(s) the component will touch.
 
@@ -212,9 +218,9 @@ In summary:
 Re-running is safe because the installer checks both ASP-owned installs and
 user-owned installs before writing:
 
-- ASP-owned installs carry
-  `# source: ai-starter-pack <component> <upstream-repo>@<commit>` or the richer
-  ASP metadata block near the top of the body.
+- ASP-owned installs carry the canonical metadata block defined in
+  `references/update.md` → "Installed metadata"; legacy installs may carry only a
+  `# source: ai-starter-pack <component> ...` line.
 - User-owned installs usually do **not** have ASP metadata, so detect them by
   host location, folder name, `SKILL.md` frontmatter `name:`, upstream repo
   hints, and component-specific heuristics from `references/dedup.md`.
@@ -261,26 +267,14 @@ user-owned installs before writing:
     configured.
   For any pure-skill component, stop and ask if no fetch/install tool is
   available or the upstream README is unclear.
-- **rtk** → only if explicitly chosen. Follow `references/optional/rtk.md` exactly:
-  treat upstream RTK docs as canonical, reuse an existing `rtk` binary when
-  present, fetch the upstream README only when install/update/repair is needed,
-  verify, and report. Ask before changing PATH, hooks, plugins, or shell config.
-- **codegraph** → only if explicitly chosen. Follow
-  `references/optional/codegraph.md` exactly: treat upstream CodeGraph docs as
-  canonical, reuse an existing `codegraph` binary when present, fetch the
-  upstream README only when install/update/repair is needed, verify, and report.
-  Ask before changing PATH, MCP config, agent permissions, or creating a project
-  `.codegraph/` index.
-- **ponytail** → only if explicitly chosen. Follow
-  `references/optional/ponytail.md` exactly: treat upstream Ponytail docs as
-  canonical, fetch the upstream README only when install/update/repair is
-  needed, prefer its current recommended plugin/extension install for
-  command-capable hosts, translate slash/TUI plugin steps to callable host CLI
-  commands when safe and available, otherwise fall back to guided manual steps,
-  use instruction-only rule copies only for hosts where upstream recommends that
-  path, and report the resulting Ponytail commands or mode controls. Ask before
-  installing plugins, trusting hooks, changing
-  shell/env config, or writing rule/context files.
+- **rtk / codegraph / ponytail** → only if explicitly chosen. Each is optional
+  infrastructure, not a pure skill; follow its adapter file exactly —
+  `references/optional/rtk.md`, `references/optional/codegraph.md`,
+  `references/optional/ponytail.md`. The adapter owns the full flow (reuse an
+  existing binary/install, fetch the upstream README only when
+  install/update/repair is needed, narrate, verify, report) and the permission
+  gates before touching PATH, hooks, plugins, MCP config, agent permissions,
+  project indexes, modes, or rule files.
 
 ### 6. Report
 
@@ -291,10 +285,10 @@ skills. Do not re-read or narrate these instructions back to the user.
 ## Provenance and licensing
 
 Do not summarize, rewrite, or clone well-known community skills into ASP-branded
-payloads. For collected third-party components, use the upstream README/docs as
-the source of truth, fetch only the selected upstream payload files when needed,
-and preserve license/notice files. This pack's own MIT content is limited to
-installer glue and documentation.
+payloads. For collected third-party components, use the remote upstream
+README/docs as the source of truth, fetch only the selected remote upstream
+payload files when needed, and preserve license/notice files. This pack's own
+MIT content is limited to installer glue and documentation.
 
 ## Adding, listing, updating, removing
 

@@ -8,9 +8,8 @@ running host detection and dedup.
 Resolve only the active `HOST` during host detection. Do not choose component
 scope or target directories until after the user has chosen components and the
 selected component's upstream README/docs or adapter have shown the concrete
-install method for that host and intent. For pure skills,
-`SETUP_INTENT=general` means agent-side/user install by default, and
-`SETUP_INTENT=project` means project-level install.
+install method for that host and intent. Scope and `SETUP_INTENT` are resolved
+later — see "Scope" and the `SETUP_INTENT` list below.
 
 ### Scope
 
@@ -123,11 +122,10 @@ Before checking for duplicates for a selected component:
    referenced by `SKILL.md`.
 2. Determine the exact command, file path, plugin path, hook path, or project
    index the component will touch for the active `HOST`.
-3. Combine upstream install mechanics with `SETUP_INTENT`. For pure skills,
-   `general` means agent-side/user install by default, even when the upstream
-   command's no-flag default is project-local. Explain that scope choice before
-   adding a global flag or choosing Global. For `project`, use the upstream
-   project-local path or prompt choice.
+3. Combine upstream install mechanics with `SETUP_INTENT` as defined in "Scope".
+   Note the pure-skill `general` default still applies even when the upstream
+   command's no-flag default is project-local: explain that scope choice before
+   adding a global flag or choosing Global.
 4. Then run the dedup checks below against those exact targets.
 
 ## Pack entrypoint duplicates
@@ -228,10 +226,13 @@ A duplicate install or a clobbered edit is far worse than one extra question.
 
 ## Marker reference
 
-- On-demand skill/rule, first body line after frontmatter when possible:
-  ```
-  # source: ai-starter-pack <component> v1
-  ```
+ASP-owned installs carry the canonical metadata block defined in
+`references/update.md` → "Installed metadata" (component, managed flag, upstream
+repo, installed commit, `content_sha256`, install date). The recorded
+`content_sha256` drives the diff-and-confirm path: a mismatch on the next run
+means the installed content changed.
 
-Bump the version suffix when a payload changes; the bump is what drives the
-diff-and-confirm path on the next run.
+Legacy installs may carry only a single-line marker,
+`# source: ai-starter-pack <component> ...`, as the first body line after
+frontmatter. Treat these as managed-but-unknown-hash: show a diff and ask before
+replacing.

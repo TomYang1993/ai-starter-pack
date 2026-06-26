@@ -1,5 +1,5 @@
 {
-  "_comment": "Upstream originals the pack can fetch at install time. Do not replace these with ASP-authored summaries. Read each upstream README before install/update. The commit field is a last-reviewed reference, not a required install target. Licenses and notices must be copied alongside each installed component (see VENDORING.md).",
+  "_comment": "Upstream originals the pack can fetch at install time. Do not replace these with ASP-authored summaries. Read each remote upstream README before install/update. The commit field is a last-reviewed reference, not a required install target. Licenses and notices must be copied alongside each installed component (see VENDORING.md).",
   "sources": [
     {
       "component": "caveman",

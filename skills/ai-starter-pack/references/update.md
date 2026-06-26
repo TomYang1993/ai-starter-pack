@@ -58,7 +58,8 @@ current upstream instructions.
 3. Scan installed ASP markers and installed skill/rule folders.
 4. Classify each installed component with the table above.
 5. For each managed unchanged component:
-   - Fetch the upstream README/docs for that component or tool.
+   - Fetch the upstream README/docs for that component or tool from the remote
+     upstream repo, not from a local checkout.
    - Resolve the current upstream install or payload path from upstream docs.
    - Compare installed metadata (`installed_commit`, source URL, or content hash)
      to the current upstream-resolved source when possible.
